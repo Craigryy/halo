@@ -1,0 +1,4 @@
+flask_sqlalchemy
+flask
+psycopg2-binary
+Flask-SQLAlchemy
