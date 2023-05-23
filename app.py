@@ -84,7 +84,7 @@ class BookModel(db.Model):
             }
     
 
-    
+
 @app.route('/test', methods=['GET'])
 def test():
   return make_response(jsonify({'message': 'test route'}), 200)
@@ -248,39 +248,19 @@ def login():
 
 @app.route("/categories/<int:id>/books/",methods=['POST'])
 #Create a new book in the category
-def addnew_book(id):
+def addnew_book():
 
-    ''' create a book in the category. '''
+    # ''' create a book in the category. '''
 
-    bookcategory = BookCategory.query.\
-                filter_by(created_by=g.user.username).\
-                filter_by(id=id).first()
-
-    if not BookCategory:
-        return bad_request('bucket list with id:{} was not found' .format(id))
-
+  
     json_data = request.get_json()
     title, done = json_data['title'], json_data['done']            
-    bookmodel = BookModel(title=title, done=True, date_modified=datetime.utcnow())
-    bookmodel.category_id=bookcategory.id
-    db.session.add(bookmodel)
+    book = BookModel(name=title, done=True, date_modified=datetime.utcnow())
+    db.session.add(book)
     db.session.commit()
 
-    return jsonify({'Book_Model':BookModel.to_json()})
-
-
-
-@app.route('/categories/', methods=['POST'])
-def add_book_category():
-    '''Create a category for a book.'''
-
-    data = request.get_json()
-    Book_category = BookCategory(name=data['name'],created_by=data['created_by'])
-    db.session.add(Book_category)
-    db.session.commit()
-
-    return jsonify({'message': 'Book category successfully saved.'})
-
+    return jsonify({'bookModel':book.to_json()}) 
+        
 
 
 @app.route('/categories/', methods=['GET'])
@@ -300,10 +280,30 @@ def list_book_category():
     return jsonify({'users' : output})
 
 
+@app.route('/categories/id', methods=['GET'])
+def get_book_category(id):
+
+    '''Get a single book category.'''
+
+    category = BookCategory.query.filter_by(id=id).first()
+
+    if not category:
+            return jsonify({"message":"No category found with the ID"})
+
+    category_data = {}
+    category_data['public_id'] = category.name
+    category_data['name'] = category.created_by
+   
+
+    return jsonify({'Book Category' : category_data})
+
+
 
 @app.route("/categories/<int:id>", methods=['PUT'])
 def update(id):
+
     '''Update a book category. '''
+
 
     book_category = BookCategory.query.filter_by(id=id).first()
     if not book_category:
@@ -329,7 +329,48 @@ def delete(id):
         db.session.commit()
         return jsonify({'message': 'BookModel successfully deleted'})
 
+# Create book
+@app.route('/categories/id/books/', methods=['POST'])
+def create_book():
+   '''Create a book. '''
+   category = BookCategory.query.\
+                filter_by(created_by=g.user.username).\
+                filter_by(id=id).first()
+   if not category:
+        return bad_request('category with id:{} was not found' .format(id))
+   json_data = request.get_json()
+   name, done = json_data['name'], json_data['done']            
+   book = BookModel(name=name, done=True, date_modified=datetime.utcnow())
+   book.category_id=category.id
+   db.session.add(book)
+   db.session.commit()
+   
+   return jsonify({'book':BookModel.to_json()})
 
+
+# Update book
+@app.route('/categories/<int:id>/books/<int:book_id>', methods=['PUT'])
+def update_book(book_id):
+    book = BookModel.query.get(book_id)
+    if book:
+        book.title = request.json.get('title', book.title)
+        book.done = request.json.get('author', book.done)
+        book.category_id = request.json.get('category_id', book.category_id)
+        db.session.commit()
+        return jsonify({"message": "Book updated successfully", "book": book.serialize()}), 200
+
+    return jsonify({"message": "Book not found"}), 404
+
+# Delete book
+@app.route('/categories/<int:id>/books/<int:book_id>', methods=['DELETE'])
+def delete_book(id):
+    book = BookModel.query.get(id)
+    if book:
+        db.session.delete(book)
+        db.session.commit()
+        return jsonify({"message": "Book deleted successfully"}), 200
+
+    return jsonify({"message": "Book not found"}), 404
 
 if __name__=='__main__':
    app.run(debug=True)
