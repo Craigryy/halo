@@ -1,10 +1,13 @@
-from flask import Flask , jsonify  ,request ,make_response
+from flask import Flask , jsonify  ,request ,make_response, url_for,g
 from flask_sqlalchemy import SQLAlchemy
 import uuid
 from werkzeug.security import generate_password_hash, check_password_hash
 import jwt
 import datetime
 from functools import wraps
+
+
+
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI']='postgresql://postgres:Favour98@localhost/milk'
@@ -36,6 +39,21 @@ class BookCategory(db.Model):
     name = db.Column(db.String(100), unique=True, nullable=False)
     created_by = db.Column(db.String(100))
     books = db.relationship('BookModel', backref='category',primaryjoin='BookCategory.id == BookModel.category_id',cascade="all, delete-orphan", lazy='dynamic')
+
+
+    def __init__(self, name,created_by):
+        self.name = name
+        self.created_by = created_by
+
+
+
+    def serialize(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'books': [book.serialize() for book in self.books]
+        }
+
     
 
 
@@ -52,10 +70,58 @@ class BookModel(db.Model):
     category_id = db.Column(db.Integer, db.ForeignKey('BookCategorys.id'))
 
 
+    def __init__(self, title):
+        self.title = title
 
+
+    def serialize(self):
+        return {
+            'id': self.id,
+            'title': self.title,
+            'done': self.done,
+            'user_id': self.user_id,
+            'category_id': self.category_id
+            }
+    
+
+    
 @app.route('/test', methods=['GET'])
 def test():
   return make_response(jsonify({'message': 'test route'}), 200)
+
+
+def bad_request(message):
+    '''Request that are bad '''
+
+    # response to invalid/bad  request.
+    response = jsonify({'message': message, 'status': '400'})
+    response.status_code = 400
+    return response
+
+
+def Unauthorized(message=None):
+    ''' Restricted in perfroming these action .'''
+
+    # if a message/response if secret key is given.
+    if message is None:
+        if app.config['SECRET_KEY']:
+            message = 'Authentication with your token is needed.'
+        else:
+            message = 'Token is required.'
+    response = jsonify({'message': message, 'status': 401})
+    response.status_code = 401
+    if app.config['SECRET_KEY']:
+        response.headers['Location'] = url_for('new_user')
+    return response
+
+
+def Method_not_allowed():
+    '''Method not allowed'''
+
+    # message to response to method not allowed
+    response = jsonify({'status': 405, 'error': 'method not allowed'})
+    response.status_code = 405
+    return response
 
 
 #create a token
@@ -179,34 +245,63 @@ def login():
 
     return make_response('Could not verify', 401, {'WWW-Authenticate' : 'Basic realm="Login required!"'})
 
+
+@app.route("/categories/<int:id>/books/",methods=['POST'])
+#Create a new book in the category
+def addnew_book(id):
+
+    ''' create a book in the category. '''
+
+    bookcategory = BookCategory.query.\
+                filter_by(created_by=g.user.username).\
+                filter_by(id=id).first()
+
+    if not BookCategory:
+        return bad_request('bucket list with id:{} was not found' .format(id))
+
+    json_data = request.get_json()
+    title, done = json_data['title'], json_data['done']            
+    bookmodel = BookModel(title=title, done=True, date_modified=datetime.utcnow())
+    bookmodel.category_id=bookcategory.id
+    db.session.add(bookmodel)
+    db.session.commit()
+
+    return jsonify({'Book_Model':BookModel.to_json()})
+
+
+
 @app.route('/categories/', methods=['POST'])
-@token_required
-def add_book_category(id):
+def add_book_category():
     '''Create a category for a book.'''
 
-    book_category = BookCategory.query.filter_by(id=id).first()
-
-    if not book_category:
-        return jsonify('category with  was not found')
-
     data = request.get_json()
-    BookModel = BookModel(title=data['title'])
-    BookModel.category_id = book_category.id
-    BookModel.save()
+    Book_category = BookCategory(name=data['name'],created_by=data['created_by'])
+    db.session.add(Book_category)
+    db.session.commit()
 
     return jsonify({'message': 'Book category successfully saved.'})
 
 
+
 @app.route('/categories/', methods=['GET'])
-@token_required
 def list_book_category():
     '''list all category for a book.'''
 
-    return BookCategory.query.all()
+    categories = BookCategory.query.all()
+
+    output = []
+
+    for books in categories:
+        user_data = {}
+        user_data['public_id'] = books.name
+        user_data['created_by'] = books.created_by
+        output.append(user_data)
+
+    return jsonify({'users' : output})
 
 
 
-@app.route("/PUT/categories/<int:id>", methods=['PUT'])
+@app.route("/categories/<int:id>", methods=['PUT'])
 def update(id):
     '''Update a book category. '''
 
@@ -214,19 +309,13 @@ def update(id):
     if not book_category:
         return jsonify({'message': 'category with id was not found in database'})
 
-    BookModel = BookModel.query.get(id)
-    if not BookModel:
-        return jsonify({'message': 'BookModel was not found'})
 
-    if request.method == 'PUT':
+    if book_category:
+        book_category.name = request.json.get('name', book_category.name)
+        book_category.created_by = request.json.get('created_by', book_category.created_by)
+        db.session.commit()
 
-        if BookModel.id == BookCategory.id:
-            data = request.get_json()
-            book_category.name = data['name']
-            BookModel.id = BookCategory.id
-            BookModel.save()
-
-            return jsonify({'message': 'book category successfully updated'})
+        return jsonify({"message": "Book category successfully updated", "book": book_category.serialize()}), 200
 
 
 
@@ -234,11 +323,11 @@ def update(id):
 def delete(id):
     '''Delete a book category. '''
 
-    if request.method == 'DELETE':
-        book = BookModel.query.filter_by(id=id).first()
-        if book:
-            BookModel.delete()
-            return jsonify({'message': 'BookModel successfully deleted'})
+    book = BookCategory.query.filter_by(id=id).first()
+    if book:
+        db.session.delete(book)
+        db.session.commit()
+        return jsonify({'message': 'BookModel successfully deleted'})
 
 
 
