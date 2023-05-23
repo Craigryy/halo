@@ -28,16 +28,6 @@ class User(db.Model):
 
 
 
-    # def json(self):
-    #     '''Display output as json object.'''
-
-    #     return {id: self.id, 'name': self.name,
-    #             'password': self.password, 'admin': self.admin}
-
-
-    # def __repr__(self):
-    #     return "<User(name='%s', email='%s')>" % (self.name,
-    #                                                   self.email)
 class BookCategory(db.Model):
     """BookCtegory table defined """
 
@@ -48,17 +38,6 @@ class BookCategory(db.Model):
     books = db.relationship('BookModel', backref='category',primaryjoin='BookCategory.id == BookModel.category_id',cascade="all, delete-orphan", lazy='dynamic')
     
 
-    # def json(self):
-    #     ''' Display output as JSON object.'''
-
-    #     return {
-    #         "id": self.id,
-    #         "name": self.name,
-    #         "items_count": len(self.items.all()),
-    #         "created_at": self.date_created.strftime("%Y-%m-%d %H:%M:%S"),
-    #         "updated_at": self.date_modified.strftime("%Y-%m-%d %H:%M:%S"),
-    #         "created_by": self.created_by,
-    #     }
 
 
 class BookModel(db.Model):
@@ -73,21 +52,7 @@ class BookModel(db.Model):
     category_id = db.Column(db.Integer, db.ForeignKey('BookCategorys.id'))
 
 
-    
 
-
-    # def json(self):
-    #     ''' Display output as JSON object.'''
-
-    #     return {
-    #         "id": self.id,
-    #         "title": self.title,
-    #         "created_at": self.date_created.strftime("%Y-%m-%d %H:%M:%S"),
-    #         "updated_at": self.date_modified.strftime("%Y-%m-%d %H:%M:%S"),
-    #         "done": self.done,
-    #     }
-
-#create a test routespip
 @app.route('/test', methods=['GET'])
 def test():
   return make_response(jsonify({'message': 'test route'}), 200)
@@ -143,20 +108,28 @@ def create_user():
     new_user = User(public_id=str(uuid.uuid4()), name=data['name'], password=hashed_password, admin=False)
     db.session.add(new_user)
     db.session.commit()
-    return jsonify({'message' : 'New user created!'})
-    # except Exception as e :
-    #    return jsonify({'message':'otilo'})
+    return jsonify({'message' : 'New user created!"'})
 
-# get a user by id
-@app.route('/users/<int:id>', methods=['GET'])
-def get_user(id):
-  try:
-    user = User.query.filter_by(id=id).first()
-    if user:
-      return make_response(jsonify({'user': user.json()}), 200)
-    return make_response(jsonify({'message': 'user not found'}), 404
-except e:
-    return make_response(jsonify({'message': 'error getting user'}), 500)
+
+@app.route('/user/<public_id>', methods=['GET'])
+# @token_required
+def get_one_user( public_id):
+
+    # if not current_user.admin:
+    #     return jsonify({'message' : 'Cannot perform that function!'})
+
+    user = User.query.filter_by(public_id=public_id).first()
+
+    if not user:
+        return jsonify({'message' : 'No user found!'})
+
+    user_data = {}
+    user_data['public_id'] = user.public_id
+    user_data['name'] = user.name
+    user_data['password'] = user.password
+    user_data['admin'] = user.admin
+
+    return jsonify({'user' : user_data})
 
 # update a user
 @app.route('/users/<int:id>', methods=['PUT'])
@@ -191,10 +164,10 @@ def delete_user(id):
 def login():
     auth = request.authorization
 
-    if not auth or not auth.name or not auth.password:
+    if not auth or not auth.username or not auth.password:
         return make_response('Could not verify', 401, {'WWW-Authenticate' : 'Basic realm="Login required!"'})
 
-    user = User.query.filter_by(name=auth.name).first()
+    user = User.query.filter_by(name=auth.username).first()
 
     if not user:
         return make_response('Could not verify', 401, {'WWW-Authenticate' : 'Basic realm="Login required!"'})
@@ -202,7 +175,7 @@ def login():
     if check_password_hash(user.password, auth.password):
         token = jwt.encode({'public_id' : user.public_id, 'exp' : datetime.datetime.utcnow() + datetime.timedelta(minutes=30)}, app.config['SECRET_KEY'])
 
-        return jsonify({'token' : token.decode('UTF-8')})
+        return jsonify({'token' : token})
 
     return make_response('Could not verify', 401, {'WWW-Authenticate' : 'Basic realm="Login required!"'})
 
@@ -232,6 +205,7 @@ def list_book_category():
     return BookCategory.query.all()
 
 
+
 @app.route("/PUT/categories/<int:id>", methods=['PUT'])
 def update(id):
     '''Update a book category. '''
@@ -255,6 +229,7 @@ def update(id):
             return jsonify({'message': 'book category successfully updated'})
 
 
+
 @app.route("/categories/<int:id>", methods=['DELETE'])
 def delete(id):
     '''Delete a book category. '''
@@ -264,6 +239,8 @@ def delete(id):
         if book:
             BookModel.delete()
             return jsonify({'message': 'BookModel successfully deleted'})
+
+
 
 if __name__=='__main__':
    app.run(debug=True)
