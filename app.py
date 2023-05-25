@@ -33,7 +33,7 @@ class User(db.Model):
 
 
 class BookCategory(db.Model):
-    """BookCtegory table defined """
+    """BookCategory table defined """
 
     __tablename__ = 'BookCategorys'
     id = db.Column(db.Integer, primary_key=True)
@@ -142,7 +142,7 @@ def token_required(f):
 
 # create a user
 
-# craete an endpoint to get all users
+# create an endpoint to get all users
 
 
 @app.route('/user', methods=['GET'])
@@ -320,7 +320,6 @@ def create_book(id):
     json_data = request.get_json()
     title, author = json_data['title'], json_data['author']
     book = BookModel(title=title, author=author)
-    # BookCategory.id == BookModel.category_id
     book.category_id = category.id
     db.session.add(book)
     db.session.commit()
@@ -330,7 +329,7 @@ def create_book(id):
 
 # Update book
 @app.route('/categories/<int:id>/books/<int:book_id>', methods=['PUT'])
-def update_book(book_id):
+def update_book(id,book_id):
     book = BookModel.query.get(book_id)
     if book:
         book.title = request.json.get('title', book.title)
@@ -345,7 +344,7 @@ def update_book(book_id):
 
 
 @app.route('/categories/<int:id>/books/<int:book_id>', methods=['DELETE'])
-def delete_book(id):
+def delete_book(id,book_id):
     book = BookModel.query.get(id)
     if book:
         db.session.delete(book)
