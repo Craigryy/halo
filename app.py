@@ -85,7 +85,7 @@ class BookModel(db.Model):
     category_id = db.Column(db.Integer, db.ForeignKey('BookCategorys.id'))
 
     def to_json(self):
-        return {'id': self.id, 'title': self.title, 'author': author}
+        return {'id': self.id, 'title': self.title, 'author': self.author}
 
 
 # create a test route
