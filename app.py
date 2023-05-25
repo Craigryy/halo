@@ -15,6 +15,7 @@ port = 5000
 
 db = SQLAlchemy(app)
 
+
 class Base(db.Model):
 
     ''' Abstract Base class used to define id.'''
@@ -22,7 +23,7 @@ class Base(db.Model):
     __abstract__ = True
 
     id = db.Column(db.Integer, primary_key=True)
-   
+
     # saves the data
     def save(self):
         db.session.add(self)
@@ -94,17 +95,6 @@ class BookModel(db.Model):
 @app.route('/test', methods=['GET'])
 def test():
     return make_response(jsonify({'message': 'test route'}), 200)
-
-# create a bad request message  response
-
-
-def bad_request(message):
-    '''Request that are bad '''
-
-    # response to invalid/bad  request.
-    response = jsonify({'message': message, 'status': '400'})
-    response.status_code = 400
-    return response
 
 
 # create a token
@@ -241,7 +231,7 @@ def addnew_bookcategory():
     name, created_by = json_data['name'], json_data['created_by']
     category = BookCategory(name=name, created_by=created_by)
     category.save()
-    
+
     return jsonify({'BookCategory': 'category created'})
 
 #
@@ -303,7 +293,7 @@ def create_book(id):
     '''Create a book. '''
     category = BookCategory.query.filter_by(id=id).first()
     if not category:
-        return bad_request('category with id:{} was not found' .format(id))
+        return make_response(jsonify(('category with id:{} was not found' .format(id))))
     json_data = request.get_json()
     title, author = json_data['title'], json_data['author']
     book = BookModel(title=title, author=author)
