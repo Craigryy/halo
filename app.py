@@ -135,7 +135,7 @@ def get_all_users():
 
 # create a new user endpoint
 @app.route('/user', methods=['POST'])
-@token_required()
+@token_required
 def create_user():
     data = request.get_json()
 
