@@ -8,9 +8,10 @@ from functools import wraps
 
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:Favour98@localhost/milk'
+app.config['SQLALCHEMY_DATABASE_URI'] ='postgresql://postgres:Favour98@localhost/mikur'
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config['SECRET_KEY'] = 'jesusislord'
+port = 5000
 
 db = SQLAlchemy(app)
 
@@ -28,6 +29,10 @@ class User(db.Model):
     Book = db.relationship('BookModel', backref='user', lazy='dynamic')
 
 
+    def to_json(self):
+        return {'id': self.id,'name': self.name, 'public_id': self.public_id,'password':self.password,'admin':self.admin}
+
+
 class BookCategory(db.Model):
     """BookCtegory table defined """
 
@@ -38,9 +43,16 @@ class BookCategory(db.Model):
     books = db.relationship('BookModel', backref='category',
                             primaryjoin='BookCategory.id == BookModel.category_id', cascade="all, delete-orphan", lazy='dynamic')
 
-    def __init__(self, name, created_by):
+
+
+    def __init__(self,id, name,created_by):
+        self.id=id
         self.name = name
         self.created_by = created_by
+    
+    def to_json(self):
+        return {'id': self.id,'name': self.name, 'created_by': self.created_by}
+
 
     def serialize(self):
         return {
@@ -57,28 +69,35 @@ class BookModel(db.Model):
     __tablename__ = 'BookModels'
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100), nullable=False)
-    done = db.Column(db.Boolean, default=False, nullable=False)
+    author =db.Column(db.String(100))
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     category_id = db.Column(db.Integer, db.ForeignKey('BookCategorys.id'))
+    
 
-    def __init__(self, title):
+    def __init__(self,id,title,author):
+        self.id=id
         self.title = title
+        self.author = author
+    
+
+    def to_json(self):
+        return {'id': self.id,'title': self.title,'author':author}
+
 
     def serialize(self):
         return {
             'id': self.id,
             'title': self.title,
-            'done': self.done,
             'user_id': self.user_id,
             'category_id': self.category_id
         }
 
-
+#create a test route
 @app.route('/test', methods=['GET'])
 def test():
     return make_response(jsonify({'message': 'test route'}), 200)
 
-
+#create a bad request message  response 
 def bad_request(message):
     '''Request that are bad '''
 
@@ -87,7 +106,7 @@ def bad_request(message):
     response.status_code = 400
     return response
 
-
+#create an unauthorized message response 
 def Unauthorized(message=None):
     ''' Restricted in perfroming these action .'''
 
@@ -103,7 +122,7 @@ def Unauthorized(message=None):
         response.headers['Location'] = url_for('new_user')
     return response
 
-
+#create a  not allowed message response 
 def Method_not_allowed():
     '''Method not allowed'''
 
@@ -138,25 +157,16 @@ def token_required(f):
 
 # create a user
 
-
+#craete an endpoint to get all users 
 @app.route('/user', methods=['GET'])
 def get_all_users():
 
     users = User.query.all()
 
-    output = []
-
-    for user in users:
-        user_data = {}
-        user_data['public_id'] = user.public_id
-        user_data['name'] = user.name
-        user_data['password'] = user.password
-        user_data['admin'] = user.admin
-        output.append(user_data)
-
-    return jsonify({'users': output})
+    return make_response(jsonify([user.to_json() for user in users]), 200)
 
 
+#create a new user endpoint
 @app.route('/user', methods=['POST'])
 def create_user():
     data = request.get_json()
@@ -170,6 +180,7 @@ def create_user():
     return jsonify({'message': 'New user created!"'})
 
 
+#endpoint to get a single user 
 @app.route('/user/<public_id>', methods=['GET'])
 # @token_required
 def get_one_user(public_id):
@@ -190,26 +201,28 @@ def get_one_user(public_id):
 
     return jsonify({'user': user_data})
 
+
+
 # update a user
-
-
 @app.route('/users/<int:id>', methods=['PUT'])
 def update_user(id):
     try:
         user = User.query.filter_by(id=id).first()
         if user:
             data = request.get_json()
-            user.rname = data['name']
-            user.email = data['email']
+            user.name = data['name']
+            user.password = data['password']
+            user.admin = data['admin']
             db.session.commit()
             return make_response(jsonify({'message': 'user updated'}), 200)
         return make_response(jsonify({'message': 'user not found'}), 404)
     except e:
         return make_response(jsonify({'message': 'error updating user'}), 500)
 
+
+
+
 # delete a user
-
-
 @app.route('/users/<int:id>', methods=['DELETE'])
 def delete_user(id):
     try:
@@ -222,11 +235,13 @@ def delete_user(id):
     except e:
         return make_response(jsonify({'message': 'error deleting user'}), 500)
 
-# create a loggin
 
 
+
+# create a loggin route 
 @app.route('/login')
 def login():
+    """ auth request"""
     auth = request.authorization
 
     if not auth or not auth.username or not auth.password:
@@ -246,95 +261,86 @@ def login():
     return make_response('Could not verify', 401, {'WWW-Authenticate': 'Basic realm="Login required!"'})
 
 
-@app.route("/categories/<int:id>/books/", methods=['POST'])
-# Create a new book in the category
-def addnew_book():
 
-    # ''' create a book in the category. '''
+
+# Create a new book in the category
+@app.route("/categories/", methods=['POST'])
+def addnew_bookcategory():
+
+    ''' create a book in the category. '''
 
     json_data = request.get_json()
-    title, done = json_data['title'], json_data['done']
-    book = BookModel(name=title, done=True, date_modified=datetime.utcnow())
-    db.session.add(book)
+    name,created_by = json_data['name'],json_data['created_by']
+    category = BookCategory(name=name,created_by=created_by)
+    db.session.add(category)
     db.session.commit()
 
-    return jsonify({'bookModel': book.to_json()})
+    return jsonify({'BookCategory':'category created'})
 
-
+#
 @app.route('/categories/', methods=['GET'])
 def list_book_category():
     '''list all category for a book.'''
 
     categories = BookCategory.query.all()
 
-    output = []
-
-    for books in categories:
-        user_data = {}
-        user_data['public_id'] = books.name
-        user_data['created_by'] = books.created_by
-        output.append(user_data)
-
-    return jsonify({'users': output})
+    return make_response(jsonify([category.to_json() for category in categories]), 200)
 
 
-@app.route('/categories/id', methods=['GET'])
+
+@app.route('/categories/<int:id>', methods=['GET'])
 def get_book_category(id):
     '''Get a single book category.'''
-
-    category = BookCategory.query.filter_by(id=id).first()
-
-    if not category:
-        return jsonify({"message": "No category found with the ID"})
-
-    category_data = {}
-    category_data['public_id'] = category.name
-    category_data['name'] = category.created_by
-
-    return jsonify({'Book Category': category_data})
-
+    try:
+        category = BookCategory.query.filter_by(id=id).first()
+        if category:
+            return make_response(jsonify({'category': category.to_json()}), 200)
+        return make_response(jsonify({'message': 'user not found'}), 404)
+    except e:
+        return make_response(jsonify({'message': 'error getting user'}), 500)
+     
 
 @app.route("/categories/<int:id>", methods=['PUT'])
 def update(id):
     '''Update a book category. '''
-
-    book_category = BookCategory.query.filter_by(id=id).first()
-    if not book_category:
-        return jsonify({'message': 'category with id was not found in database'})
-
-    if book_category:
-        book_category.name = request.json.get('name', book_category.name)
-        book_category.created_by = request.json.get(
-            'created_by', book_category.created_by)
-        db.session.commit()
-
-        return jsonify({"message": "Book category successfully updated", "book": book_category.serialize()}), 200
+    try:
+        category = BookCategory.query.filter_by(id=id).first()
+        if category:
+            data = request.get_json()
+            category.name= data['name']
+            category.created_by = data['created_by']
+            db.session.commit()
+            return make_response(jsonify({'message': 'category updated'}), 200)
+        return make_response(jsonify({'message': 'category not found'}), 404)
+    except e:
+        return make_response(jsonify({'message': 'error updating category'}), 500)
 
 
 @app.route("/categories/<int:id>", methods=['DELETE'])
 def delete(id):
     '''Delete a book category. '''
+    try:
+        book = BookCategory.query.filter_by(id=id).first()
+        if book:
+            db.session.delete(book)
+            db.session.commit()
+            return jsonify({'message': 'BookModel successfully deleted'})
+        return make_response(jsonify({'message': 'user not found'}), 404)
+    except e:
+        return make_response(jsonify({'message': 'error deleting user'}), 500)
 
-    book = BookCategory.query.filter_by(id=id).first()
-    if book:
-        db.session.delete(book)
-        db.session.commit()
-        return jsonify({'message': 'BookModel successfully deleted'})
 
 # Create book
-
-
-@app.route('/categories/id/books/', methods=['POST'])
-def create_book():
+@app.route('/categories/<int:id>/books/', methods=['POST'])
+def create_book(id):
     '''Create a book. '''
-    category = BookCategory.query.\
-        filter_by(created_by=g.user.username).\
-        filter_by(id=id).first()
+    category = BookCategory.query.filter_by(id=id).first()
     if not category:
         return bad_request('category with id:{} was not found' .format(id))
     json_data = request.get_json()
-    name, done = json_data['name'], json_data['done']
-    book = BookModel(name=name, done=True, date_modified=datetime.utcnow())
+    title,author = json_data['title'], json_data['author']
+    book = BookModel(title=title,author=author)
+    # BookCategory.id == BookModel.category_id
     book.category_id = category.id
     db.session.add(book)
     db.session.commit()
@@ -370,4 +376,4 @@ def delete_book(id):
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0',port=port)
