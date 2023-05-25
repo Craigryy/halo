@@ -106,35 +106,6 @@ def bad_request(message):
     response.status_code = 400
     return response
 
-# create an unauthorized message response
-
-
-def Unauthorized(message=None):
-    ''' Restricted in perfroming these action .'''
-
-    # if a message/response if secret key is given.
-    if message is None:
-        if app.config['SECRET_KEY']:
-            message = 'Authentication with your token is needed.'
-        else:
-            message = 'Token is required.'
-    response = jsonify({'message': message, 'status': 401})
-    response.status_code = 401
-    if app.config['SECRET_KEY']:
-        response.headers['Location'] = url_for('new_user')
-    return response
-
-# create a  not allowed message response
-
-
-def Method_not_allowed():
-    '''Method not allowed'''
-
-    # message to response to method not allowed
-    response = jsonify({'status': 405, 'error': 'method not allowed'})
-    response.status_code = 405
-    return response
-
 
 # create a token
 def token_required(f):
