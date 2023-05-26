@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request, make_response, url_for
+from flask import Flask, jsonify, request, make_response
 from flask_sqlalchemy import SQLAlchemy
 import uuid
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -66,15 +66,8 @@ class BookCategory(Base):
     def to_json(self):
         return {'id': self.id, 'name': self.name, 'created_by': self.created_by}
 
-    def serialize(self):
-        return {
-            'id': self.id,
-            'name': self.name,
-            'books': [book.serialize() for book in self.books]
-        }
 
-
-class BookModel(db.Model):
+class BookModel(Base):
 
     """BookModel defined."""
 
@@ -114,7 +107,7 @@ def token_required(f):
             current_user = User.query.filter_by(
                 public_id=data['public_id']).first()
         except Exception as e :
-            return jsonify({'message': 'Token is invalid!'}), 401
+            return jsonify({'message': 'Token is invalid!'}.format(e)), 401
 
         return f(current_user, *args, **kwargs)
 
@@ -135,7 +128,7 @@ def get_all_users():
 
 # create a new user endpoint
 @app.route('/user', methods=['POST'])
-@token_required
+# @token_required
 def create_user():
     data = request.get_json()
 
@@ -183,7 +176,7 @@ def update_user(id):
             return make_response(jsonify({'message': 'user updated'}), 200)
         return make_response(jsonify({'message': 'user not found'}), 404)
     except Exception as e:
-        return make_response(jsonify({'message': 'error updating user'}), 500)
+        return make_response(jsonify({'message': 'error updating user'}.format(e)), 500)
 
 
 # delete a user
@@ -255,7 +248,7 @@ def get_book_category(id):
             return make_response(jsonify({'category': category.to_json()}), 200)
         return make_response(jsonify({'message': 'user not found'}), 404)
     except Exception as e:
-        return make_response(jsonify({'message': 'error getting user'}), 500)
+        return make_response(jsonify({'message': 'error getting user'}.format(e)), 500)
 
 
 @app.route("/categories/<int:id>", methods=['PUT'])
@@ -271,7 +264,7 @@ def update(id):
             return make_response(jsonify({'message': 'category updated'}), 200)
         return make_response(jsonify({'message': 'category not found'}), 404)
     except Exception as e:
-        return make_response(jsonify({'message': 'error updating category'}), 500)
+        return make_response(jsonify({'message': 'error updating category'}.format(e)), 500)
 
 
 @app.route("/categories/<int:id>", methods=['DELETE'])
@@ -284,7 +277,7 @@ def delete(id):
             return jsonify({'message': 'BookModel successfully deleted'})
         return make_response(jsonify({'message': 'user not found'}), 404)
     except Exception as e :
-        return make_response(jsonify({'message': 'error deleting user'}), 500)
+        return make_response(jsonify({'message': 'error deleting user'}.format(e)), 500)
 
 
 # Create book
@@ -300,33 +293,48 @@ def create_book(id):
     book.category_id = category.id
     book.save()
 
-    return jsonify({'book': "good"})
+    return jsonify({'book': book.to_json()})
 
 
 # Update book
 @app.route('/categories/<int:id>/books/<int:book_id>', methods=['PUT'])
 def update_book(id, book_id):
-    book = BookModel.query.get(book_id)
+    bookcategory = BookCategory.query.filter_by(id=id).first()
+
+    if not bookcategory:
+        return make_response(('book category with id:{} was not found' .format(id)))
+
+    book = BookModel.session.get(id)
+    if not book:
+        return make_response(('book model with id:{} was not found' .format(book_id)))
+
+    book = BookModel.query.get(id)
     if book:
         book.title = request.json.get('title', book.title)
         book.done = request.json.get('author', book.done)
         book.category_id = request.json.get('category_id', book.category_id)
-        db.session.commit()
-        return jsonify({"message": "Book updated successfully", "book": book.serialize()}), 200
+        book.category_id = category.id
+        db.session.save()
+        return make_response(jsonify({"message": "Book updated successfully", "book": book.to_json()}), 200)
 
-    return jsonify({"message": "Book not found"}), 404
+    return make_response(jsonify({"message": "Book not found"}), 404)
 
 # Delete book
 
 
 @app.route('/categories/<int:id>/books/<int:book_id>', methods=['DELETE'])
 def delete_book(id, book_id):
-    book = BookModel.session.get(id)
-    if book:
-        book.delete()
-        return jsonify({"message": "Book deleted successfully"}), 200
+    bookcategory = BookCategory.query.filter_by(id=id).first()
 
-    return jsonify({"message": "Book not found"}), 404
+    if not bookcategory:
+        return make_response(('book category with id:{} was not found' .format(book_id)))
+
+    book = BookModel.query.get(id)
+    if book :
+        book.delete()
+        return make_response(jsonify({"message": "Book deleted successfully"}), 200)
+
+    return make_response(jsonify({"message": "Book not found"}), 404)
 
 
 if __name__ == '__main__':
