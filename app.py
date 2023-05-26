@@ -293,31 +293,31 @@ def create_book(id):
     book.category_id = category.id
     book.save()
 
-    return jsonify({'book': book.to_json()})
+    return jsonify({'book': "good"})
 
 
 # Update book
 @app.route('/categories/<int:id>/books/<int:book_id>', methods=['PUT'])
 def update_book(id, book_id):
-    bookcategory = BookCategory.query.filter_by(id=id).first()
+    category = BookCategory.query.filter_by(id=id).first()
 
-    if not bookcategory:
-        return make_response(('book category with id:{} was not found' .format(id)))
+    if not category:
+        return make_response(('bucket list with id:{} was not found' .format(id)))
 
-    book = BookModel.session.get(id)
+    book = BookModel.query.get(id)
     if not book:
-        return make_response(('book model with id:{} was not found' .format(book_id)))
+        return make_response(('book with id:{} was not found' .format(book_id)))
 
     book = BookModel.query.get(id)
     if book:
         book.title = request.json.get('title', book.title)
-        book.done = request.json.get('author', book.done)
+        book.author = request.json.get('author', book.author)
         book.category_id = request.json.get('category_id', book.category_id)
         book.category_id = category.id
-        db.session.save()
-        return make_response(jsonify({"message": "Book updated successfully", "book": book.to_json()}), 200)
+        book.save()
+        return make_response( jsonify({"message": "Book updated successfully", "book": book.to_json()}), 200)
 
-    return make_response(jsonify({"message": "Book not found"}), 404)
+    return make_response(jsonify({"message": "Book not found"}), 404) 
 
 # Delete book
 
@@ -332,9 +332,9 @@ def delete_book(id, book_id):
     book = BookModel.query.get(id)
     if book :
         book.delete()
-        return make_response(jsonify({"message": "Book deleted successfully"}), 200)
+        return make_response(jsonify({"message": "Book deleted successfully"}), 200) 
 
-    return make_response(jsonify({"message": "Book not found"}), 404)
+    return make_response(jsonify({"message": "Book not found"}), 404) 
 
 
 if __name__ == '__main__':
