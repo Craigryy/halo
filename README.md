@@ -7,10 +7,10 @@ The API allows user to interact only when authenticated,to ensured security .
 
 ![Screenshot (50)](https://github.com/Craigryy/halo/assets/116971272/a9580fb5-1356-416f-9106-c1429beddf86)
 
-##RESOURCES
+`##RESOURCES`
 
 
-POST POST /user | create a User
+`*** POST /user | create a User***`
 Parameter : {"name":"james","password":"12345"}
 
 A token is generated upon login, which is use to perform various task in which token is required.The token has an expiration time of 30mins .Token is only visible/exposed on login.
