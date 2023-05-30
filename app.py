@@ -119,8 +119,7 @@ def token_required(f):
 
 
 @app.route('/user', methods=['GET'])
-@token_required
-def get_all_users(current_user):
+def get_all_users():
 
     users = User.query.all()
 
@@ -129,7 +128,6 @@ def get_all_users(current_user):
 
 # create a new user endpoint
 @app.route('/auth/login', methods=['POST'])
-# @token_required
 def create_user():
     data = request.get_json()
 
