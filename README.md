@@ -10,7 +10,7 @@ The API allows user to interact only when authenticated,to ensured security .
 `##RESOURCES`
 
 
-`*** POST /user | create a User***`
+`*** POST /auth/login | create a User***`
 
 
 Parameter : {"name":"james","password":"12345"}
@@ -18,12 +18,11 @@ Parameter : {"name":"james","password":"12345"}
 A token is generated upon login, which is use to perform various task in which token is required.The token has an expiration time of 30mins .Token is only visible/exposed on login.
 
 
-POST /auth/login | login a User
-Parameter : {"name":"james","password":"12345"}
+GET /user | get all users
+Parameter : nil
 
-
-GET user /user | get a single user 
-Parameter : id
+GET /user/<public_id> | get a single user 
+Parameter : public_id 
 
 BOOK-CATEGORY url data: id = bookcategory id
 
@@ -67,7 +66,9 @@ app.app_context().push()
 db.create_all()
 
 Test Api using POSTMAN or cURL
-
+on auth 
+```key: x-access-token
+value: token generated``` 
 
 `On linux`
 
