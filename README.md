@@ -11,6 +11,8 @@ The API allows user to interact only when authenticated,to ensured security .
 
 
 `*** POST /user | create a User***`
+
+
 Parameter : {"name":"james","password":"12345"}
 
 A token is generated upon login, which is use to perform various task in which token is required.The token has an expiration time of 30mins .Token is only visible/exposed on login.
