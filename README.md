@@ -20,27 +20,27 @@ POST /auth/login | login a User
 Parameter : {"name":"james","password":"12345"}
 
 
-GET user/username
-Parameters/Input data: nil
+GET user /user | get a single user 
+Parameter : id
 
 BOOK-CATEGORY url data: id = bookcategory id
 
 POST /categories/ | create a new category
-Parameters/Input data: {"name":"name of category","created_by":"who created the category"}
+Parameters : {"name":"name of category","created_by":"who created the category"}
 
 GET /categories/ | List all categories
-Parameters/Input data: no parameter is needed to perform this task
+Parameters : no parameter is needed to perform this task
 
 GET /categories/<int:id> | Get single category
-Parameters/Input data: id
+Parameter: id
 
 PUT /categories/<int:id> | Update a category
 Parameters : {"name":"update category name","created_by":"Have a nice day"}
 
-DELETE /categories/<int:id> | Delete this single bucket list
-Parameters/Input data: id
+DELETE /categories/<int:id> | Delete a category
+Parameter: id
 
-Book-Mpdel url data:id = bucketlist id, item_id = item id
+BookModel url data:id = category id, book_id = book id
 
 POST /categories/<int:id>/books/ | Create a new book in a category
 Parameters: {"title":"My book", "author":"harrison james"}
@@ -52,10 +52,12 @@ DELETE /categories/<int:id>/books/<int:book_id> | Delete a book in a category
 Parameters/Input data: id , book_id 
 
 
-#USAGE
+`#USAGE`
+
 Install dependencies using pip install -r requirements.txt
 
-On windows 
+`On windows`
+
 Run  the following commands in your terminal
 python
 from app import app,User,db,BookModel,BookCategory 
@@ -65,7 +67,7 @@ db.create_all()
 Test Api using POSTMAN or cURL
 
 
-On linux -
+`On linux`
 
 Run  the following commands in your terminal
 python3
