@@ -81,4 +81,13 @@ Database in use Postgres .
  - POSTGRES_USER=postgres
  - POSTGRES_DB=kittie
 
-Deloyment
+`Deployment`:
+To deploy to docker 
+RUN the following command:
+-docker compose up -d flask_db
+-docker compose build
+-docker compose up flask_app
+-docker compose up --build flask_app
+
+`TEST`
+To test our endpoints, we be using HTTpretty.HTTPretty is a Python library that allows you to mock HTTP responses in your unit tests. It provides a way to simulate HTTP requests and responses, making it easier to test code that interacts with external HTTP services. With HTTPretty, you can define expected responses for specific HTTP requests, including status codes, headers, and response bodies.
