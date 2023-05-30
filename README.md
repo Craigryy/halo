@@ -65,9 +65,10 @@ from app import app,User,db,BookModel,BookCategory
 app.app_context().push()
 db.create_all()
 
-Test Api using POSTMAN or cURL
-on auth 
-```key: x-access-token
+```Test Api using POSTMAN or cURL
+
+For basic auth 
+key: x-access-token
 value: token generated``` 
 
 `On linux`
