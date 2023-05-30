@@ -61,23 +61,23 @@ Install dependencies using pip install -r requirements.txt
 
 Run  the following commands in your terminal
 python
-from app import app,User,db,BookModel,BookCategory 
+```from app import app,User,db,BookModel,BookCategory 
 app.app_context().push()
-db.create_all()
+db.create_all()```
 
-```Test Api using POSTMAN or cURL
+Test Api using POSTMAN or cURL
 
 For basic auth 
 key: x-access-token
-value: token generated``` 
+value: token generated
 
 `On linux`
 
 Run  the following commands in your terminal
-python3
+```python3
 from app import app,User,db,BookModel,BookCategory 
 app.app_context().push()
-db.create_all()
+db.create_all()```
 
 
 Database in use Postgres .
