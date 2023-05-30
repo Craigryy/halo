@@ -1,3 +1,5 @@
+"""Script to test end points using HTTpretty python library. """
+
 try:
     from app import app, db
     import unittest
@@ -40,7 +42,7 @@ class APITestCase(unittest.TestCase):
 
         data_user = {'name': 'Harrison', 'password': 'James'}
         json_body = json.dumps(data_user)
-        httpretty.register_uri(httpretty.POST, 'http://127.0.0.1:5000/user',
+        httpretty.register_uri(httpretty.POST, 'http://127.0.0.1:5000/auth/login',
                                body=json_body, content_type='application/json',
                                status=200)
 
