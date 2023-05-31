@@ -89,33 +89,38 @@ class BookModel(Base):
 def test():
     return make_response(jsonify({'message': 'test route'}), 200)
 
-# Authentication decorator
+
+# create a token
 def token_required(f):
     @wraps(f)
-    def decorator(*args, **kwargs):
+    def decorated(*args, **kwargs):
         token = None
-        # ensure the jwt-token is passed with the headers
+
         if 'x-access-token' in request.headers:
             token = request.headers['x-access-token']
-        if not token: # throw error if no token provided
-            return make_response(jsonify({"message": "A valid token is missing!"}), 401)
+
+        if not token:
+            return jsonify({'message': 'Token is missing!'}), 401
+
         try:
-           # decode the token to obtain user public_id
-            data = jwt.decode(token, app.config['SECRET_KEY'], algorithms=['HS256'])
-            current_user = User.query.filter_by(public_id=data['public_id']).first()
-        except:
-            return make_response(jsonify({"message": "Invalid token!"}), 401)
-         # Return the user information attached to the token
+            data = jwt.decode(token, app.config['SECRET_KEY'])
+            current_user = User.query.filter_by(
+                public_id=data['public_id']).first()
+        except Exception as e:
+            return jsonify({'message': 'Token is invalid!'}.format(e)), 401
+
         return f(current_user, *args, **kwargs)
-    return decorator
+
+    return decorated
+
 # create a user
 
 # create an endpoint to get all users
 
 
 @app.route('/user', methods=['GET'])
-# @token_required
-def get_all_users():
+@token_required
+def get_all_users(current_user):
 
     users = User.query.all()
 
@@ -124,6 +129,7 @@ def get_all_users():
 
 # create a new user endpoint
 @app.route('/auth/login', methods=['POST'])
+# @token_required
 def create_user():
     data = request.get_json()
 
@@ -140,7 +146,7 @@ def create_user():
 @token_required
 def get_one_user(current_user, public_id):
 
-    if not current_user:
+    if not current_user.admin:
         return jsonify({'message': 'Cannot perform that function!'})
 
     user = User.query.filter_by(public_id=public_id).first()
@@ -157,28 +163,11 @@ def get_one_user(current_user, public_id):
     return jsonify({'user': user_data})
 
 
-
-@app.route('/user/<public_id>', methods=['PUT'])
-# @token_required
-def promote_user(public_id):
-    if not current_user:
-        return jsonify({'message' : 'Cannot perform that function!'})
-
-    user = User.query.filter_by(public_id=public_id).first()
-
-    if not user:
-        return jsonify({'message' : 'No user found!'})
-
-    user.admin = True
-    db.session.commit()
-
-    return jsonify({'message' : 'The user has been promoted!'})
-
 # update a user
 @app.route('/users/<int:id>', methods=['PUT'])
 @token_required
 def update_user(current_user, id):
-    if not current_user:
+    if not current_user.admin:
         return jsonify({'message': 'Cannot perform that function!'})
     try:
         user = User.query.filter_by(id=id).first()
@@ -197,9 +186,9 @@ def update_user(current_user, id):
 # delete a user
 @app.route('/users/<int:id>', methods=['DELETE'])
 @token_required
-def delete_user(current_user,id):
-    if not current_user:
-        return jsonify({'message' : 'Cannot perform that function!'})
+def delete_user(current_user, id):
+    if not current_user.admin:
+        return jsonify({'message': 'Cannot perform that function!'})
     try:
         user = User.query.filter_by(id=id).first()
         if user:
@@ -210,28 +199,26 @@ def delete_user(current_user,id):
         return make_response(jsonify({'message': 'error deleting user'}), 500)
 
 
-
-
-
-
-@app.route('/login',methods=['POST'])
+# create a loggin route
+@app.route('/login')
 def login():
     auth = request.authorization
 
     if not auth or not auth.username or not auth.password:
-        return make_response('Could not verify', 401, {'WWW-Authenticate' : 'Basic realm="Login required!"'})
+        return make_response('Could not verify', 401, {'WWW-Authenticate': 'Basic realm="Login required!"'})
 
     user = User.query.filter_by(name=auth.username).first()
 
     if not user:
-        return make_response('Could not verify', 401, {'WWW-Authenticate' : 'Basic realm="Login required!"'})
+        return make_response('Could not verify', 401, {'WWW-Authenticate': 'Basic realm="Login required!"'})
 
     if check_password_hash(user.password, auth.password):
-        token = jwt.encode({'public_id' : user.public_id, 'exp' : datetime.datetime.utcnow() + datetime.timedelta(minutes=30)}, app.config['SECRET_KEY'])
+        token = jwt.encode({'public_id': user.public_id, 'exp': datetime.datetime.utcnow(
+        ) + datetime.timedelta(minutes=30)}, app.config['SECRET_KEY'])
 
-        return jsonify({'token' : token})
+        return jsonify({'token': token})
 
-    return make_response('Could not verify', 401, {'WWW-Authenticate' : 'Basic realm="Login required!"'})
+    return make_response('Could not verify', 401, {'WWW-Authenticate': 'Basic realm="Login required!"'})
 
 
 # Create a new book in the category
@@ -239,12 +226,13 @@ def login():
 @token_required
 def addnew_bookcategory(current_user):
     ''' create a book in the category. '''
-    if not current_user:
-        return jsonify({'message' : 'Cannot perform that function!'})
+    if not current_user.admin:
+        return jsonify({'message': 'Cannot perform that function!'})
 
     json_data = request.get_json()
     name, created_by = json_data['name'], json_data['created_by']
-    category = BookCategory(name=name, created_by=created_by)
+    category = BookCategory(
+        name=name, created_by=created_by, user_id=current_user.id)
     category.save()
 
     return jsonify({'BookCategory': 'category created'})
@@ -256,8 +244,8 @@ def addnew_bookcategory(current_user):
 @token_required
 def list_book_category(current_user):
     '''list all category for a book.'''
-    if not current_user:
-        return jsonify({'message' : 'Cannot perform that function!'})
+    if not current_user.admin:
+        return jsonify({'message': 'Cannot perform that function!'})
 
     categories = BookCategory.query.all()
 
@@ -266,12 +254,13 @@ def list_book_category(current_user):
 
 @app.route('/categories/<int:id>', methods=['GET'])
 @token_required
-def get_book_category(current_user,id):
+def get_book_category(current_user, id):
     '''Get a single book category.'''
-    if not current_user:
-        return jsonify({'message' : 'Cannot perform that function!'})
+    if not current_user.admin:
+        return jsonify({'message': 'Cannot perform that function!'})
     try:
-        category = BookCategory.query.filter_by(id=id,user_id=current_user.id).first()
+        category = BookCategory.query.filter_by(
+            id=id, user_id=current_user.id).first()
         if category:
             return make_response(jsonify({'category': category.to_json()}), 200)
         return make_response(jsonify({'message': 'user not found'}), 404)
@@ -281,12 +270,13 @@ def get_book_category(current_user,id):
 
 @app.route("/categories/<int:id>", methods=['PUT'])
 @token_required
-def update(current_user,id):
+def update(current_user, id):
     '''Update a book category. '''
-    if not current_user:
-        return jsonify({'message' : 'Cannot perform that function!'})
+    if not current_user.admin:
+        return jsonify({'message': 'Cannot perform that function!'})
     try:
-        category = BookCategory.query.filter_by(id=id).first()
+        category = BookCategory.query.filter_by(
+            id=id, user_id=current_user.id).first()
         if category:
             data = request.get_json()
             category.name = data['name']
@@ -300,29 +290,31 @@ def update(current_user,id):
 
 @app.route("/categories/<int:id>", methods=['DELETE'])
 @token_required
-def delete(current_user,id):
+def delete(current_user, id):
     '''Delete a book category. '''
-    if not current_user:
-        return jsonify({'message' : 'Cannot perform that function!'})
+    if not current_user.admin:
+        return jsonify({'message': 'Cannot perform that function!'})
     try:
-        book = BookCategory.query.filter_by(id=id).first()
+        book = BookCategory.query.filter_by(
+            id=id, user_id=current_user.id).first()
         if book:
             book.delete()
             return jsonify({'message': 'BookModel successfully deleted'})
         return make_response(jsonify({'message': 'user not found'}), 404)
-    except Exception as e :
+    except Exception as e:
         return make_response(jsonify({'message': 'error deleting user'}.format(e)), 500)
 
 
 # Create book
 @app.route('/categories/<int:id>/books/', methods=['POST'])
 @token_required
-def create_book(current_user,id):
+def create_book(current_user, id):
     '''Create a book. '''
-    if not current_user:
-        return jsonify({'message' : 'Cannot perform that function!'})
+    if not current_user.admin:
+        return jsonify({'message': 'Cannot perform that function!'})
 
-    category = BookCategory.query.filter_by(id=id).first()
+    category = BookCategory.query.filter_by(
+        id=id, user_id=current_user.id).first()
     if not category:
         return make_response(jsonify(('category with id:{} was not found' .format(id))))
     json_data = request.get_json()
@@ -337,9 +329,9 @@ def create_book(current_user,id):
 # Update book
 @app.route('/categories/<int:id>/books/<int:book_id>', methods=['PUT'])
 @token_required
-def update_book(current_user,id, book_id):
-    if not current_user:
-        return jsonify({'message' : 'Cannot perform that function!'})
+def update_book(current_user, id, book_id):
+    if not current_user.admin:
+        return jsonify({'message': 'Cannot perform that function!'})
     category = BookCategory.query.filter_by(id=id).first()
 
     if not category:
@@ -356,7 +348,7 @@ def update_book(current_user,id, book_id):
         book.category_id = request.json.get('category_id', book.category_id)
         book.category_id = category.id
         book.save()
-        return make_response( jsonify({"message": "Book updated successfully", "book": book.to_json()}), 200)
+        return make_response(jsonify({"message": "Book updated successfully", "book": book.to_json()}), 200)
 
     return make_response(jsonify({"message": "Book not found"}), 404)
 
@@ -365,16 +357,17 @@ def update_book(current_user,id, book_id):
 
 @app.route('/categories/<int:id>/books/<int:book_id>', methods=['DELETE'])
 @token_required
-def delete_book(current_user,id, book_id):
-    if not current_user:
-        return jsonify({'message' : 'Cannot perform that function!'})
-    bookcategory = BookCategory.query.filter_by(id=id).first()
+def delete_book(current_user, id, book_id):
+    if not current_user.admin:
+        return jsonify({'message': 'Cannot perform that function!'})
+    bookcategory = BookCategory.query.filter_by(
+        id=id, user_id=current_user.id).first()
 
     if not bookcategory:
         return make_response(('book category with id:{} was not found' .format(book_id)))
 
     book = BookModel.query.get(id)
-    if book :
+    if book:
         book.delete()
         return make_response(jsonify({"message": "Book deleted successfully"}), 200)
 
