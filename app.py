@@ -8,7 +8,7 @@ from functools import wraps
 
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:Favour98@localhost/kittie'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:Favour98@localhost/halo'
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config['SECRET_KEY'] = 'jesusislord'
 port = 5000
@@ -46,7 +46,7 @@ class User(Base):
     name = db.Column(db.String(100))
     password = db.Column(db.String(100))
     admin = db.Column(db.Boolean)
-    Book = db.relationship('BookModel', backref='user', lazy='dynamic')
+    category = db.relationship('BookCategory', backref='owner', lazy='dynamic')
 
     def to_json(self):
         return {'id': self.id, 'name': self.name, 'public_id': self.public_id, 'password': self.password, 'admin': self.admin}
@@ -59,7 +59,7 @@ class BookCategory(Base):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), unique=True, nullable=False)
     created_by = db.Column(db.String(100))
-    author_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     books = db.relationship('BookModel', backref='category',
                             cascade="all, delete-orphan", lazy='dynamic')
 
@@ -75,7 +75,6 @@ class BookModel(Base):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100), nullable=False)
     author = db.Column(db.String(100))
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     category_id = db.Column(db.Integer, db.ForeignKey('BookCategorys.id'))
 
     def to_json(self):
