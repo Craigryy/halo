@@ -107,7 +107,8 @@ def token_required(f):
             current_user = User.query.filter_by(
                 public_id=data['public_id']).first()
         except Exception as e:
-            return jsonify({'message': 'Token is invalid!'}.format(e)), 401
+            error_message = f"Token is invalid!: {str(e)}"
+            return make_response(jsonify({'message': error_message}), 500)
 
         return f(current_user, *args, **kwargs)
 
@@ -180,7 +181,8 @@ def update_user(current_user, id):
             return make_response(jsonify({'message': 'user updated'}), 200)
         return make_response(jsonify({'message': 'user not found'}), 404)
     except Exception as e:
-        return make_response(jsonify({'message': 'error updating user'}.format(e)), 500)
+        error_message = f"Error updating user: {str(e)}"
+    return make_response(jsonify({'message': error_message}), 500)
 
 
 # delete a user
@@ -196,7 +198,8 @@ def delete_user(current_user, id):
             return make_response(jsonify({'message': 'user deleted'}), 200)
         return make_response(jsonify({'message': 'user not found'}), 404)
     except Exception as e:
-        return make_response(jsonify({'message': 'error deleting user'}), 500)
+        error_message = f"Error deleting user: {str(e)}"
+    return make_response(jsonify({'message': error_message}), 500)
 
 
 # create a loggin route
@@ -235,7 +238,7 @@ def addnew_bookcategory(current_user):
         name=name, created_by=created_by, user_id=current_user.id)
     category.save()
 
-    return jsonify({'BookCategory': 'category created'})
+    return jsonify({'BookCategory': category.to_json})
 
 #
 
@@ -263,9 +266,10 @@ def get_book_category(current_user, id):
             id=id, user_id=current_user.id).first()
         if category:
             return make_response(jsonify({'category': category.to_json()}), 200)
-        return make_response(jsonify({'message': 'user not found'}), 404)
+        return make_response(jsonify({'message': 'category not found'}), 404)
     except Exception as e:
-        return make_response(jsonify({'message': 'error getting user'}.format(e)), 500)
+        error_message = f"Error getting category: {str(e)}"
+    return make_response(jsonify({'message': error_message}), 500)
 
 
 @app.route("/categories/<int:id>", methods=['PUT'])
@@ -299,10 +303,11 @@ def delete(current_user, id):
             id=id, user_id=current_user.id).first()
         if book:
             book.delete()
-            return jsonify({'message': 'BookModel successfully deleted'})
-        return make_response(jsonify({'message': 'user not found'}), 404)
+            return jsonify({'message': 'category successfully deleted'})
+        return make_response(jsonify({'message': 'category not found'}), 404)
     except Exception as e:
-        return make_response(jsonify({'message': 'error deleting user'}.format(e)), 500)
+        error_message = f"Error deleting category: {str(e)}"
+    return make_response(jsonify({'message': error_message}), 500)
 
 
 # Create book
@@ -323,7 +328,7 @@ def create_book(current_user, id):
     book.category_id = category.id
     book.save()
 
-    return jsonify({'book': "good"})
+    return jsonify({'book': book.to_json})
 
 
 # Update book
