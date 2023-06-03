@@ -1,10 +1,5 @@
-from flask import Flask, jsonify, request, make_response
 from flask_sqlalchemy import SQLAlchemy
-import uuid
-from werkzeug.security import generate_password_hash, check_password_hash
-import jwt
-import datetime
-from functools import wraps
+from flask import Flask
 
 
 app = Flask(__name__)
