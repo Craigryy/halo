@@ -1,4 +1,8 @@
-FROM python:3.6-slim-buster
+FROM alpine:latest
+
+RUN adduser -D admin
+USER admin
+
 
 WORKDIR /app
 
