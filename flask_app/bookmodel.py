@@ -1,6 +1,6 @@
 from flask import jsonify, request, make_response
-from model import BookModel, BookCategory, app, port
-from authenticate import token_required
+from flask_app.model import BookModel, BookCategory, app
+from flask_app.authenticate import token_required
 
 # Create book
 
@@ -25,11 +25,13 @@ def create_book(current_user, id):
     return jsonify({'book': book.to_json})
 
 
-# Update book
+# Write a function named `update_book` which updates an existing book using `PUT` method,
+# and assign to the static route of ('/categories/<int:id>/books/<int:book_id>')
 @app.route('/categories/<int:id>/books/<int:book_id>', methods=['PUT'])
 @token_required
 def update_book(current_user, id, book_id):
-    if not current_user.admin:
+    '''Update a book. '''
+    if not current_user:
         return jsonify({'message': 'Cannot perform that function!'})
     category = BookCategory.query.filter_by(id=id).first()
 
@@ -51,13 +53,14 @@ def update_book(current_user, id, book_id):
 
     return make_response(jsonify({"message": "Book not found"}), 404)
 
-# Delete book
 
-
+# Write a function named `delete_book` which updates an existing book using `DELETE` method,
+# and assign to the static route of ('/categories/<int:id>/books/<int:book_id>'')
 @app.route('/categories/<int:id>/books/<int:book_id>', methods=['DELETE'])
 @token_required
 def delete_book(current_user, id, book_id):
-    if not current_user.admin:
+    '''Delete a book in a category '''
+    if not current_user:
         return jsonify({'message': 'Cannot perform that function!'})
     bookcategory = BookCategory.query.filter_by(
         id=id, user_id=current_user.id).first()
@@ -71,7 +74,3 @@ def delete_book(current_user, id, book_id):
         return make_response(jsonify({"message": "Book deleted successfully"}), 200)
 
     return make_response(jsonify({"message": "Book not found"}), 404)
-
-
-# if __name__ == '__main__':
-#     app.run(host='0.0.0.0', port=port)

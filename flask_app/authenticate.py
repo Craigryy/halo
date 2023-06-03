@@ -14,7 +14,7 @@ def test():
     return make_response(jsonify({'message': 'test route'}), 200)
 
 
-# create a token
+# create a token_required decorator which requires a header "x-access-token" and a token .
 def token_required(f):
     @wraps(f)
     def decorated(*args, **kwargs):
@@ -45,7 +45,8 @@ def token_required(f):
 
 @app.route('/user', methods=['GET'])
 @token_required
-def get_all_users(current_user):
+def get_all_users():
+    '''Get all users '''
 
     users = User.query.all()
 
@@ -66,12 +67,14 @@ def create_user():
     return jsonify({'message': 'New user created!"'})
 
 
-# endpoint to get a single user
-@app.route('/user/<public_id>', methods=['GET'])
+# Write a function named `get_one_user` which takes in a public id using `GET` method,
+# and assign to the static route of ('/user/<int:public_id>')
+@app.route('/user/<int:public_id>', methods=['GET'])
 @token_required
 def get_one_user(current_user, public_id):
+    '''End point to access a single user in the database.'''
 
-    if not current_user.admin:
+    if not current_user:
         return jsonify({'message': 'Cannot perform that function!'})
 
     user = User.query.filter_by(public_id=public_id).first()
@@ -89,10 +92,14 @@ def get_one_user(current_user, public_id):
 
 
 # update a user
+
+# Write a function named `update_user` which takes in an id using `PUT` method,
+# and assign to the static route of ('/users/<int:id>')
 @app.route('/users/<int:id>', methods=['PUT'])
 @token_required
 def update_user(current_user, id):
-    if not current_user.admin:
+    '''End point to update a single user in the database.'''
+    if not current_user:
         return jsonify({'message': 'Cannot perform that function!'})
     try:
         user = User.query.filter_by(id=id).first()
@@ -109,11 +116,13 @@ def update_user(current_user, id):
     return make_response(jsonify({'message': error_message}), 500)
 
 
-# delete a user
+# Write a function named `delete_user` which takes in an id using `DELETE` method,
+# and assign to the static route of ('/users/<int:id>')
 @app.route('/users/<int:id>', methods=['DELETE'])
 @token_required
 def delete_user(current_user, id):
-    if not current_user.admin:
+    '''End point to delete a single user in the database.'''
+    if not current_user:
         return jsonify({'message': 'Cannot perform that function!'})
     try:
         user = User.query.filter_by(id=id).first()
@@ -126,9 +135,11 @@ def delete_user(current_user, id):
     return make_response(jsonify({'message': error_message}), 500)
 
 
-# create a loggin route
-@app.route('/login')
+# create a loggin route ,which requires a username and a password for basic,
+# authentication.
+@app.route('/login', methods=['POST'])
 def login():
+    '''create a login route'''
     auth = request.authorization
 
     if not auth or not auth.username or not auth.password:
