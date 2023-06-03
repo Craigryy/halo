@@ -157,7 +157,7 @@ class JapaneseContextAnalysis:
         # this character will simply our logic and improve performance.
         i = self._need_to_skip_char_num
         while i < num_bytes:
-            order, char_len = self.get_order(byte_str[i : i + 2])
+            order, char_len = self.get_order(byte_str[i: i + 2])
             i += char_len
             if i > num_bytes:
                 self._need_to_skip_char_num = i - num_bytes

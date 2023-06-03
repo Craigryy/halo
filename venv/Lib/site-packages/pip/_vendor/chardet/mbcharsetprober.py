@@ -78,7 +78,7 @@ class MultiByteCharSetProber(CharSetProber):
                     self._last_char[1] = byte
                     self.distribution_analyzer.feed(self._last_char, char_len)
                 else:
-                    self.distribution_analyzer.feed(byte_str[i - 1 : i + 1], char_len)
+                    self.distribution_analyzer.feed(byte_str[i - 1: i + 1], char_len)
 
         self._last_char[0] = byte_str[-1]
 

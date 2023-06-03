@@ -1,10 +1,10 @@
-from flask import  jsonify, request, make_response
+from flask import jsonify, request, make_response
 import uuid
 from werkzeug.security import generate_password_hash, check_password_hash
 import jwt
 import datetime
 from functools import wraps
-from .model import User,app,db
+from .model import User, app, db
 
 # create a test route
 

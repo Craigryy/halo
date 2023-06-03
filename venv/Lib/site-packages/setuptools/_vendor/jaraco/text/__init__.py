@@ -224,8 +224,6 @@ def unwrap(s):
     return '\n'.join(cleaned)
 
 
-
-
 class Splitter(object):
     """object that will split a string with the given arguments for each call
 
