@@ -1,17 +1,17 @@
 '''Models defined for APi  '''
 
-from flask_sqlalchemy import SQLAlchemy
-from flask import Flask
+# from flask_sqlalchemy import SQLAlchemy
+# from flask import Flask
 
+# app = Flask(__name__)
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:Favour98@localhost/halo'
+# app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+# app.config['SECRET_KEY'] = 'jesusislord'
+# port = 5000
 
-app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:Favour98@localhost/halo'
-app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-app.config['SECRET_KEY'] = 'jesusislord'
-port = 5000
+# db = SQLAlchemy(app)
 
-db = SQLAlchemy(app)
-
+from config import db
 
 
 class Base(db.Model):

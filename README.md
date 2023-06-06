@@ -63,7 +63,7 @@ Run  the following commands in your terminal
 python
 ```
 pip install -r requirements.txt
-Run  python manager.py to start the server 
+Run ### python manager.py ### to start the server 
 Test Api using POSTMAN or cURL
 
 For basic auth 
@@ -73,11 +73,12 @@ value: token generated
 `On linux`
 
 Run  the following commands in your terminal
-``` 
-pip install -r requirements.txt
-Run  python manager.py to start the server 
-Test Api using POSTMAN or cURL
 
+
+pip install -r requirements.txt
+Run ### python3 manager.py ### to start the server 
+Test Api using POSTMAN or cURL
+```
 
 Database in use Postgres .
  - POSTGRES_PASSWORD=Favour98
