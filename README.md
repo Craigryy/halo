@@ -61,12 +61,9 @@ Install dependencies using pip install -r requirements.txt
 
 Run  the following commands in your terminal
 python
-```from app import app,User,db,BookModel,BookCategory 
-app.app_context().push()
-db.create_all()```
-
+```
 pip install -r requirements.txt
-Run  python halo.py to start the server 
+Run  python manager.py to start the server 
 Test Api using POSTMAN or cURL
 
 For basic auth 
@@ -76,13 +73,9 @@ value: token generated
 `On linux`
 
 Run  the following commands in your terminal
-```python3
-from app import app,User,db,BookModel,BookCategory 
-app.app_context().push()
-db.create_all()```
-
+``` 
 pip install -r requirements.txt
-Run  python halo.py to start the server 
+Run  python manager.py to start the server 
 Test Api using POSTMAN or cURL
 
 

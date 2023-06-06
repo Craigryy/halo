@@ -1,3 +1,5 @@
+'''Models defined for APi  '''
+
 from flask_sqlalchemy import SQLAlchemy
 from flask import Flask
 
@@ -9,6 +11,7 @@ app.config['SECRET_KEY'] = 'jesusislord'
 port = 5000
 
 db = SQLAlchemy(app)
+
 
 
 class Base(db.Model):

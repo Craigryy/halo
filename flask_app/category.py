@@ -1,13 +1,19 @@
 '''Script for BookCategory  Api Accesspoint. '''
 
-from flask import jsonify, request, make_response
-from flask_app.model import BookCategory, app, db
-from flask_app.authenticate import token_required
+from flask import jsonify, request, make_response,Blueprint
+from flask_sqlalchemy import SQLAlchemy
+from .model import BookCategory
+from .authenticate import token_required
+
+
+db = SQLAlchemy()
+
+category_app = Blueprint('category_app', __name__)
 
 
 # Write a function named `test` which returns a json object with the mesage: "test route ",
 # and assign to the static route of ('/test')
-@app.route('/test', methods=['GET'])
+@category_app.route('/', methods=['GET'])
 def test():
     '''Test route'''
     return make_response(jsonify({'message': 'test route'}), 200)
@@ -15,7 +21,7 @@ def test():
 
 # Write a function named "addnew_category`which creates new book category using `POST` method,
 # and assign to the static route of ('/categories/')
-@app.route("/categories/", methods=['POST'])
+@category_app.route("/categories/", methods=['POST'])
 @token_required
 def addnew_bookcategory(current_user):
     ''' create a book in the category. '''
@@ -34,7 +40,7 @@ def addnew_bookcategory(current_user):
 # and assign to the static route of ('/categories/<int:id>')
 
 
-@app.route('/categories/', methods=['GET'])
+@category_app.route('/categories/', methods=['GET'])
 @token_required
 def list_book_category(current_user):
     '''list all category for a book.'''
@@ -49,7 +55,7 @@ def list_book_category(current_user):
 # and assign to the static route of ('/categories/<int:id>')
 
 
-@app.route('/categories/<int:id>', methods=['GET'])
+@category_app.route('/categories/<int:id>', methods=['GET'])
 @token_required
 def get_book_category(current_user, id):
     '''Get a single book category.'''
@@ -69,7 +75,7 @@ def get_book_category(current_user, id):
 # and assign to the static route of ('/categories/<int:id>')
 
 
-@app.route("/categories/<int:id>", methods=['PUT'])
+@category_app.route("/categories/<int:id>", methods=['PUT'])
 @token_required
 def update(current_user, id):
     '''Update a book category. '''
@@ -91,7 +97,7 @@ def update(current_user, id):
 
 # Write a function named `delete` which updates an existing book using `DELETE` method,
 # and assign to the static route of ('/categories/<int:id>')
-@app.route("/categories/<int:id>", methods=['DELETE'])
+@category_app.route("/categories/<int:id>", methods=['DELETE'])
 @token_required
 def delete(current_user, id):
     '''Delete a book category. '''

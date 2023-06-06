@@ -1,15 +1,20 @@
-from flask import jsonify, request, make_response
+from flask import jsonify, request, make_response,Blueprint
 import uuid
 from werkzeug.security import generate_password_hash, check_password_hash
 import jwt
 import datetime
 from functools import wraps
-from .model import User, app, db
+from .model import User,db
+
+
+
+auth_app = Blueprint('auth_app', __name__)
+
 
 # create a test route
 
 
-@app.route('/test', methods=['GET'])
+@auth_app.route('/test', methods=['GET'])
 def test():
     return make_response(jsonify({'message': 'test route'}), 200)
 
@@ -27,7 +32,7 @@ def token_required(f):
             return jsonify({'message': 'Token is missing!'}), 401
 
         try:
-            data = jwt.decode(token, app.config['SECRET_KEY'])
+            data = jwt.decode(token, auth_app.config['SECRET_KEY'])
             current_user = User.query.filter_by(
                 public_id=data['public_id']).first()
         except Exception as e:
@@ -43,7 +48,7 @@ def token_required(f):
 # create an endpoint to get all users
 
 
-@app.route('/user', methods=['GET'])
+@auth_app.route('/user', methods=['GET'])
 @token_required
 def get_all_users():
     '''Get all users '''
@@ -54,7 +59,7 @@ def get_all_users():
 
 
 # create a new user endpoint
-@app.route('/auth/login', methods=['POST'])
+@auth_app.route('/auth/login', methods=['POST'])
 # @token_required
 def create_user():
     data = request.get_json()
@@ -69,7 +74,7 @@ def create_user():
 
 # Write a function named `get_one_user` which takes in a public id using `GET` method,
 # and assign to the static route of ('/user/<int:public_id>')
-@app.route('/user/<int:public_id>', methods=['GET'])
+@auth_app.route('/user/<int:public_id>', methods=['GET'])
 @token_required
 def get_one_user(current_user, public_id):
     '''End point to access a single user in the database.'''
@@ -95,7 +100,7 @@ def get_one_user(current_user, public_id):
 
 # Write a function named `update_user` which takes in an id using `PUT` method,
 # and assign to the static route of ('/users/<int:id>')
-@app.route('/users/<int:id>', methods=['PUT'])
+@auth_app.route('/users/<int:id>', methods=['PUT'])
 @token_required
 def update_user(current_user, id):
     '''End point to update a single user in the database.'''
@@ -118,7 +123,7 @@ def update_user(current_user, id):
 
 # Write a function named `delete_user` which takes in an id using `DELETE` method,
 # and assign to the static route of ('/users/<int:id>')
-@app.route('/users/<int:id>', methods=['DELETE'])
+@auth_app.route('/users/<int:id>', methods=['DELETE'])
 @token_required
 def delete_user(current_user, id):
     '''End point to delete a single user in the database.'''
@@ -137,7 +142,7 @@ def delete_user(current_user, id):
 
 # create a loggin route ,which requires a username and a password for basic,
 # authentication.
-@app.route('/login', methods=['POST'])
+@auth_app.route('/login', methods=['POST'])
 def login():
     '''create a login route'''
     auth = request.authorization
@@ -152,7 +157,7 @@ def login():
 
     if check_password_hash(user.password, auth.password):
         token = jwt.encode({'public_id': user.public_id, 'exp': datetime.datetime.utcnow(
-        ) + datetime.timedelta(minutes=30)}, app.config['SECRET_KEY'])
+        ) + datetime.timedelta(minutes=30)}, auth_app.config['SECRET_KEY'])
 
         return jsonify({'token': token})
 

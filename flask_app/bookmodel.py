@@ -1,15 +1,19 @@
-from flask import jsonify, request, make_response
-from flask_app.model import BookModel, BookCategory, app
-from flask_app.authenticate import token_required
+'''bookmodel scripts for APi'''
 
+from flask import jsonify, request, make_response,Blueprint
+from .model import BookModel, BookCategory
+from .authenticate import token_required
+
+
+book_app = Blueprint('book_app', __name__)
 # Create book
 
 
-@app.route('/categories/<int:id>/books/', methods=['POST'])
+@book_app.route('/categories/<int:id>/books/', methods=['POST'])
 @token_required
 def create_book(current_user, id):
     '''Create a book. '''
-    if not current_user.admin:
+    if not current_user:
         return jsonify({'message': 'Cannot perform that function!'})
 
     category = BookCategory.query.filter_by(
@@ -27,7 +31,7 @@ def create_book(current_user, id):
 
 # Write a function named `update_book` which updates an existing book using `PUT` method,
 # and assign to the static route of ('/categories/<int:id>/books/<int:book_id>')
-@app.route('/categories/<int:id>/books/<int:book_id>', methods=['PUT'])
+@book_app.route('/categories/<int:id>/books/<int:book_id>', methods=['PUT'])
 @token_required
 def update_book(current_user, id, book_id):
     '''Update a book. '''
@@ -56,7 +60,7 @@ def update_book(current_user, id, book_id):
 
 # Write a function named `delete_book` which updates an existing book using `DELETE` method,
 # and assign to the static route of ('/categories/<int:id>/books/<int:book_id>'')
-@app.route('/categories/<int:id>/books/<int:book_id>', methods=['DELETE'])
+@book_app.route('/categories/<int:id>/books/<int:book_id>', methods=['DELETE'])
 @token_required
 def delete_book(current_user, id, book_id):
     '''Delete a book in a category '''
