@@ -1,12 +1,8 @@
 '''Script for BookCategory  Api Accesspoint. '''
 
 from flask import jsonify, request, make_response,Blueprint
-from flask_sqlalchemy import SQLAlchemy
-from .model import BookCategory
+from .model import BookCategory,db
 from .authenticate import token_required
-
-
-db = SQLAlchemy()
 
 category_app = Blueprint('category_app', __name__)
 

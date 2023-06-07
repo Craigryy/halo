@@ -3,6 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_app.authenticate import auth_app
 from flask_app.bookmodel import book_app
 from flask_app.category import category_app
+
 from config import POSTGRES_HOST,POSTGRES_DB, POSTGRES_USER, POSTGRES_PASSWORD
 
 db = SQLAlchemy()
