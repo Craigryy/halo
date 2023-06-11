@@ -18,11 +18,6 @@ def create_app():
     app.config['SECRET_KEY'] = 'jesusislord'
       
 
-    # # Set the secret_key attribute on the auth_app
-    # auth_app.secret_key = app.config['SECRET_KEY']
-    
-
-
     # Initialize the database
     db.init_app(app)
 
