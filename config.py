@@ -18,4 +18,5 @@ app.config['SQLALCHEMY_DATABASE_URI'] = f'postgresql://{POSTGRES_USER}:{POSTGRES
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # Initialize the database
-db = SQLAlchemy(app)
+db = SQLAlchemy()
+db.init_app(app)
