@@ -1,4 +1,4 @@
-from flask import jsonify, request, make_response,Blueprint
+from flask import jsonify, request, make_response,Blueprint,current_app
 import uuid
 from werkzeug.security import generate_password_hash, check_password_hash
 import jwt
@@ -9,6 +9,8 @@ from .model import User,db
 
 
 auth_app = Blueprint('auth_app', __name__)
+auth_app.secret_key = None
+
 
 
 # create a test route
@@ -145,6 +147,7 @@ def delete_user(current_user, id):
 @auth_app.route('/login', methods=['POST'])
 def login():
     '''create a login route'''
+    secret_key = current_app.config['SECRET_KEY']
     auth = request.authorization
 
     if not auth or not auth.username or not auth.password:
@@ -157,8 +160,12 @@ def login():
 
     if check_password_hash(user.password, auth.password):
         token = jwt.encode({'public_id': user.public_id, 'exp': datetime.datetime.utcnow(
-        ) + datetime.timedelta(minutes=30)}, auth_app.config['SECRET_KEY'])
+        ) + datetime.timedelta(minutes=30)}, secret_key)
 
-        return jsonify({'token': token})
+        # Decode the token to string format
+        token_string = token.decode('utf-8')
+
+
+        return jsonify({'token': token_string})
 
     return make_response('Could not verify', 401, {'WWW-Authenticate': 'Basic realm="Login required!"'})
