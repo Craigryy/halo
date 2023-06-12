@@ -2,13 +2,7 @@ version: '3'
 
 services:
   flask_app:
-<<<<<<< HEAD
     build: .
-=======
-    build:
-      context: ./flask_app
-      dockerfile: Dockerfile
->>>>>>> f923958493f9c3a30ec5a8d3f6ff892b4a0500b9
     ports:
       - 5000:5000
     volumes:

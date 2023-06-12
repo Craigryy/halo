@@ -1,21 +1,16 @@
-from flask import jsonify, request, make_response,Blueprint,current_app
+from flask import jsonify, request, make_response, Blueprint, current_app
 import uuid
 from werkzeug.security import generate_password_hash, check_password_hash
 import jwt
 import datetime
 from functools import wraps
-from .model import User,db
-
+from .model import User, db
 
 
 auth_app = Blueprint('auth_app', __name__)
-auth_app.secret_key = None
-
 
 
 # create a test route
-
-
 @auth_app.route('/test', methods=['GET'])
 def test():
     return make_response(jsonify({'message': 'test route'}), 200)
@@ -35,7 +30,7 @@ def token_required(f):
             return jsonify({'message': 'Token is missing!'}), 401
 
         try:
-            data = jwt.decode(token,current_app.config['SECRET_KEY'] )
+            data = jwt.decode(token, current_app.config['SECRET_KEY'])
             current_user = User.query.filter_by(
                 public_id=data['public_id']).first()
         except Exception as e:
@@ -46,11 +41,8 @@ def token_required(f):
 
     return decorated
 
-# create a user
 
 # create an endpoint to get all users
-
-
 @auth_app.route('/user', methods=['GET'])
 @token_required
 def get_all_users(current_user):
@@ -167,7 +159,6 @@ def login():
 
         # Decode the token to string format
         token_string = token.decode('utf-8')
-
 
         return jsonify({'token': token_string})
 
