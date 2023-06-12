@@ -52,9 +52,11 @@ def token_required(f):
 
 
 @auth_app.route('/user', methods=['GET'])
-# @token_required
-def get_all_users():
+@token_required
+def get_all_users(current_user):
     '''Get all users '''
+    if not current_user:
+        return jsonify({'message': 'Cannot perform that function!'})
 
     users = User.query.all()
 
