@@ -25,6 +25,7 @@ def test():
 def token_required(f):
     @wraps(f)
     def decorated(*args, **kwargs):
+        secret_key = current_app.config['SECRET_KEY']
         token = None
 
         if 'x-access-token' in request.headers:
@@ -34,7 +35,7 @@ def token_required(f):
             return jsonify({'message': 'Token is missing!'}), 401
 
         try:
-            data = jwt.decode(token, auth_app.config['SECRET_KEY'])
+            data = jwt.decode(token,current_app.config['SECRET_KEY'] )
             current_user = User.query.filter_by(
                 public_id=data['public_id']).first()
         except Exception as e:
@@ -51,7 +52,7 @@ def token_required(f):
 
 
 @auth_app.route('/user', methods=['GET'])
-@token_required
+# @token_required
 def get_all_users():
     '''Get all users '''
 
