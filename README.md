@@ -61,10 +61,9 @@ Install dependencies using pip install -r requirements.txt
 
 Run  the following commands in your terminal
 python
-```from app import app,User,db,BookModel,BookCategory 
-app.app_context().push()
-db.create_all()```
-
+```
+pip install -r requirements.txt
+Run ### python manager.py ### to start the server 
 Test Api using POSTMAN or cURL
 
 For basic auth 
@@ -74,11 +73,12 @@ value: token generated
 `On linux`
 
 Run  the following commands in your terminal
-```python3
-from app import app,User,db,BookModel,BookCategory 
-app.app_context().push()
-db.create_all()```
 
+
+pip install -r requirements.txt
+Run ### python3 manager.py ### to start the server 
+Test Api using POSTMAN or cURL
+```
 
 Database in use Postgres .
  - POSTGRES_PASSWORD=Favour98
@@ -86,6 +86,11 @@ Database in use Postgres .
  - POSTGRES_DB=kittie
 
 `Deployment`:
+To deploy to your localhost :
+-sudo docker build -t halo .
+-sudo docker run -p 5000:5000 halo
+
+
 To deploy to docker 
 RUN the following command:
 -docker compose up -d flask_db
@@ -94,4 +99,7 @@ RUN the following command:
 -docker compose up --build flask_app
 
 `TEST`
-To test our endpoints, we be using HTTpretty.HTTPretty is a Python library that allows you to mock HTTP responses in your unit tests. It provides a way to simulate HTTP requests and responses, making it easier to test code that interacts with external HTTP services. With HTTPretty, you can define expected responses for specific HTTP requests, including status codes, headers, and response bodies.
+To test our endpoints, we will be using HTTpretty.
+HTTPretty is a Python library that allows you to mock HTTP responses in your unit tests.
+It provides a way to simulate HTTP requests and responses, making it easier to test code that interacts with external HTTP services. 
+With HTTPretty, you can define expected responses for specific HTTP requests, including status codes, headers, and response bodies.
