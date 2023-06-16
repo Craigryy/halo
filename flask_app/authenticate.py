@@ -20,7 +20,6 @@ def test():
 def token_required(f):
     @wraps(f)
     def decorated(*args, **kwargs):
-        secret_key = current_app.config['SECRET_KEY']
         token = None
 
         if 'x-access-token' in request.headers:

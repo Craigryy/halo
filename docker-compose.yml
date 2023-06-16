@@ -1,4 +1,4 @@
-version: '3'
+version: '3.9'
 
 services:
   flask_app:
@@ -20,4 +20,7 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=Favour98
     volumes:
-      - ./data:/var/lib/postgresql/data
+      - db_data:/var/lib/postgresql/data
+
+volumes:
+  db_data:
