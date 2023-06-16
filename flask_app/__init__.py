@@ -4,7 +4,7 @@ from flask_app.authenticate import auth_app
 from flask_app.bookmodel import book_app
 from flask_app.category import category_app
 
-from config import POSTGRES_HOST,POSTGRES_DB, POSTGRES_USER, POSTGRES_PASSWORD,db
+from config import POSTGRES_HOST,POSTGRES_DB, POSTGRES_USER, POSTGRES_PASSWORD,db,POSTGRES_SECRET_KEY
 
 
 
@@ -15,13 +15,8 @@ def create_app():
     # Configure the database
     app.config['SQLALCHEMY_DATABASE_URI'] = f'postgresql://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_HOST}/{POSTGRES_DB}'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-    app.config['SECRET_KEY'] = 'jesusislord'
+    app.config['SECRET_KEY'] = POSTGRES_SECRET_KEY
       
-
-    # # Set the secret_key attribute on the auth_app
-    # auth_app.secret_key = app.config['SECRET_KEY']
-    
-
 
     # Initialize the database
     db.init_app(app)
