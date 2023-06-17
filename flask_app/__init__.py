@@ -1,3 +1,4 @@
+import time
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_app.authenticate import auth_app
@@ -13,9 +14,12 @@ def create_app():
     app = Flask(__name__)
    
     # Configure the database
-    app.config['SQLALCHEMY_DATABASE_URI'] = f'postgresql://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_HOST}/{POSTGRES_DB}'
+    app.config['SQLALCHEMY_DATABASE_URI'] =f'postgresql://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_HOST}/{POSTGRES_DB}'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['SECRET_KEY'] = POSTGRES_SECRET_KEY
+
+    # Introduce a delay before initializing the database
+    time.sleep(10)  # Adjust the delay as needed
       
 
     # Initialize the database

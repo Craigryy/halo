@@ -8,8 +8,6 @@ WORKDIR /app
 COPY . . 
 
 
-# # # Install system dependencies
-RUN apk --no-cache add build-base
 
 # # Install the Python dependencies
 RUN pip install -r requirements.txt
@@ -25,6 +23,8 @@ USER myuser
 ENV FLASK_APP=manager.py
 ENV FLASK_RUN_HOST=0.0.0.0
 ENV FLASK_RUN_PORT=5000
+
+# Initialize the migration environment
 
 # # Expose the port on which the Flask app will run
 EXPOSE 5000
