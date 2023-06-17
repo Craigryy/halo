@@ -29,8 +29,9 @@ def create_book(current_user, id):
     return jsonify({'book': book.to_json})
 
 
-# Write a function named `update_book` which updates an existing book using `PUT` method,
-# and assign to the static route of ('/categories/<int:id>/books/<int:book_id>')
+# Write a function named `update_book` which updates an existing book
+#  using `PUT` method,and assign to the static route of 
+# ('/categories/<int:id>/books/<int:book_id>')
 @book_app.route('/categories/<int:id>/books/<int:book_id>', methods=['PUT'])
 @token_required
 def update_book(current_user, id, book_id):
@@ -58,8 +59,9 @@ def update_book(current_user, id, book_id):
     return make_response(jsonify({"message": "Book not found"}), 404)
 
 
-# Write a function named `delete_book` which updates an existing book using `DELETE` method,
-# and assign to the static route of ('/categories/<int:id>/books/<int:book_id>'')
+# Write a function named `delete_book` which updates an existing book
+#  using `DELETE` method, and assign to the static route of
+#  ('/categories/<int:id>/books/<int:book_id>'')
 @book_app.route('/categories/<int:id>/books/<int:book_id>', methods=['DELETE'])
 @token_required
 def delete_book(current_user, id, book_id):

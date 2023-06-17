@@ -19,7 +19,9 @@ def create_app():
       
 
     # Initialize the database
-    db.init_app(app)
+    with app.app_context():
+        db.init_app(app)
+        db.create_all()
 
     # Register blueprints
     app.register_blueprint(auth_app)
