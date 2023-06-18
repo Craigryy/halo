@@ -2,7 +2,6 @@ version: '3.9'
 
 volumes:
   postgres_data: {}
-  postgres_backup: {}
 
 services:
   database:
@@ -31,7 +30,5 @@ services:
       - POSTGRES_DB=halo
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=Favour98
-
-volumes:
-  postgres_data:
-  postgres_backup:
+    ports:
+      - "5000:5000"
