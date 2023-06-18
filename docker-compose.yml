@@ -1,5 +1,9 @@
 version: '3.9'
 
+volumes:
+  postgres_data: {}
+  postgres_backup: {}
+
 services:
   database:
     restart: always
@@ -18,8 +22,6 @@ services:
     restart: always
     container_name: halo_web
     build: .
-    ports:
-      - "5000:5000"
     depends_on:
       - database
     environment:
@@ -32,3 +34,4 @@ services:
 
 volumes:
   postgres_data:
+  postgres_backup:
