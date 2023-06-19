@@ -51,17 +51,25 @@ DELETE /categories/<int:id>/books/<int:books_id> | Delete a bookmodel in a categ
 Parameters/Input data: nil
 
 ##HOW TO USE 
-login/registers via  POST auth/login route and is given a token
+
+
+login/registers via  POST auth/login route and is given a token.
 User uses token which expires after a period of 30 minutes.
 User obtains token if he/she wants to continue using API services.
 User uses token to make request to server for resources defined above.
 
-##HOW TO USE TOKEN 
-Upon auth/login a token is given 
+##HOW TO USE TOKEN :
+
+
+Upon auth/login a token is given .
 Token should be used as header value with key 'Header'
 Example :
+
+
 Key:"x-access-token"
-Value:<TOKEN>
+
+
+Value:<int:TOKEN>
 
 if the key "x-aceess-token" isn't stated , an error message will appear.
 
@@ -78,7 +86,11 @@ docker-compose up
 Open postman application and Test
 
 
-####Database Used: Postgress.
+####Database Used: 
+
+Postgress.
 Set User: postgres
+
 Password: Favour98
+
 Database name: halo
