@@ -47,7 +47,7 @@ Value: {int:TOKEN}
 
 ## Endpoints
 
-### Get all books
+### Get all categories
 
 
 GET /categories
@@ -76,7 +76,7 @@ json
 ]
 
 
-### Get a book
+### Get a category
 
 
 GET /categories/{int:id}
