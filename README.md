@@ -4,94 +4,93 @@ This API allows a user to create a book-category and add books to their categori
 The API allows user to interact only when authenticated,to ensured security .
 
 
-
 ![Screenshot (50)](https://github.com/Craigryy/halo/assets/116971272/a9580fb5-1356-416f-9106-c1429beddf86)
 
-`##RESOURCES`
 
 
-`*** POST /auth/login | create a User***`
+##RESOURCES
 
+AUTH url_data:username = "username"
 
-Parameter : {"name":"james","password":"12345"}
+POST /auth/login | Logs a user in
+Parameters/Input data: {"username":"createuser"}
 
-A token is generated upon login, which is use to perform various task in which token is required.The token has an expiration time of 30mins .Token is only visible/exposed on login.
+User url data: username = username
 
+Only visible/exposed on login
 
-GET /user | get all users
-Parameter : nil
+GET user/username
+Parameters/Input data: nil
 
-GET /user/<public_id> | get a single user 
-Parameter : public_id 
-
-BOOK-CATEGORY url data: id = bookcategory id
+category url data: id = category id
 
 POST /categories/ | create a new category
-Parameters : {"name":"name of category","created_by":"who created the category"}
+Parameters/Input data: {"name":"name of category"}
 
-GET /categories/ | List all categories
-Parameters : no parameter is needed to perform this task
+GET /categories/ | List all the created categories in the database
+Parameters/Input data: nil 
 
-GET /categories/<int:id> | Get single category
-Parameter: id
+GET /categories/<int:id> | Get a single category in the database 
+Parameters/Input data: nil 
 
-PUT /categories/<int:id> | Update a category
-Parameters : {"name":"update category name","created_by":"Have a nice day"}
+PUT /categories/<int:id> | Update a category in the database
+Parameters/Input data: {"name":"update a category name"}
 
-DELETE /categories/<int:id> | Delete a category
-Parameter: id
+DELETE /categories/<int:id> | Delete a category in the database 
+Parameters/Input data: nil
 
-BookModel url data:id = category id, book_id = book id
+BOOKMODEL url data:id = category id, bookmodel_id = bookmodel id
 
-POST /categories/<int:id>/books/ | Create a new book in a category
-Parameters: {"title":"My book", "author":"harrison james"}
+POST /categories/<int:id>/books/ | Create a new book in a category 
+Parameters/Input data: {"name":"my categorybooks"}
 
-PUT /categories/<int:id>/books/<int:book_id> | Update a book  in a category 
-Parameters: {"title":"update my book", "author":"harrison james" }
+PUT /categories/<int:id>/books/<int:books_id> | Update a bookmodel in a category
+Parameters/Input data: {"name":"update my bookmodel"}
 
-DELETE /categories/<int:id>/books/<int:book_id> | Delete a book in a category 
-Parameters/Input data: id , book_id 
+DELETE /categories/<int:id>/books/<int:books_id> | Delete a bookmodel in a category
+Parameters/Input data: nil
+
+##HOW TO USE 
 
 
-`#USAGE`
+login/registers via  POST auth/login route and is given a token.
+User uses token which expires after a period of 30 minutes.
+User obtains token if he/she wants to continue using API services.
+User uses token to make request to server for resources defined above.
 
-Install dependencies using pip install -r requirements.txt
+##HOW TO USE TOKEN :
 
-`On windows`
 
-Run  the following commands in your terminal
-python
-```from app import app,User,db,BookModel,BookCategory 
-app.app_context().push()
-db.create_all()```
+Upon auth/login a token is given .
+Token should be used as header value with key 'Header'
+Example :
 
+
+Key:"x-access-token"
+
+
+Value:<int:TOKEN>
+
+if the key "x-aceess-token" isn't stated , an error message will appear.
+
+RESTful API is STATELESS and so no user session is stored.
+
+
+#USAGE Install dependencies using pip install -r requirements.txt
+Run  python manager.py to start server
 Test Api using POSTMAN or cURL
 
-For basic auth 
-key: x-access-token
-value: token generated
-
-`On linux`
-
-Run  the following commands in your terminal
-```python3
-from app import app,User,db,BookModel,BookCategory 
-app.app_context().push()
-db.create_all()```
+###UUSEAGE ON DOCKER 
+Clone this repo into your local machine then run "docker-compose up --build" command on terminal inside cloned directory.
+docker-compose up 
+Open postman application and Test
 
 
-Database in use Postgres .
- - POSTGRES_PASSWORD=Favour98
- - POSTGRES_USER=postgres
- - POSTGRES_DB=kittie
+####Database Used: 
 
-`Deployment`:
-To deploy to docker 
-RUN the following command:
--docker compose up -d flask_db
--docker compose build
--docker compose up flask_app
--docker compose up --build flask_app
+Postgress.
+Set User: postgres
 
-`TEST`
-To test our endpoints, we be using HTTpretty.HTTPretty is a Python library that allows you to mock HTTP responses in your unit tests. It provides a way to simulate HTTP requests and responses, making it easier to test code that interacts with external HTTP services. With HTTPretty, you can define expected responses for specific HTTP requests, including status codes, headers, and response bodies.
+Password: Favour98
+
+Database name: halo

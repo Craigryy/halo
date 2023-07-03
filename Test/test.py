@@ -1,7 +1,7 @@
 """Script to test end points using HTTpretty python library. """
 
 try:
-    from app import app, db
+    from flask_app import flask_app, db
     import unittest
     import httpretty
     import json
@@ -13,8 +13,8 @@ except Exception as e:
 
 class APITestCase(unittest.TestCase):
     def setUp(self):
-        self.app = app.test_client()
-        self.ctx = app.app_context()
+        self.app = flask_app.test_client()
+        self.ctx = flask_app.app_context()
         self.ctx.push()
         db.create_all()
 

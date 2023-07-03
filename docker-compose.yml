@@ -1,28 +1,34 @@
-version: "3.9"
+version: '3.9'
+
+volumes:
+  postgres_data: {}
 
 services:
-  flask_app:
-    container_name: flask_app
-    image: francescoxx/flask_live_app:1.0.0
-    build: .
-    ports:
-      - "5000:5000"
-    environment:
-      - DB_URL=postgresql://postgres:Favour98@flask_db:5432/kittie
-    depends_on:
-      - flask_db
-  flask_db:
-    container_name: flask_db
-    image: postgres:12
-    ports:
-      - "5432:5432"
+  database:
+    restart: always
+    image: postgres:13-alpine
+    container_name: haloo_db
     environment:
       - POSTGRES_PASSWORD=Favour98
       - POSTGRES_USER=postgres
-      - POSTGRES_DB=kittie
+      - POSTGRES_DB=halo
+    ports:
+      - "5432:5432"
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql/data
 
-volumes:
-  pgdata: {}
-    
+  web:
+    restart: always
+    container_name: halo_web
+    build: .
+    depends_on:
+      - database
+    environment:
+      - DOCKER_ENV=true
+      - POSTGRES_HOST=database
+      - POSTGRES_PORT=5432
+      - POSTGRES_DB=halo
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=Favour98
+    ports:
+      - "5000:5000"
