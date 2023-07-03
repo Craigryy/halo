@@ -1,4 +1,6 @@
-# halo
+### halo
+
+
 halo is a book inventory api that uses flask python micro framework.
 This API allows a user to create a book-category and add books to their categories.
 The API allows user to interact only when authenticated,to ensured security .
@@ -22,54 +24,289 @@ Only visible/exposed on login
 GET user/username
 Parameters/Input data: nil
 
-category url data: id = category id
+## Base URL
 
-POST /categories/ | create a new category
-Parameters/Input data: {"name":"name of category"}
+The base URL for all API endpoints is: `http://127.0.0.1:5000/`
 
-GET /categories/ | List all the created categories in the database
-Parameters/Input data: nil 
+## Authentication
 
-GET /categories/<int:id> | Get a single category in the database 
-Parameters/Input data: nil 
+The API requires authentication using an API key token . Include the API key in the  `Headers` of each request.
 
-PUT /categories/<int:id> | Update a category in the database
-Parameters/Input data: {"name":"update a category name"}
-
-DELETE /categories/<int:id> | Delete a category in the database 
-Parameters/Input data: nil
-
-BOOKMODEL url data:id = category id, bookmodel_id = bookmodel id
-
-POST /categories/<int:id>/books/ | Create a new book in a category 
-Parameters/Input data: {"name":"my categorybooks"}
-
-PUT /categories/<int:id>/books/<int:books_id> | Update a bookmodel in a category
-Parameters/Input data: {"name":"update my bookmodel"}
-
-DELETE /categories/<int:id>/books/<int:books_id> | Delete a bookmodel in a category
-Parameters/Input data: nil
-
-##HOW TO USE 
-
-
-login/registers via  POST auth/login route and is given a token.
-User uses token which expires after a period of 30 minutes.
-User obtains token if he/she wants to continue using API services.
-User uses token to make request to server for resources defined above.
-
-##HOW TO USE TOKEN :
+## HOW TO USE TOKEN :
 
 
 Upon auth/login a token is given .
-Token should be used as header value with key 'Header'
+Token should be used as header value with key 'x-access-token'
 Example :
-
 
 Key:"x-access-token"
 
 
 Value:<int:TOKEN>
+
+
+## Endpoints
+
+### Get all books
+
+
+GET /categories
+
+
+Retrieves a list of all book categories in the inventory.
+
+#### Response
+
+- Status Code: 200 OK
+- Content Type: application/json
+
+Example Response:
+json
+[
+    {
+        "id": 1,
+        "name": "Book 1",
+        "created_by": "Author 1"
+    },
+    {
+        "id": 2,
+        "title": "Book 2",
+        "created_by": "Author 2"
+    }
+]
+
+
+### Get a book
+
+
+GET /categories/{int:id}
+
+Retrieves details of a specific book category by its ID.
+
+#### Parameters
+
+- `{id}` (integer, required): ID of the book.
+
+#### Response
+
+- Status Code: 200 OK
+- Content Type: application/json
+
+Example Response:
+json
+{
+    "id": 1,
+    "name": "Book 1",
+    "created_by": "Author 1"
+}
+
+
+### Add a category
+
+
+POST /categories
+
+
+Adds a new book category to the inventory.
+
+#### Request
+
+- Content Type: application/json
+
+Example Request Body:
+json
+{
+    "name": "New Book",
+    "created_by": "New User"
+}
+
+
+#### Response
+
+- Status Code: 201 Created
+- Content Type: application/json
+
+Example Response:
+json
+{
+    "id": 3,
+    "name": "New Book",
+    "created_by": "New Nmae"
+}
+
+
+### Update a category
+
+
+PUT /categories/{int:id}
+
+
+Updates the details of a specific book category by its ID.
+
+#### Parameters
+
+- `{id}` (integer, required): ID of the book category .
+
+#### Request
+
+- Content Type: application/json
+
+Example Request Body:
+json
+{
+    "name": "Updated Category",
+    "created_by": "Updated name"
+}
+
+
+#### Response
+
+- Status Code: 200 OK
+- Content Type: application/json
+
+Example Response:
+json
+{
+    "id": 3,
+    "name": "Updated category",
+    "created_by": "Updated name "
+}
+
+
+### Delete a category 
+
+
+DELETE /categories/{int:id}
+
+
+Deletes a specific book by its ID.
+
+#### Parameters
+
+- `{id}` (integer, required): ID of the book category.
+
+#### Response
+
+- Status Code: 204 No Content
+
+## Error Handling
+
+If an error occurs, the API will respond with an appropriate error message and status code. Error responses will be in the following format:
+
+json
+{
+    "error": {
+        "code": 404,
+        "message": "Book not found"
+    }
+}
+
+
+
+### Add a book
+
+
+POST /categories/<int:id>/books
+
+
+Adds a new book into a category.
+
+#### Request
+
+- Content Type: application/json
+
+Example Request Body:
+json
+{
+    "title": "New Book",
+    "author": "New Author"
+}
+
+
+#### Response
+
+- Status Code: 201 Created
+- Content Type: application/json
+
+Example Response:
+json
+{
+    "id": 3,
+    "title": "New Book",
+    "author": "New Author"
+}
+
+
+### Update a book
+
+PUT /categories/{int:id}/books/<int:books_id>
+
+Updates the details of a specific book in a category by its ID.
+
+#### Parameters
+
+- `{id}` (integer, required): ID of the book category .
+
+- `{book_id}` (integer, required): ID of the book .
+
+
+#### Request
+
+- Content Type: application/json
+
+Example Request Body:
+json
+{
+    "name": "Updated Book",
+    "author": "Updated Author"
+}
+
+
+#### Response
+
+- Status Code: 200 OK
+- Content Type: application/json
+
+Example Response:
+json
+{
+    "id": 3,
+    "name": "Updated Book",
+    "author": "Updated Author"
+}
+
+
+### Delete a book
+
+
+DELETE /categories/{int:id}/books/{int:book_id}
+
+
+Deletes a specific book by its ID.
+
+#### Parameters
+
+- `{id}` (integer, required): ID of the book category.
+
+- `{book_id}` (integer, required): ID of the book .
+
+#### Response
+
+- Status Code: 204 No Content
+
+## Error Handling
+
+If an error occurs, the API will respond with an appropriate error message and status code. Error responses will be in the following format:
+
+json
+{
+    "error": {
+        "code": 404,
+        "message": "Book not found"
+    }
+}
+
+
 
 if the key "x-aceess-token" isn't stated , an error message will appear.
 
