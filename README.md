@@ -39,10 +39,10 @@ Upon auth/login a token is given .
 Token should be used as header value with key 'x-access-token'
 Example :
 
-Key:"x-access-token"
+Key: "x-access-token"
 
 
-Value:<int:TOKEN>
+Value: {int:TOKEN}
 
 
 ## Endpoints
