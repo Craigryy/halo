@@ -68,17 +68,26 @@ if the key "x-aceess-token" isn't stated , an error message will appear.
 RESTful API is STATELESS and so no user session is stored.
 
 
-#USAGE Install dependencies using pip install -r requirements.txt
+#USAGE :
+
+Install dependencies using pip install -r requirements.txt
 Run  python manager.py to start server
 Test Api using POSTMAN or cURL
 
-###UUSEAGE ON DOCKER 
+###UUSEAGE ON DOCKER :
+
+
 Clone this repo into your local machine then run "docker-compose up --build" command on terminal inside cloned directory.
 docker-compose up 
 Open postman application and Test
 
 
-####Database Used: Postgress.
+####Database Used: 
+
+Postgress
+
 Set User: postgres
+
 Password: Favour98
+
 Database name: halo
