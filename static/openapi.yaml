@@ -1,0 +1,114 @@
+"openapi": "3.0.0"
+"info":
+  "title": "Halo API"
+  "description": "A book iventory API"
+  "version": "1.0.0"
+"servers":
+  -
+    "url": "http://127.0.0.1:5000"
+"paths":
+  "/categories":
+    "description": "Categories"
+    "get":
+      "description": "To fetch all categories in the database"
+      "parameters":
+        -
+          "in": "query"
+          "name": "categoryID"
+          "required": true
+          "schema":
+            "type": "string"
+            "example": "James"
+      "responses":
+        200:
+          "description": "Success Response"
+          "content":
+            "application/json":
+              "schema":
+                "type": "array"
+                "items":
+                  "properties":
+                    "ID":
+                      "type": "integer"
+                      "example": 3
+                    "name":
+                      "type": "string"
+                      "example": "david"
+                    "created_by":
+                      "type": "string"
+                      "example": "Lord"
+    "post":
+      "description": "Add a new book category."
+      "requestBody":
+        "content":
+          "applicatiion/json":
+            "schema":
+              "type": "object"
+              "properties":
+                "ID":
+                  "type": "integer"
+                  "example": 3
+                "name":
+                  "type": "string"
+                  "example": "david"
+                "created_by":
+                  "type": "string"
+                  "example": "Lord"
+      "responses":
+        201:
+          "description": "Book category successfully added."
+  "/categories{id}":
+    "description": "Get all cat"
+    "get":
+      "parameters":
+        -
+          "in": "path"
+          "name": "id"
+          "required": true
+          "schema":
+            "type": "integer"
+      "responses":
+        200:
+          "description": "success response with path param"
+          "content":
+            "application/json":
+              "schema":
+                "type": "array"
+                "items":
+                  "properties":
+                    "ID":
+                      "type": "integer"
+                      "example": 3
+                    "name":
+                      "type": "string"
+                      "example": "david"
+                    "created_by":
+                      "type": "string"
+                      "example": "Lord"
+"components":
+  "schemas":
+    "category":
+      "type": "object"
+      "properties":
+        "ID":
+          "type": "integer"
+          "example": 3
+        "name":
+          "type": "string"
+          "example": "david"
+        "created_by":
+          "type": "string"
+          "example": "Lord"
+    "categories":
+      "type": "array"
+      "items":
+        "properties":
+          "ID":
+            "type": "integer"
+            "example": 3
+          "name":
+            "type": "string"
+            "example": "david"
+          "created_by":
+            "type": "string"
+            "example": "Lord"
