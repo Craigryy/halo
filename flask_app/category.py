@@ -3,7 +3,6 @@
 from flask import jsonify, request, make_response,Blueprint,app
 from .model import BookCategory,db
 from .authenticate import token_required
-from flasgger import swag_from
 
 category_app = Blueprint('category_app', __name__)
 
@@ -12,7 +11,6 @@ category_app = Blueprint('category_app', __name__)
 #  with the mesage: "test route ",
 # and assign to the static route of ('/test')
 @category_app.route('/', methods=['GET'])
-# @swag_from('swagger/test.yml')
 def test():
     '''Test route'''
     return make_response(jsonify({'message': 'test route'}), 200)
@@ -22,7 +20,6 @@ def test():
 # category using `POST` method, and assign to the static route of
 #  ('/categories/')
 @category_app.route("/categories/", methods=['POST'])
-# @swag_from('swagger/adnew_bookcategory.yml')
 @token_required
 def addnew_bookcategory(current_user):
     ''' create a book in the category. '''
@@ -43,7 +40,6 @@ def addnew_bookcategory(current_user):
 
 
 @category_app.route('/categories/', methods=['GET'])
-# @swag_from('swagger/list_book_category.yml')
 @token_required
 def list_book_category(current_user):
     '''list all category for a book.'''
@@ -60,7 +56,6 @@ def list_book_category(current_user):
 
 
 @category_app.route('/categories/<int:id>', methods=['GET'])
-# @swag_from('swagger/get_book_category.yml')
 @token_required
 def get_book_category(current_user, id):
     '''Get a single book category.'''
@@ -82,9 +77,8 @@ def get_book_category(current_user, id):
 
 
 @category_app.route("/categories/<int:id>", methods=['PUT'])
-# @swag_from('swagger/update_book_category.yml')
 @token_required
-def update_book_category(current_user, id):
+def update(current_user, id):
     '''Update a book category. '''
     if not current_user:
         return jsonify({'message': 'Cannot perform that function!'})
@@ -106,9 +100,8 @@ def update_book_category(current_user, id):
 # ('/categories/<int:id>')
 
 @category_app.route("/categories/<int:id>", methods=['DELETE'])
-# @swag_from('swagger/delete_category.yml')
 @token_required
-def delete_category(current_user, id):
+def delete(current_user, id):
     '''Delete a book category. '''
     if not current_user:
         return jsonify({'message': 'Cannot perform that function!'})

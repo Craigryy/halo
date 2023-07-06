@@ -3,17 +3,13 @@
 from flask import jsonify, request, make_response,Blueprint
 from .model import BookModel, BookCategory
 from .authenticate import token_required
-# from flasgger import swag_from
 
 
 book_app = Blueprint('book_app', __name__)
 # Create book
 
-# #Define models using Flask-RestPlus fields
-# bookmod = api.models
 
 @book_app.route('/categories/<int:id>/books/', methods=['POST'])
-# @swag_from('swagger/create_book.yml')
 @token_required
 def create_book(current_user, id):
     '''Create a book. '''
@@ -37,7 +33,6 @@ def create_book(current_user, id):
 #  using `PUT` method,and assign to the static route of 
 # ('/categories/<int:id>/books/<int:book_id>')
 @book_app.route('/categories/<int:id>/books/<int:book_id>', methods=['PUT'])
-# @swag_from('swagger/update_book.yml')
 @token_required
 def update_book(current_user, id, book_id):
     '''Update a book. '''
@@ -68,7 +63,6 @@ def update_book(current_user, id, book_id):
 #  using `DELETE` method, and assign to the static route of
 #  ('/categories/<int:id>/books/<int:book_id>'')
 @book_app.route('/categories/<int:id>/books/<int:book_id>', methods=['DELETE'])
-# @swag_from('swagger/delete_book.yml')
 @token_required
 def delete_book(current_user, id, book_id):
     '''Delete a book in a category '''

@@ -1,114 +1,247 @@
-"openapi": "3.0.0"
-"info":
-  "title": "Halo API"
-  "description": "A book iventory API"
-  "version": "1.0.0"
-"servers":
-  -
-    "url": "http://127.0.0.1:5000"
-"paths":
-  "/categories":
-    "description": "Categories"
-    "get":
-      "description": "To fetch all categories in the database"
-      "parameters":
-        -
-          "in": "query"
-          "name": "categoryID"
-          "required": true
-          "schema":
-            "type": "string"
-            "example": "James"
-      "responses":
-        200:
-          "description": "Success Response"
-          "content":
-            "application/json":
-              "schema":
-                "type": "array"
-                "items":
-                  "properties":
-                    "ID":
-                      "type": "integer"
-                      "example": 3
-                    "name":
-                      "type": "string"
-                      "example": "david"
-                    "created_by":
-                      "type": "string"
-                      "example": "Lord"
-    "post":
-      "description": "Add a new book category."
-      "requestBody":
-        "content":
-          "applicatiion/json":
-            "schema":
-              "type": "object"
-              "properties":
-                "ID":
-                  "type": "integer"
-                  "example": 3
-                "name":
-                  "type": "string"
-                  "example": "david"
-                "created_by":
-                  "type": "string"
-                  "example": "Lord"
-      "responses":
-        201:
-          "description": "Book category successfully added."
-  "/categories{id}":
-    "description": "Get all cat"
-    "get":
-      "parameters":
-        -
-          "in": "path"
-          "name": "id"
-          "required": true
-          "schema":
-            "type": "integer"
-      "responses":
-        200:
-          "description": "success response with path param"
-          "content":
-            "application/json":
-              "schema":
-                "type": "array"
-                "items":
-                  "properties":
-                    "ID":
-                      "type": "integer"
-                      "example": 3
-                    "name":
-                      "type": "string"
-                      "example": "david"
-                    "created_by":
-                      "type": "string"
-                      "example": "Lord"
-"components":
-  "schemas":
-    "category":
-      "type": "object"
-      "properties":
-        "ID":
-          "type": "integer"
-          "example": 3
-        "name":
-          "type": "string"
-          "example": "david"
-        "created_by":
-          "type": "string"
-          "example": "Lord"
-    "categories":
-      "type": "array"
-      "items":
-        "properties":
-          "ID":
-            "type": "integer"
-            "example": 3
-          "name":
-            "type": "string"
-            "example": "david"
-          "created_by":
-            "type": "string"
-            "example": "Lord"
+openapi: 3.0.0
+info:
+  title: Halo API
+  description: A book inventory API
+  version: 1.0.0
+servers:
+  - url: http://127.0.0.1:5000
+paths:
+  /users:
+    get:
+      summary: Get all users
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserList'
+    post:
+      summary: Create a user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '201':
+          description: User created successfully
+  /users/{userId}:
+    get:
+      summary: Get a user by ID
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+    put:
+      summary: Update a user
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          description: User updated successfully
+    delete:
+      summary: Delete a user
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: User deleted successfully
+
+  /categories:
+    get:
+      summary: Get all book categories
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookCategoryList'
+    post:
+      summary: Create a book category
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BookCategory'
+      responses:
+        '201':
+          description: Book category created successfully
+  /categories/{categoryId}:
+    get:
+      summary: Get a book category by ID
+      parameters:
+        - in: path
+          name: categoryId
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookCategory'
+    put:
+      summary: Update a book category
+      parameters:
+        - in: path
+          name: categoryId
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BookCategory'
+      responses:
+        '200':
+          description: Book category updated successfully
+    delete:
+      summary: Delete a book category
+      parameters:
+        - in: path
+          name: categoryId
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Book category deleted successfully
+
+  /books:
+    get:
+      summary: Get all books
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookList'
+    post:
+      summary: Create a book
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Book'
+      responses:
+        '201':
+          description: Book created successfully
+  /books/{bookId}:
+    get:
+      summary: Get a book by ID
+      parameters:
+        - in: path
+          name: bookId
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+    put:
+      summary: Update a book
+      parameters:
+        - in: path
+          name: bookId
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Book'
+      responses:
+        '200':
+          description: Book updated successfully
+    delete:
+      summary: Delete a book
+      parameters:
+        - in: path
+          name: bookId
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Book deleted successfully
+
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        email:
+          type: string
+    UserList:
+      type: array
+      items:
+        $ref: '#/components/schemas/User'
+    BookCategory:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+    BookCategoryList:
+      type: array
+      items:
+        $ref: '#/components/schemas/BookCategory'
+    Book:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        author:
+          type: string
+        category:
+          $ref: '#/components/schemas/BookCategory'
+    BookList:
+      type: array
+      items:
+        $ref: '#/components/schemas/Book'
