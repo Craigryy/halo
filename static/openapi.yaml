@@ -27,9 +27,9 @@ paths:
       responses:
         '201':
           description: User created successfully
-  /users/{userId}:
+  /user/{public_id}:
     get:
-      summary: Get a user by ID
+      summary: Get a user by public ID
       parameters:
         - in: path
           name: userId
@@ -93,7 +93,7 @@ paths:
       responses:
         '201':
           description: Book category created successfully
-  /categories/{categoryId}:
+  /categories/{id}:
     get:
       summary: Get a book category by ID
       parameters:
@@ -138,16 +138,7 @@ paths:
         '204':
           description: Book category deleted successfully
 
-  /books:
-    get:
-      summary: Get all books
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/BookList'
+  /categories/{id}/books:
     post:
       summary: Create a book
       requestBody:
@@ -159,22 +150,6 @@ paths:
       responses:
         '201':
           description: Book created successfully
-  /books/{bookId}:
-    get:
-      summary: Get a book by ID
-      parameters:
-        - in: path
-          name: bookId
-          required: true
-          schema:
-            type: integer
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Book'
     put:
       summary: Update a book
       parameters:
@@ -213,8 +188,10 @@ components:
           type: integer
         name:
           type: string
-        email:
+          example: createuser 
+        password:
           type: string
+          example: gentlefella 
     UserList:
       type: array
       items:
