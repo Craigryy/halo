@@ -29,7 +29,7 @@ def token_required(f):
             return jsonify({'message': 'Token is missing!'}), 401
 
         try:
-            data = jwt.decode(token, current_app.config['SECRET_KEY'])
+            data = jwt.decode(token, current_app.config['SECRET_KEY'],algorithms=['HS256'])
             current_user = User.query.filter_by(
                 public_id=data['public_id']).first()
         except Exception as e:
@@ -156,9 +156,7 @@ def login():
         token = jwt.encode({'public_id': user.public_id, 'exp': datetime.datetime.utcnow(
         ) + datetime.timedelta(minutes=30)}, secret_key)
 
-        # Decode the token to string format
-        token_string = token.decode('utf-8')
 
-        return jsonify({'token': token_string})
+        return jsonify({'token':token})
 
     return make_response('Could not verify', 401, {'WWW-Authenticate': 'Basic realm="Login required!"'})
