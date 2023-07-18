@@ -313,13 +313,34 @@ if the key "x-aceess-token" isn't stated , an error message will appear.
 RESTful API is STATELESS and so no user session is stored.
 
 
-#USAGE :
+### USEAGE ON HOW TO USE SWAGGER UI :
+
+To access the Swagger UI and view your API documentation, follow these steps:
+
+Start the Flask application: In your terminal or command prompt, navigate to the project directory containing the app.py file and execute the following command:
+
+`python manager.py`
+
+This will start the Flask application, and you should see output indicating that the application is running.
+
+Open a web browser: Launch a web browser of your choice.
+
+Access the Swagger UI: In the address bar of your web browser, enter the following URL:
+
+bash
+Copy code
+http://localhost:5000/api/docs
+This URL assumes that the Flask application is running on the default development server, listening on port 5000. If you're using a different port or domain, modify the URL accordingly.
+
+Explore the Swagger UI: The Swagger UI interface should now be displayed in your web browser. You can browse through the available routes, view their parameters, and even test them directly from the Swagger UI.
+
+### USAGE :
 
 Install dependencies using pip install -r requirements.txt
 Run  python manager.py to start server
 Test Api using POSTMAN or cURL
 
-###UUSEAGE ON DOCKER :
+###USEAGE ON DOCKER :
 
 
 Clone this repo into your local machine then run "docker-compose up --build" command on terminal inside cloned directory.
@@ -328,13 +349,8 @@ Open postman application and Test
 
 
 ####Database Used: 
-
-<<<<<<< HEAD
 Postgress
 
-=======
-Postgress.
->>>>>>> 87ef8d72cb79b98becd5fa74cb77904112052ab7
 Set User: postgres
 
 Password: Favour98
