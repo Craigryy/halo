@@ -349,4 +349,8 @@
               "id":
                 "type": "integer"
               "name":
+<<<<<<< HEAD
                 "type": "string"
+=======
+                "type": "string"
+>>>>>>> 25dc219c56545ce7423ee627b684eded2f0b4765
