@@ -12,14 +12,16 @@ from .model import User, db
 auth_app = Blueprint("auth_app", __name__)
 
 
-# create a test route
-@auth_app.route("/test", methods=["GET"])
-def test():
-    return make_response(jsonify({"message": "test route"}), 200)
-
-
-# create a token_required decorator which requires a header "x-access-token" and a token .
 def token_required(f):
+    """
+    A decorator to require a valid token in the "x-access-token" header.
+
+    Args:
+        f (function): The function to decorate.
+
+    Returns:
+        function: The decorated function with token authentication.
+    """
     @wraps(f)
     def decorated(*args, **kwargs):
         token = None
@@ -31,11 +33,7 @@ def token_required(f):
             return jsonify({"message": "Token is missing!"}), 401
 
         try:
-            data = jwt.decode(
-                token,
-                current_app.config["SECRET_KEY"],
-                algorithms=["HS256"],
-            )
+            data = jwt.decode(token, current_app.config["SECRET_KEY"], algorithms=["HS256"])
             current_user = User.query.filter_by(public_id=data["public_id"]).first()
         except Exception as e:
             error_message = f"Token is invalid!: {str(e)}"
@@ -46,11 +44,16 @@ def token_required(f):
     return decorated
 
 
-# create an endpoint to get all users
+@auth_app.route("/test", methods=["GET"])
+def test():
+    """A test route."""
+    return make_response(jsonify({"message": "test route"}), 200)
+
+
 @auth_app.route("/user", methods=["GET"])
 @token_required
 def get_all_users(current_user):
-    """Get all users"""
+    """Get all users from the database."""
     if not current_user:
         return jsonify({"message": "Cannot perform that function!"})
 
@@ -59,10 +62,9 @@ def get_all_users(current_user):
     return make_response(jsonify([user.to_json() for user in users]), 200)
 
 
-# create a new user endpoint
 @auth_app.route("/auth/login", methods=["POST"])
-# @token_required
 def create_user():
+    """Create a new user endpoint."""
     data = request.get_json()
 
     hashed_password = generate_password_hash(data["password"], method="sha256")
@@ -74,12 +76,10 @@ def create_user():
     return jsonify({"message": "New user created!"})
 
 
-# Write a function named `get_one_user` which takes in a public id using `GET` method,
-# and assign to the static route of ('/user/<int:public_id>')
 @auth_app.route("/user/<int:public_id>", methods=["GET"])
 @token_required
 def get_one_user(current_user, public_id):
-    """End point to access a single user in the database."""
+    """Get a single user from the database."""
     if not current_user:
         return jsonify({"message": "Cannot perform that function!"})
 
@@ -97,14 +97,10 @@ def get_one_user(current_user, public_id):
     return jsonify({"user": user_data})
 
 
-# update a user
-
-# Write a function named `update_user` which takes in an id using `PUT` method,
-# and assign to the static route of ('/users/<int:id>')
 @auth_app.route("/users/<int:id>", methods=["PUT"])
 @token_required
 def update_user(current_user, id):
-    """End point to update a single user in the database."""
+    """Update a single user in the database."""
     if not current_user:
         return jsonify({"message": "Cannot perform that function!"})
     try:
@@ -122,12 +118,10 @@ def update_user(current_user, id):
     return make_response(jsonify({"message": error_message}), 500)
 
 
-# Write a function named `delete_user` which takes in an id using `DELETE` method,
-# and assign to the static route of ('/users/<int:id>')
 @auth_app.route("/users/<int:id>", methods=["DELETE"])
 @token_required
 def delete_user(current_user, id):
-    """End point to delete a single user in the database."""
+    """Delete a single user from the database."""
     if not current_user:
         return jsonify({"message": "Cannot perform that function!"})
     try:
@@ -141,11 +135,9 @@ def delete_user(current_user, id):
     return make_response(jsonify({"message": error_message}), 500)
 
 
-# create a loggin route ,which requires a username and a password for basic,
-# authentication.
 @auth_app.route("/login", methods=["POST"])
 def login():
-    """create a login route"""
+    """Authenticate a user and return a token."""
     secret_key = current_app.config["SECRET_KEY"]
     auth = request.authorization
 

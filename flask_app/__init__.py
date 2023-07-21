@@ -15,8 +15,13 @@ from flask_app.authenticate import auth_app
 from flask_app.bookmodel import book_app
 from flask_app.category import category_app
 
-
 def create_app():
+    """
+    Create the Flask application, configure the database, and register blueprints.
+
+    Returns:
+        Flask: The Flask application instance.
+    """
     # Create the Flask application
     app = Flask(__name__)
 
@@ -27,6 +32,7 @@ def create_app():
     app.static_folder = "static"
 
     # Introduce a delay before initializing the database
+    # (Optional: Used to ensure the database is ready before creating tables)
     time.sleep(10)  # Adjust the delay as needed
 
     # Initialize the database
