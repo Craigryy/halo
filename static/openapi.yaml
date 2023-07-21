@@ -1,0 +1,343 @@
+openapi: "3.0.0"
+info:
+  title: "Halo API"
+  description: "A book inventory API"
+  version: "1.0.0"
+servers:
+  - url: "http://127.0.0.1:5000"
+paths:
+  "/users":
+    get:
+      summary: "Get all users"
+      responses:
+        200:
+          description: "Successful response"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  type: "object"
+                  properties:
+                    id:
+                      type: "integer"
+                    name:
+                      type: "string"
+                      example: "createuser"
+                    password:
+                      type: "string"
+                      example: "gentlefella"
+    post:
+      summary: "Create a user"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                id:
+                  type: "integer"
+                name:
+                  type: "string"
+                  example: "createuser"
+                password:
+                  type: "string"
+                  example: "gentlefella"
+      responses:
+        201:
+          description: "User created successfully"
+  "/user/{public_id}":
+    get:
+      summary: "Get a user by public ID"
+      parameters:
+        - in: "path"
+          name: "userId"
+          required: true
+          schema:
+            type: "integer"
+      responses:
+        200:
+          description: "Successful response"
+          content:
+            application/json:
+              schema:
+                type: "object"
+                properties:
+                  id:
+                    type: "integer"
+                  name:
+                    type: "string"
+                    example: "createuser"
+                  password:
+                    type: "string"
+                    example: "gentlefella"
+    put:
+      summary: "Update a user"
+      parameters:
+        - in: "path"
+          name: "userId"
+          required: true
+          schema:
+            type: "integer"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                id:
+                  type: "integer"
+                name:
+                  type: "string"
+                  example: "createuser"
+                password:
+                  type: "string"
+                  example: "gentlefella"
+      responses:
+        200:
+          description: "User updated successfully"
+    delete:
+      summary: "Delete a user"
+      parameters:
+        - in: "path"
+          name: "userId"
+          required: true
+          schema:
+            type: "integer"
+      responses:
+        204:
+          description: "User deleted successfully"
+  "/categories":
+    get:
+      summary: "Get all book categories"
+      responses:
+        200:
+          description: "Successful response"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  type: "object"
+                  properties:
+                    id:
+                      type: "integer"
+                    name:
+                      type: "string"
+    post:
+      summary: "Create a book category"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                id:
+                  type: "integer"
+                name:
+                  type: "string"
+      responses:
+        201:
+          description: "Book category created successfully"
+  "/categories/{id}":
+    get:
+      summary: "Get a book category by ID"
+      parameters:
+        - in: "path"
+          name: "categoryId"
+          required: true
+          schema:
+            type: "integer"
+      responses:
+        200:
+          description: "Successful response"
+          content:
+            application/json:
+              schema:
+                type: "object"
+                properties:
+                  id:
+                    type: "integer"
+                  name:
+                    type: "string"
+    put:
+      summary: "Update a book category"
+      parameters:
+        - in: "path"
+          name: "categoryId"
+          required: true
+          schema:
+            type: "integer"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                id:
+                  type: "integer"
+                name:
+                  type: "string"
+      responses:
+        200:
+          description: "Book category updated successfully"
+    delete:
+      summary: "Delete a book category"
+      parameters:
+        - in: "path"
+          name: "categoryId"
+          required: true
+          schema:
+            type: "integer"
+      responses:
+        204:
+          description: "Book category deleted successfully"
+  "/categories/{id}/books":
+    post:
+      summary: "Create a book"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                id:
+                  type: "integer"
+                title:
+                  type: "string"
+                author:
+                  type: "string"
+                category:
+                  type: "object"
+                  properties:
+                    id:
+                      type: "integer"
+                    name:
+                      type: "string"
+      responses:
+        201:
+          description: "Book created successfully"
+    put:
+      summary: "Update a book"
+      parameters:
+        - in: "path"
+          name: "bookId"
+          required: true
+          schema:
+            type: "integer"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                id:
+                  type: "integer"
+                title:
+                  type: "string"
+                author:
+                  type: "string"
+                category:
+                  type: "object"
+                  properties:
+                    id:
+                      type: "integer"
+                    name:
+                      type: "string"
+      responses:
+        200:
+          description: "Book updated successfully"
+    delete:
+      summary: "Delete a book"
+      parameters:
+        - in: "path"
+          name: "bookId"
+          required: true
+          schema:
+            type: "integer"
+      responses:
+        204:
+          description: "Book deleted successfully"
+components:
+  schemas:
+    User:
+      type: "object"
+      properties:
+        id:
+          type: "integer"
+        name:
+          type: "string"
+          example: "createuser"
+        password:
+          type: "string"
+          example: "gentlefella"
+    UserList:
+      type: "array"
+      items:
+        type: "object"
+        properties:
+          id:
+            type: "integer"
+          name:
+            type: "string"
+            example: "createuser"
+          password:
+            type: "string"
+            example: "gentlefella"
+    BookCategory:
+      type: "object"
+      properties:
+        id:
+          type: "integer"
+        name:
+          type: "string"
+    BookCategoryList:
+      type: "array"
+      items:
+        type: "object"
+        properties:
+          id:
+            type: "integer"
+          name:
+            type: "string"
+    Book:
+      type: "object"
+      properties:
+        id:
+          type: "integer"
+        title:
+          type: "string"
+        author:
+          type: "string"
+        category:
+          type: "object"
+          properties:
+            id:
+              type: "integer"
+            name:
+              type: "string"
+    BookList:
+      type: "array"
+      items:
+        type: "object"
+        properties:
+          id:
+            type: "integer"
+          title:
+            type: "string"
+          author:
+            type: "string"
+          category:
+            type: "object"
+            properties:
+              id:
+                type: "integer"
+              name:
+                type: "string"
+                type: "string"
