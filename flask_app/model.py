@@ -34,10 +34,6 @@ class User(Base):
     category = db.relationship("BookCategory", backref="owner", lazy="dynamic")
 
     def to_json(self):
-<<<<<<< HEAD
-=======
-        """Convert User object to a JSON representation."""
->>>>>>> 4669b5e20f05bda245bf928c0ffaebdc5e2e4c34
         return {
             "id": self.id,
             "name": self.name,
@@ -48,11 +44,7 @@ class User(Base):
 
 
 class BookCategory(Base):
-<<<<<<< HEAD
     """BookCategory table defined"""
-=======
-    """BookCategory table defined."""
->>>>>>> 4669b5e20f05bda245bf928c0ffaebdc5e2e4c34
 
     __tablename__ = "BookCategorys"
     id = db.Column(db.Integer, primary_key=True)
@@ -64,10 +56,6 @@ class BookCategory(Base):
     )
 
     def to_json(self):
-<<<<<<< HEAD
-=======
-        """Convert BookCategory object to a JSON representation."""
->>>>>>> 4669b5e20f05bda245bf928c0ffaebdc5e2e4c34
         return {"id": self.id, "name": self.name, "created_by": self.created_by}
 
 
@@ -81,10 +69,4 @@ class BookModel(Base):
     category_id = db.Column(db.Integer, db.ForeignKey("BookCategorys.id"))
 
     def to_json(self):
-<<<<<<< HEAD
         return {"id": self.id, "title": self.title, "author": self.author}
-=======
-        """Convert BookModel object to a JSON representation."""
-        return {"id": self.id, "title": self.title, "author": self.author}
-
->>>>>>> 4669b5e20f05bda245bf928c0ffaebdc5e2e4c34
