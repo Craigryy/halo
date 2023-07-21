@@ -10,7 +10,7 @@ The API allows user to interact only when authenticated,to ensured security .
 
 
 
-##RESOURCES
+## RESOURCES
 
 AUTH url_data:username = "username"
 
@@ -348,7 +348,7 @@ docker-compose up
 Open postman application and Test
 
 
-####Database Used: 
+#### Database Used: 
 Postgress
 
 Set User: postgres
