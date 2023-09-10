@@ -367,7 +367,6 @@ function Login() {
           <br />
           {isLogin ? <h1>Login</h1> : <h1>Register</h1>}
           <br />
-          <br />
           {error && <div className='alert alert-danger'>{error}</div>}
           <div className='mb-3'>
             <label htmlFor='username' className='form-label'>

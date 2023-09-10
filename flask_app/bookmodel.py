@@ -2,7 +2,6 @@ from flask import Blueprint, jsonify, make_response, request
 from flask_jwt_extended import jwt_required ,get_jwt_identity
 from .model import BookCategory, BookModel, User
 
-
 book_app = Blueprint('book_app', __name__)
 
 @book_app.route('/categories/<int:id>/books/', methods=['GET', 'POST'])
@@ -22,6 +21,7 @@ def create_book(id):
     book.save()
 
     return jsonify({'book': book.to_json()})
+
 
 @book_app.route('/categories/<int:id>/books/', methods=['GET'])
 @jwt_required()
@@ -52,6 +52,7 @@ def get_books_by_category(id):
         error_message = f"Error fetching books: {str(e)}"
         return make_response(jsonify({'message': error_message}), 500)
 
+
 @book_app.route('/categories/<int:category_id>/books/<int:book_id>', methods=['GET'])
 @jwt_required()
 def get_book_and_category(category_id, book_id):
@@ -74,6 +75,7 @@ def get_book_and_category(category_id, book_id):
     }
 
     return jsonify({'book': book_data})
+
 
 @book_app.route('/books/', methods=['GET'])
 @jwt_required()
