@@ -31,12 +31,10 @@ def create_app():
     # # CORS setup
     cors = CORS(app, resources={r"*": {"origins": "http://localhost:3000"}})
    
-
    
     if 'DATABASE_URL' in os.environ:
         app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
     else:
-    # from config import POSTGRES_HOST, POSTGRES_DB, POSTGRES_USER, POSTGRES_PASSWORD
         app.config['SQLALCHEMY_DATABASE_URI'] = f'postgresql://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_HOST}/{POSTGRES_DB}'
 
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
@@ -97,7 +95,6 @@ def create_app():
         return send_from_directory('../reactFrontend/build','index.html')
     
     
-    # Add this before the return statement
     CORS(app)
 
 

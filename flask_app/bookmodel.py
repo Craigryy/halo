@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, make_response, request
-from flask_jwt_extended import jwt_required
-from .model import BookCategory, BookModel
+from flask_jwt_extended import jwt_required, get_jwt_identity
+from .model import BookCategory, BookModel, User  
 
 book_app = Blueprint('book_app', __name__)
 
@@ -10,6 +10,14 @@ def create_book(id):
     """
     Create a book in the specified category.
     """
+    # Get the user ID of the currently authenticated user
+    current_user_id = get_jwt_identity()
+    
+    # Query the currently logged-in user based on their public_id
+    current_user = User.query.filter_by(public_id=current_user_id).first()
+    if not current_user:
+        return make_response(jsonify({'message': 'User not found'}), 404)
+
     category = BookCategory.query.filter_by(id=id).first()
     if not category:
         return make_response(jsonify({'message': 'Category with id:{} was not found'.format(id)}))
@@ -18,9 +26,12 @@ def create_book(id):
     title, author = json_data['title'], json_data['author']
     book = BookModel(title=title, author=author)
     book.category_id = category.id
+    book.user_id = current_user.id  # Set the user ID for the book
     book.save()
 
     return jsonify({'book': book.to_json()})
+
+
 
 @book_app.route('/categories/<int:id>/books/', methods=['GET'])
 @jwt_required()
@@ -28,12 +39,16 @@ def get_books_by_category(id):
     """
     Get books in the specified category.
     """
+    # Get the user ID of the currently authenticated user
+    current_user_id = get_jwt_identity()
+
     try:
         category = BookCategory.query.get(id)
         if not category:
             return make_response(jsonify({'message': 'Category not found'}), 404)
 
-        books = BookModel.query.filter_by(category_id=id).all()
+        # Query books only for the current user
+        books = BookModel.query.filter_by(category_id=id, user_id=current_user_id).all()
 
         books_data = []
         for book in books:
@@ -57,6 +72,9 @@ def get_book_and_category(category_id, book_id):
     """
     Get a particular book and its category.
     """
+    # Get the user ID of the currently authenticated user
+    current_user_id = get_jwt_identity()
+
     category = BookCategory.query.filter_by(id=category_id).first()
     if not category:
         return make_response(jsonify({'message': 'Category with id:{} was not found'.format(category_id)}))
@@ -64,6 +82,10 @@ def get_book_and_category(category_id, book_id):
     book = BookModel.query.get(book_id)
     if not book:
         return make_response(jsonify({'message': 'Book with id:{} was not found'.format(book_id)}))
+
+    # Ensure the book belongs to the current user
+    if book.user_id != current_user_id:
+        return make_response(jsonify({'message': 'Unauthorized access to this book'}), 403)
 
     book_data = {
         'id': book.id,
@@ -73,15 +95,18 @@ def get_book_and_category(category_id, book_id):
     }
 
     return jsonify({'book': book_data})
-
 @book_app.route('/books/', methods=['GET'])
 @jwt_required()
 def get_all_books():
     """
     Get all books.
     """
+    # Get the user ID of the currently authenticated user
+    current_user_id = get_jwt_identity()
+
     try:
-        books = BookModel.query.all()
+        # Query books only for the current user
+        books = BookModel.query.filter_by(user_id=current_user_id).all()
         books_data = []
 
         for book in books:
@@ -112,6 +137,9 @@ def update_book(id, book_id):
     """
     Update a book in the specified category.
     """
+    # Get the user ID of the currently authenticated user
+    current_user_id = get_jwt_identity()
+
     category = BookCategory.query.filter_by(id=id).first()
     if not category:
         return make_response(jsonify({'message': 'Category with id:{} was not found'.format(id)}))
@@ -119,6 +147,10 @@ def update_book(id, book_id):
     book = BookModel.query.get(book_id)
     if not book:
         return make_response(jsonify({'message': 'Book with id:{} was not found'.format(book_id)}))
+
+    # Ensure the book belongs to the current user
+    if book.user_id != current_user_id:
+        return make_response(jsonify({'message': 'Unauthorized access to this book'}), 403)
 
     book.title = request.json.get('title', book.title)
     book.author = request.json.get('author', book.author)
@@ -134,6 +166,9 @@ def delete_book(id, book_id):
     """
     Delete a book from the specified category.
     """
+    # Get the user ID of the currently authenticated user
+    current_user_id = get_jwt_identity()
+
     book_category = BookCategory.query.filter_by(id=id).first()
     if not book_category:
         return make_response(jsonify({'message': 'Book category with id:{} was not found'.format(book_id)}))
@@ -141,6 +176,10 @@ def delete_book(id, book_id):
     book = BookModel.query.get(book_id)
     if not book:
         return make_response(jsonify({'message': 'Book with id:{} was not found'.format(book_id)}))
+
+    # Ensure the book belongs to the current user
+    if book.user_id != current_user_id:
+        return make_response(jsonify({'message': 'Unauthorized access to this book'}), 403)
 
     book.delete()
     return make_response(jsonify({"message": "Book deleted successfully"}), 200)

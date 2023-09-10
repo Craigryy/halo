@@ -31,7 +31,6 @@ cors = CORS(app,resources={r'*':{'origins':'http://localhost:3000'}})
 if 'DATABASE_URL' in os.environ:
     app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
 else:
-    # from config import POSTGRES_HOST, POSTGRES_DB, POSTGRES_USER, POSTGRES_PASSWORD
     app.config['SQLALCHEMY_DATABASE_URI'] = f'postgresql://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_HOST}/{POSTGRES_DB}'
 
 
@@ -46,8 +45,3 @@ port = FLASK_PORT
 # Initialize the database
 db = SQLAlchemy()
 db.init_app(app)
-
-
-# @app.route('/')
-# def serve():
-#     return send_from_directory(app.static_folder,'index.html')
