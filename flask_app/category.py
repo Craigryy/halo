@@ -6,6 +6,20 @@ from flask_app.authenticate import auth_app
 
 category_app = Blueprint('category_app', __name__)
 
+
+@category_app.route('/categories/admin', methods=['GET'])
+@jwt_required()
+def list_book_category():
+    """
+    List all book categories.
+    """
+
+    categories = BookCategory.query.all()
+
+    return make_response(jsonify([category.to_json() for category in categories]), 200)
+
+
+
 @category_app.route('/categories/add', methods=['POST'])
 @jwt_required()
 def add_new_book_category():
