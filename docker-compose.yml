@@ -1,0 +1,58 @@
+version: '3.9'
+
+volumes:
+  postgres_data: {}
+
+services:
+  database:
+    restart: always
+    image: postgres:13-alpine
+    container_name: haloo_db
+    environment:
+      - POSTGRES_PASSWORD=Favour98
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=halo
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  web:
+    restart: always
+    container_name: halo_web
+    build: .
+    depends_on:
+      - database
+    environment:
+      - DOCKER_ENV=true
+      - POSTGRES_HOST=database
+      - POSTGRES_PORT=5432
+      - POSTGRES_DB=halo
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=Favour98
+    ports:
+      - "5000:5000"
+
+  frontend:
+    restart: always
+    container_name: halo_frontend
+    build: ./reactFrontend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./reactFrontend/:/app
+      - /app/client/node_modules/
+    command: ["npm", "start", "--prefix", "/app"]  # Start React using npm start
+
+  app:
+    restart: always
+    container_name: halo_app
+    build: ./
+    depends_on:
+      - database
+    env_file:
+      - .env_docker
+    command: ["python", "manager.py"]  # Start Flask using python manager.py
+    ports:
+      - "8000:8000"
+
