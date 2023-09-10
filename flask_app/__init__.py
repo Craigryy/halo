@@ -25,7 +25,7 @@ def create_app():
         Flask: The Flask application instance.
     """
     # Create the Flask application
-    app = Flask(__name__, static_folder='../reactFrontend/build', static_url_path='')
+    app = Flask(__name__, static_folder='../reactFrontenddd/build', static_url_path='')
     jwt = JWTManager(app)
 
     # # CORS setup
@@ -39,7 +39,7 @@ def create_app():
 
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     app.config["SECRET_KEY"] = POSTGRES_SECRET_KEY    
-    app.static_folder ='../reactFrontend/build'
+    app.static_folder ='../reactFrontenddd/build'
 
 
     # Initialize the database

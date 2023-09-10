@@ -24,7 +24,7 @@ from flask_cors import CORS, cross_origin
 from flask.helpers import send_from_directory
 
 # Create the Flask application
-app = Flask(__name__, static_folder='reactFrontend/build', static_url_path='')
+app = Flask(__name__, static_folder='reactFrontenddd/build', static_url_path='')
 cors = CORS(app,resources={r'*':{'origins':'http://localhost:3000'}})
 
     # Configure the database URI conditionally based on Heroku or local
