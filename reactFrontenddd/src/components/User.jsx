@@ -13,6 +13,8 @@ function User(props) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [showUsers, setShowUsers] = useState(false);
+  const [accessCode, setAccessCode] = useState('');
+  const [isConfirmationVisible, setIsConfirmationVisible] = useState(false);
   const navigate = useNavigate(); 
 
   // Function to fetch all users from API
@@ -33,21 +35,32 @@ function User(props) {
       });
   };
 
-  // Function to handle user deletion
+  // Function to handle user deletion with confirmation
   const handleDeleteUser = (user) => {
-    const isConfirmed = window.confirm(`Are you sure you want to delete ${user.name}?`);
-  
-    if (isConfirmed) {
-      APIService.deleteUser(user.id, token['mytoken'])
+    // Show the confirmation dialog
+    setIsConfirmationVisible(true);
+  };
+
+  // Function to handle confirmation button click
+  const handleConfirmation = () => {
+    // Check if the access code is correct
+    if (accessCode === 'jamesharrison') {
+      setIsConfirmationVisible(false);
+      // Continue with user deletion
+      APIService.deleteUser(selectedUser.id, token['mytoken'])
         .then(() => {
           // Fetch the updated list of users after successful deletion
+          setAccessCode('');
           fetchAllUsers();
           // Call the parent component's deleteBtnUser function
-          deleteBtnUser(user);
+          deleteBtnUser(selectedUser);
         })
         .catch((error) => {
           console.error('Error deleting user:', error);
         });
+    } else {
+      // Display an error message for incorrect access code
+      setError('Wrong access code. Please try again.');
     }
   };
 
@@ -55,6 +68,9 @@ function User(props) {
   const handleHideUsers = () => {
     setShowUsers(false);
   };
+
+  // Selected user for deletion
+  const [selectedUser, setSelectedUser] = useState(null);
 
   // JSX rendering
   return (
@@ -71,10 +87,25 @@ function User(props) {
             {usersList.map((user) => (
               <li key={user.id}>
                 {user.name}{' '}
-                <button onClick={() => handleDeleteUser(user)}>Delete</button>
+                <button onClick={() => {
+                  setSelectedUser(user);
+                  handleDeleteUser(user);
+                }}>Delete</button>
               </li>
             ))}
           </ul>
+        </div>
+      )}
+      {/* Confirmation Modal */}
+      {isConfirmationVisible && (
+        <div className="confirmation-modal">
+          <p>Enter access code to confirm:</p>
+          <input
+            type="password"
+            value={accessCode}
+            onChange={(e) => setAccessCode(e.target.value)}
+          />
+          <button onClick={handleConfirmation}>Confirm</button>
         </div>
       )}
     </div>
