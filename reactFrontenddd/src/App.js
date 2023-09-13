@@ -23,32 +23,20 @@ function App() {
   const [editedCategories, setEditedCategories] = useState(null);
 
   useEffect(() => {
-    fetch('/categories/', {
-      method: 'GET',
-      headers: {
-        "Content-Type": 'application/json',
-        Authorization: `Bearer ${token['mytoken']}`
-      }
-    })
-      .then(resp => resp.json())
+    // Use APIService to fetch categories
+    APIService.makeRequest('/categories/', 'GET', null, token['mytoken'])
       .then(resp => setCategories(resp))
       .catch(error => console.log(error));
   }, [token]);
-
+  
   useEffect(() => {
-
-    fetch('/books/', {
-      method: 'GET',
-      headers: {
-        "Content-Type": 'application/json',
-        Authorization: `Bearer ${token['mytoken']}`
-      }
-    })
-      .then(resp => resp.json())
+    // Use APIService to fetch books
+    APIService.makeRequest('/books/', 'GET', null, token['mytoken'])
       .then(resp => setBooks(resp))
       .catch(error => console.log(error));
   }, [token]);
-
+ 
+   
   useEffect(() => {
     if (!token['mytoken']) {
       navigate('/'); // Use navigate() to redirect to the '/' route
