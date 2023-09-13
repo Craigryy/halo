@@ -24,148 +24,36 @@ export default class APIService {
   // get all categories from the server and store them in state
 
   static async insertCategory(body, token) {
-    return fetch(`/categories/add`, {
-      method: "POST",
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(body)
-    })
-    .then(resp => {
-      if (!resp.ok) {
-        throw new Error(`Error: ${resp.status} ${resp.statusText}`);
-      }
-      return resp.json();
-    })
-    .catch(error => {
-      console.error('Error inserting category:', error);
-    });
+    return this.makeRequest(`/categories/add`, 'POST', body, token);
   }
 
-  static async UpdateCategory (categoryId, updatedData, token) {
-    return fetch(`/categories/${categoryId}/`, {
-        method: 'PUT', 
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify(updatedData)
-      })
-      .then(resp => {
-        if (!resp.ok) {
-          throw new Error(`Error: ${resp.status} ${resp.statusText}`);
-        }
-        return resp.json();
-      })
-      .catch(error => {
-        console.error('Error inserting category:', error);
-      });
-    }
+  static async UpdateCategory(categoryId, updatedData, token) {
+    return this.makeRequest(`/categories/${categoryId}/`, 'PUT', updatedData, token);
+  }
 
-   static async DeleteCategory (categoryId, token)  {
-    return fetch(`/categories/${categoryId}/`, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-      }
-    })
-    .then(response => {
-      if (!response.ok) {
-        throw new Error('Failed to delete category');
-      }
-    })
-    .catch(error => {
-      throw error;
-    });
-}
-
-
+  static async DeleteCategory(categoryId, token) {
+    return this.makeRequest(`/categories/${categoryId}/`, 'DELETE', null, token);
+  }
   
   //  BOOKS ROUTES
 
-  static async addBook(id,body, token) {
-    return fetch(`/categories/${id}/books/`, {
-      method: "POST",
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(body)
-    })
-    .then(resp => {
-      if (!resp.ok) {
-        throw new Error(`Error: ${resp.status} ${resp.statusText}`);
-      }
-      return resp.json();
-    })
-    .catch(error => {
-      console.error('Error adding book:', error);
-      console.error('Response body:', error.response);
-    });
+  static async addBook(categoryId, body, token) {
+    return this.makeRequest(`/categories/${categoryId}/books/`, 'POST', body, token);
   }
 
   static async getAllBooks(token) {
-    return fetch('/books/', {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json'
-      }
-    })
-    .then(resp => {
-      if (!resp.ok) {
-        throw new Error(`Error: ${resp.status} ${resp.statusText}`);
-      }
-      return resp.json();
-    })
-    .catch(error => {
-      console.error('Error fetching all books:', error);
-    });
+    return this.makeRequest('/books/', 'GET', null, token);
   }
-  
 
-  static async updateBook (categoryId, bookId,updatedData, token) {
-    return fetch(`/categories/${categoryId}/books/${bookId}`, {
-        method: 'PUT', 
-        headers: {
-          'Content-Type': 'application/json',
-         'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify(updatedData)
-      })
-      .then(resp => {
-        if (!resp.ok) {
-          throw new Error(`Error: ${resp.status} ${resp.statusText}`);
-        }
-        return resp.json();
-      })
-      .catch(error => {
-        console.error('Error inserting book:', error);
-      });
-    }
+  static async updateBook(categoryId, bookId, updatedData, token) {
+    return this.makeRequest(`/categories/${categoryId}/books/${bookId}`, 'PUT', updatedData, token);
+  }
+
+  static async deleteBook(categoryId, bookId, token) {
+    return this.makeRequest(`/categories/${categoryId}/books/${bookId}`, 'DELETE', null, token);
+  }
 
 
-
-  static async deleteBook (categoryId,bookId, token)  {
-    return fetch(`/categories/${categoryId}/books/${bookId}`, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-      }
-    })
-    .then(response => {
-      if (!response.ok) {
-        throw new Error('Failed to delete book');
-      }
-    })
-    .catch(error => {
-      throw error;
-    });
-  }   
-  
   //  Login Routes
 
 static async login(username, password) {
@@ -195,6 +83,7 @@ static async login(username, password) {
   });
 }
 
+
   // / Users Routes
 
   static async createUser(username, password) {
@@ -202,59 +91,15 @@ static async login(username, password) {
       name: username,
       password: password
     };
-  
-    return fetch('/auth/register', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(requestBody)
-    })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error(`Error: ${response.status} ${response.statusText}`);
-        }
-        return response.json();
-      })
-      .catch(error => {
-        console.error('Error creating user:', error);
-      });
+
+    return this.makeRequest('/auth/register', 'POST', requestBody);
   }
-  
 
   static async getAllUsers(token) {
-    return fetch("/users", {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json'
-      }
-    })
-    .then(resp => {
-      if (!resp.ok) {
-        throw new Error(`Error: ${resp.status} ${resp.statusText}`);
-      }
-      return resp.json();
-    })
-    .catch(error => {
-      console.error('Error fetching all users:', error);
-    });
+    return this.makeRequest('/users', 'GET', null, token);
   }
-  static async deleteUser (Id, token)  {
-    return fetch(`/user/${Id}/`, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-      }
-    })
-    .then(response => {
-      if (!response.ok) {
-        throw new Error('Failed to delete a user');
-      }
-    })
-    .catch(error => {
-      throw error;
-    });
-  } 
+
+  static async deleteUser(id, token) {
+    return this.makeRequest(`/user/${id}/`, 'DELETE', null, token);
+  }
 }
