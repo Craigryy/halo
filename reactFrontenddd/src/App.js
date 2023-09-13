@@ -9,6 +9,7 @@ import { useCookies } from 'react-cookie';
 import './App.css';
 import Login from './components/login';
 import User from './components/User';
+import APIService from './APIService'; 
 
 function App() {
   const [categories, setCategories] = useState([]);
@@ -35,6 +36,7 @@ function App() {
   }, [token]);
 
   useEffect(() => {
+
     fetch('/books/', {
       method: 'GET',
       headers: {
@@ -62,43 +64,24 @@ function App() {
   };
 
   const fetchCategories = () => {
-    fetch('/categories/', {
-      method: 'GET',
-      headers: {
-        "Content-Type": 'application/json',
-        "Authorization": `Bearer ${token['mytoken']}`
-      }
-    })
-      .then(resp => resp.json())
-      .then(resp => setCategories(resp))
-      .catch(error => console.log(error));
-  };
+    APIService.makeRequest('/categories/', 'GET', null, token['mytoken'])
+    .then(resp => setCategories(resp))
+    .catch(error => console.log(error));
+    };  
+
 
   const fetchBooks = () => {
-    fetch('/books/', {
-      method: 'GET',
-      headers: {
-        "Content-Type": 'application/json',
-        "Authorization": `Bearer ${token['mytoken']}`
-      }
-    })
-      .then(resp => resp.json())
-      .then(resp => setBooks(resp))
-      .catch(error => console.log(error));
-  };
+    APIService.makeRequest('/books/', 'GET', null, token['mytoken'])
+    .then(resp => setBooks(resp))
+    .catch(error => console.log(error));
+    };  
+   
 
   const fetchUsers = () => {
-    fetch('/users/', {
-      method: 'GET',
-      headers: {
-        "Content-Type": 'application/json',
-        "Authorization": `Bearer ${token['mytoken']}`
-      }
-    })
-      .then(resp => resp.json())
-      .then(resp => setUsers(resp))
-      .catch(error => console.log(error));
-  };
+    APIService.makeRequest('/users/', 'GET', null, token['mytoken'])
+    .then(resp => setUsers(resp))
+    .catch(error => console.log(error));
+    };  
 
   const updatedInformation = (category) => {
     const new_categories = categories.map(mycategory => {
@@ -245,3 +228,5 @@ function App() {
 }
 
 export default App;
+
+

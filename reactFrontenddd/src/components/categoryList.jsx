@@ -124,33 +124,6 @@ function CategoryList(props) {
       ) : (
         <p>No categories available.</p>
       )}
-      <button className="btn btn-primary" onClick={fetchAllBooks}>
-        {showAllBooks ? 'Hide Books' : 'Show All Books'}
-        <br/>
-        <br/>
-      </button>
-       {/* Display allBooks */}
-       <div className='note'>
-        {allBooks && allBooks.length > 0 ? (
-          allBooks.map((book) => (
-            <div key={book.id}>
-              <h3>{book.title}</h3>
-              <p>Author: {book.author}</p>
-              <p>Category: {book.category_id}</p>
-              <button className='btn btn-primary custom-btn' onClick={() => editCatBook(book)}>
-                Upd
-              </button>
-              <button className='btn btn-danger custom-btn' onClick={() => deleteBook(book)}>
-                Del
-              </button>
-              <br/>
-              <br/>
-            </div>
-          ))
-        ) : null}
-    
-
-        </div>
     </div>
   );
 }

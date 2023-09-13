@@ -21,15 +21,29 @@ auth_app = Blueprint("auth_app", __name__)
 #     A test route.
 #     """
 #     return make_response(jsonify({"message": "test route"}), 200)
-
 @auth_app.route("/users", methods=["GET"])
 @jwt_required()
 def get_all_users():
     """
     Get all users from the database.
     """
-    users = User.query.all()
-    return make_response(jsonify([user.to_json() for user in users]), 200)
+    try:
+        # Get the user ID of the currently authenticated user
+        current_user_id = get_jwt_identity()
+        
+        # Query the currently logged-in user based on their public_id
+        current_user = User.query.filter_by(public_id=current_user_id).first()
+
+        if current_user:
+            # Retrieve all users from the database (remove the unnecessary filter)
+            users = User.query.all()
+            
+            return make_response(jsonify([user.to_json() for user in users]), 200)
+        return make_response(jsonify({'message': 'User not found'}), 404)
+    except Exception as e:
+        error_message = f"Error listing users: {str(e)}"
+        return make_response(jsonify({'message': error_message}), 500)
+
 
 @auth_app.route('/auth/register', methods=["POST"])
 def register_user():

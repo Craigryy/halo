@@ -6,7 +6,6 @@ from flask_app.authenticate import auth_app
 
 category_app = Blueprint('category_app', __name__)
 
-
 @category_app.route('/categories/admin', methods=['GET'])
 @jwt_required()
 def list_book_category():
@@ -43,6 +42,7 @@ def add_new_book_category():
         return jsonify({'BookCategory': category.to_json()})
     return make_response(jsonify({'message': 'User not found'}), 404)
 
+
 @category_app.route('/categories/', methods=['GET'])
 @jwt_required()
 def list_book_categories():
@@ -65,6 +65,7 @@ def list_book_categories():
     except Exception as e:
         error_message = f"Error listing categories: {str(e)}"
         return make_response(jsonify({'message': error_message}), 500)
+
 
 @category_app.route('/categories/<int:id>', methods=['GET'])
 @jwt_required()
@@ -89,6 +90,7 @@ def get_book_category_by_id(id):
     except Exception as e:
         error_message = f"Error getting category: {str(e)}"
         return make_response(jsonify({'message': error_message}), 500)
+
 
 @category_app.route('/categories/<int:id>/', methods=['PUT'])
 @jwt_required()
@@ -117,6 +119,7 @@ def update_book_category(id):
     except Exception as e:
         error_message = f"Error updating category: {str(e)}"
         return make_response(jsonify({'message': error_message}), 500)
+
 
 @category_app.route('/categories/<int:id>/', methods=['DELETE'])
 @jwt_required()
