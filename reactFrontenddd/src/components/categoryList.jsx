@@ -84,7 +84,6 @@ function CategoryList(props) {
             <button className="btn btn-primary" onClick={() => props.toggleShowBooks(category.id)}>
               {props.showBooks[category.id] ? 'Hide Books' : 'Show Books'}
             </button>
-            <hr />
             {props.showBooks[category.id] && books && books.length > 0 ? (
               <div className="book-list-background">
                 <h2>All Books</h2>
