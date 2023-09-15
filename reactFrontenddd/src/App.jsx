@@ -162,18 +162,13 @@ function App() {
     fetchUsers();
     fetchCategories();
   };
-
   return (
     <div className="App">
       <div className="row">
         <div className="col">
           <Header title="Halo" />
         </div>
-        <div className="col">
-          <button className="btn btn-success custom-btn" onClick={openCreateArea}>
-            INSERT
-          </button>
-          <br />
+        <div className="col text-right"> {/* Use Bootstrap's text-right class */}
           <button onClick={logoutBtn} className='btn btn-primary custom-btn'>
             Logout
           </button>
@@ -182,6 +177,23 @@ function App() {
       <br />
       <br />
 
+      <CategoryList
+        categories={categories}
+        books={books}
+        users={users}
+        showBooks={showBooks}
+        toggleShowBooks={toggleShowBooks}
+        editCat={handleEditCategory}
+        editCatBook={handleEditBook}
+        deleteBtn={deleteBtn}
+        deleteBtnBook={deleteBtnBook}
+        fetchUsers={fetchUsers}
+      />
+      <button className="btn btn-success custom-btn" onClick={openCreateArea}>
+        INSERT
+      </button>
+
+      <br />
       {editedCategory || editedBook ? (
         <CreateArea
           category={editedCategory}
@@ -193,21 +205,6 @@ function App() {
         />
       ) : null}
 
-      <CategoryList
-        categories={categories}
-        books={books}
-        users={users}
-       
-        showBooks={showBooks}
-        toggleShowBooks={toggleShowBooks}
-        editCat={handleEditCategory}
-        editCatBook={handleEditBook}
-        deleteBtn={deleteBtn}
-        deleteBtnBook={deleteBtnBook}
-        fetchUsers={fetchUsers}
-      />
-
-      <br />
       <User deleteBtnUser={deleteBtnUser} />
       <br/>
       <Footer />
@@ -216,5 +213,3 @@ function App() {
 }
 
 export default App;
-
-

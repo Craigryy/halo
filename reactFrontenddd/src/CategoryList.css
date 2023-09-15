@@ -1,0 +1,64 @@
+/* CategoryList.css */
+
+.CategoryList {
+  display: flex;
+  flex-wrap: wrap; /* Allow items to wrap into the next row */
+  justify-content: center; /* Center items horizontally */
+}
+
+.CategoryList .key {
+  background: #fff;
+  border-radius: 7px;
+  box-shadow: 0 2px 5px #ccc;
+  padding: 20px;
+  margin: 20px;
+  width: 300px; /* Adjust the width of each item */
+  border: 1px solid #ccc; /* Add a border */
+}
+
+.CategoryList .key h3 {
+  margin-bottom: 10px;
+}
+
+.CategoryList .key .row {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.CategoryList .note {
+  margin-top: 10px;
+}
+
+.CategoryList .no-categories {
+  text-align: center;
+  margin-top: 50px;
+}
+
+.CategoryList .grey-background {
+  background-color: #f0f0f0;
+  padding: 20px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.CategoryList .no-categories img {
+  width: 48px;
+  height: 48px;
+  color: blue;
+}
+
+.CategoryList .no-categories p {
+  margin-top: 10px;
+}
+
+/* Center bookicon and p tag when there are no categories */
+.CategoryList .no-categories {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.CategoryList .no-categories img {
+  margin-bottom: 10px;
+}
