@@ -1,5 +1,3 @@
-the width is okay but its now too long please make it shorter /* CategoryList.css */
-
 .CategoryList {
   display: flex;
   flex-wrap: wrap; /* Allow items to wrap into the next row */
@@ -23,12 +21,12 @@ the width is okay but its now too long please make it shorter /* CategoryList.cs
 
 .CategoryList h3,
 .CategoryList p {
-  font-size: 12px; /* Reduced font size */
+  font-size: 14px; /* Reduced font size */
 }
 
 .CategoryList .btn {
   padding: 3px 6px; /* Reduced padding */
-  font-size: 10px; /* Reduced font size */
+  font-size: 15px; /* Reduced font size */
 }
 
 .CategoryList .custom-btn {
@@ -102,12 +100,6 @@ the width is okay but its now too long please make it shorter /* CategoryList.cs
 
 .CategoryList .no-categories img {
   margin-bottom: 5px; /* Reduced margin */
-}
-
-/* CategoryList.css */
-
-.CategoryList {
-  /* Your existing styles for categories */
 }
 
 .book-list-background {

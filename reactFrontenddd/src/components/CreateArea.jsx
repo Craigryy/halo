@@ -159,6 +159,7 @@ function CreateArea(props) {
 
           {showBookForm && (
             <div>
+              <br/>
               <h3>Add a Book</h3>
               <label htmlFor="bookTitle" className="form-label">
                 Title
