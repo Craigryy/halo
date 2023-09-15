@@ -80,8 +80,6 @@ function CategoryList(props) {
             <h3>{category.name}</h3>
             <p>created_by: {category.created_by}</p>
             <p>category_id: {category.id}</p>
-            <br />
-
             <div className="row">
               <div className="col-md-1">
                 <button className="btn btn-primary" onClick={() => editCat(category)}>
@@ -94,11 +92,10 @@ function CategoryList(props) {
                 </button>
               </div>
             </div>
-            <br />
+         
             <button className="btn btn-primary" onClick={() => props.toggleShowBooks(category.id)}>
               {props.showBooks[category.id] ? 'Hide Books' : 'Show Books'}
             </button>
-            <br />
             <hr />
 
             <div className="note">
