@@ -1,4 +1,4 @@
-/* CategoryList.css */
+the width is okay but its now too long please make it shorter /* CategoryList.css */
 
 .CategoryList {
   display: flex;
@@ -12,8 +12,7 @@
   box-shadow: 0 2px 5px #ccc;
   padding: 10px; /* Reduced padding */
   margin: 10px;
-  max-height: 200px; /* Adjusted max height */
-  overflow: auto; /* Add overflow for content */
+  /* Removed fixed width */
   border: 1px solid #ccc; /* Add a border */
 }
 
@@ -103,4 +102,47 @@
 
 .CategoryList .no-categories img {
   margin-bottom: 5px; /* Reduced margin */
+}
+
+/* CategoryList.css */
+
+.CategoryList {
+  /* Your existing styles for categories */
+}
+
+.book-list-background {
+  background-color: #f9f9f9;
+  padding: 20px;
+  margin-top: 20px;
+}
+
+.book-list {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.book {
+  background: #fff;
+  border-radius: 7px;
+  box-shadow: 0 2px 5px #ccc;
+  padding: 10px;
+  margin: 10px;
+  width: 300px;
+  border: 1px solid #ccc;
+}
+
+.book h3,
+.book p {
+  font-size: 14px;
+}
+
+.book .btn {
+  padding: 5px 10px;
+  font-size: 12px;
+}
+
+@media screen and (max-width: 768px) {
+  .book .btn {
+    font-size: 10px;
+  }
 }

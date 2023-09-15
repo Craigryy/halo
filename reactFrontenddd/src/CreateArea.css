@@ -1,18 +1,33 @@
-/* Add these styles to your existing CreateArea.css or create a new CSS file */
+/* Styles for the create area */
 .create-area-container {
   padding: 20px;
   background-color: #f9f9f9;
   border-radius: 10px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .create-area-container label {
   font-weight: bold;
+  margin-bottom: 5px;
 }
 
 .create-area-container .form-control {
   width: 100%;
+  margin-bottom: 10px;
+}
+
+.create-area-container .form-group {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.create-area-container .form-group .form-control {
+  width: 48%; /* Adjust width as needed */
 }
 
 .create-area-container button {
@@ -26,7 +41,8 @@
 
 /* Additional styles for responsiveness */
 @media screen and (max-width: 768px) {
-  .create-area-container {
-    padding: 10px;
+  .create-area-container .form-group .form-control {
+    width: 100%; /* Adjust width as needed */
+    margin-bottom: 10px;
   }
 }

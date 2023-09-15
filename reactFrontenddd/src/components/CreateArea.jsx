@@ -3,7 +3,7 @@ import APIService from '../APIService';
 import { useCookies } from 'react-cookie';
 import { Button, Form } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons'; // Import FontAwesome icons
+import { faEdit, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons'; 
 import '../CreateArea.css';
 
 function CreateArea(props) {
@@ -191,7 +191,7 @@ function CreateArea(props) {
                 type="text"
                 className="form-control"
                 name="bookCategory"
-                placeholder="Enter category ID or name"
+                placeholder="Enter category ID "
                 value={category_id}
                 onChange={e => setBookCategory(e.target.value)}
               />

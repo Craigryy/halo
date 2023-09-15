@@ -176,7 +176,19 @@ function App() {
       </div>
       <br />
       <br />
-
+      <button className="btn btn-success custom-btn" onClick={openCreateArea}>
+        INSERT
+      </button>
+      {editedCategory || editedBook ? (
+        <CreateArea
+          category={editedCategory}
+          book={editedBook}
+          updatedInformation={updatedInformation}
+          insertedInformation={insertedInformation}
+          insertedBookInformation={insertedBookInformation}
+          updatedBookInformation={updatedBookInformation}
+        />
+      ) : null }
       <CategoryList
         categories={categories}
         books={books}
@@ -189,24 +201,7 @@ function App() {
         deleteBtnBook={deleteBtnBook}
         fetchUsers={fetchUsers}
       />
-      <button className="btn btn-success custom-btn" onClick={openCreateArea}>
-        INSERT
-      </button>
-
-      <br />
-      {editedCategory || editedBook ? (
-        <CreateArea
-          category={editedCategory}
-          book={editedBook}
-          updatedInformation={updatedInformation}
-          insertedInformation={insertedInformation}
-          insertedBookInformation={insertedBookInformation}
-          updatedBookInformation={updatedBookInformation}
-        />
-      ) : null}
-
       <User deleteBtnUser={deleteBtnUser} />
-      <br/>
       <Footer />
     </div>
   );
