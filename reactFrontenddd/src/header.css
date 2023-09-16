@@ -1,0 +1,33 @@
+.header-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #749BC2;
+  padding: 10px;
+}
+
+.header-list {
+  display: flex;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.header-list-item {
+  margin-left: 10px;
+}
+
+.header-list-item a {
+  color: #fff;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.header-list-item a:hover {
+  text-decoration: underline;
+}
+
+#logo_img {
+  height: 30px; /* Adjust the height as needed */
+  margin-right: 10px;
+}

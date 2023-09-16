@@ -107,4 +107,25 @@
     height: auto;
     font-size: medium;
   }
-  
+  /* Existing styles */
+
+/* Add styles for smaller screens (e.g., phones) */
+@media screen and (max-width: 767px) {
+  .login-container {
+    width: 80%; /* Adjust width for smaller screens */
+    height: auto; /* Allow height to adjust based on content */
+  }
+
+  .login-container img.login-image {
+    max-width: 70px; /* Adjust image size for smaller screens */
+    top: -40px; /* Adjust image position */
+  }
+
+  .login-input {
+    font-size: 14px; /* Adjust font size for inputs */
+  }
+
+  .login-button {
+    width: 100%; /* Make button full width on smaller screens */
+  }
+}

@@ -8,7 +8,6 @@ import { useNavigate } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
 import './App.css';
 import Login from './components/login';
-import User from './components/User';
 import APIService from './APIService'; 
 
 function App() {
@@ -16,7 +15,6 @@ function App() {
   const [token, setToken, removeCookie] = useCookies(['mytoken']);
   const navigate = useNavigate();
   const [books, setBooks] = useState([]);
-  const [users, setUsers] = useState([]);
   const [editedCategory, setEditedCategory] = useState(null);
   const [editedBook, setEditedBook] = useState(null);
   const [showBooks, setShowBooks] = useState({});
@@ -65,12 +63,7 @@ function App() {
     };  
    
 
-  const fetchUsers = () => {
-    APIService.makeRequest('/users/', 'GET', null, token['mytoken'])
-    .then(resp => setUsers(resp))
-    .catch(error => console.log(error));
-    };  
-
+  
   const updatedInformation = (category) => {
     const new_categories = categories.map(mycategory => {
       if (mycategory.id === category.id) {
@@ -144,6 +137,10 @@ function App() {
     setEditedCategory({ name: '', created_by: '' });
   };
 
+  const closeCreateArea = () => {
+    setEditedCategory(null);
+  };
+
   const insertedBookInformation = (book) => {
     const new_books = [...books, book];
     setBooks(new_books);
@@ -152,35 +149,35 @@ function App() {
     fetchBooks();
   };
 
-  const navigateToUserRoute = () => {
-    navigate('/user');
-  };
 
-  const deleteBtnUser = (user) => {
-    const new_user = users.filter(myuser => myuser.id !== user.id);
-    setUsers(new_user);
-    fetchUsers();
-    fetchCategories();
-  };
+
+  
   return (
     <div className="App">
       <div className="row">
         <div className="col">
-          <Header title="Halo" />
-        </div>
-        <div className="col text-right">
-          <span>Halo</span>
-          <a href="#" onClick={logoutBtn} className='btn btn-link'>
-            Logout
-          </a>
+        <Header logoutBtn={logoutBtn} />
         </div>
       </div>
       <br />
       <br />
+      <CategoryList
+        categories={categories}
+        books={books}
+        showBooks={showBooks}
+        toggleShowBooks={toggleShowBooks}
+        editCat={handleEditCategory}
+        editCatBook={handleEditBook}
+        deleteBtn={deleteBtn}
+        deleteBtnBook={deleteBtnBook}
+      /> 
       <button className="btn btn-success custom-btn" onClick={openCreateArea}>
         INSERT
       </button>
-      {editedCategory || editedBook ? (
+      <button className="btn btn-success custom-btn" onClick={closeCreateArea}>
+        CLOSE
+      </button>
+        {editedCategory || editedBook ? (
         <CreateArea
           category={editedCategory}
           book={editedBook}
@@ -190,19 +187,8 @@ function App() {
           updatedBookInformation={updatedBookInformation}
         />
       ) : null }
-      <CategoryList
-        categories={categories}
-        books={books}
-        users={users}
-        showBooks={showBooks}
-        toggleShowBooks={toggleShowBooks}
-        editCat={handleEditCategory}
-        editCatBook={handleEditBook}
-        deleteBtn={deleteBtn}
-        deleteBtnBook={deleteBtnBook}
-        fetchUsers={fetchUsers}
-      />
-      <User deleteBtnUser={deleteBtnUser} />
+      <br/>
+      <br/>
       <Footer />
     </div>
   );

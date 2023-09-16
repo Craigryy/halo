@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import APIService from '../APIService';
 import { useCookies } from 'react-cookie';
-import { Button, Form } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons'; 
+import { faEdit, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 import '../CreateArea.css';
 
 function CreateArea(props) {
@@ -15,6 +14,7 @@ function CreateArea(props) {
   const [token] = useCookies(['mytoken']);
   const [error, setError] = useState(null);
   const [showBookForm, setShowBookForm] = useState(false);
+  const [categories, setCategories] = useState([]);
 
   useEffect(() => {
     if (props.category) {
@@ -30,6 +30,26 @@ function CreateArea(props) {
       setBookCategory(props.book.category_id || '');
     }
   }, [props.book]);
+
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await APIService.makeRequest('/categories', 'GET', null, token['mytoken']);
+  
+        if (Array.isArray(response)) {
+          setCategories(response);
+        } else {
+          console.error('Error fetching categories:', response);
+        }
+      } catch (error) {
+        console.error('Error fetching categories:', error);
+      }
+    };
+  
+    fetchCategories();
+  }, [token]);
+  
 
   const updateCategory = () => {
     APIService.UpdateCategory(props.category.id, { name, created_by }, token['mytoken'])
@@ -110,7 +130,7 @@ function CreateArea(props) {
         setError('Error adding book. Please try again.');
       });
   };
-  
+
   const handleCloseForms = () => {
     setShowBookForm(false);
     setName('');
@@ -139,6 +159,7 @@ function CreateArea(props) {
         <div className="form-container">
           {/* Category Form */}
           <div className="form-section">
+            <h3>Category Form</h3>
             <label htmlFor="name" className="form-label">
               Name of Category
             </label>
@@ -151,7 +172,7 @@ function CreateArea(props) {
               onChange={e => setName(e.target.value)}
             />
             <label htmlFor="created_by" className="form-label">
-              Created_by
+              Created by
             </label>
             <input
               type="text"
@@ -176,7 +197,7 @@ function CreateArea(props) {
           <div className="form-section">
             {showBookForm && (
               <div>
-                <h3>Add a Book</h3>
+                <h3>Book Form</h3>
                 <label htmlFor="bookTitle" className="form-label">
                   Title
                 </label>
@@ -202,14 +223,19 @@ function CreateArea(props) {
                 <label htmlFor="bookCategory" className="form-label">
                   Category
                 </label>
-                <input
-                  type="text"
+                <select
                   className="form-control"
                   name="bookCategory"
-                  placeholder="Enter category ID "
                   value={category_id}
                   onChange={e => setBookCategory(e.target.value)}
-                />
+                >
+                  <option value="">Select a category</option>
+                  {categories.map(category => (
+                    <option key={category.id} value={category.id}>
+                      {category.name}
+                    </option>
+                  ))}
+                </select>
                 {props.book && props.book.id ? (
                   <button onClick={updateBook} className="btn btn-success">
                     <FontAwesomeIcon icon={faEdit} /> Update book
@@ -219,9 +245,6 @@ function CreateArea(props) {
                     <FontAwesomeIcon icon={faPlus} /> Add book
                   </button>
                 )}
-                <button onClick={handleCloseBookForm} className="btn btn-secondary">
-                  Close Book Form
-                </button>
               </div>
             )}
 
@@ -236,16 +259,9 @@ function CreateArea(props) {
         </div>
       )}
 
-      {/* Close All Forms Button */}
-      <button onClick={handleCloseForms} className="btn btn-danger">
-        Close All Forms
-      </button>
-
       {error && <p className="text-danger">{error}</p>}
     </div>
   );
 }
 
 export default CreateArea;
-
-

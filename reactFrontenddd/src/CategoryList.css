@@ -1,140 +1,33 @@
 .CategoryList {
   display: flex;
-  flex-wrap: wrap; /* Allow items to wrap into the next row */
-  justify-content: center; /* Center items horizontally */
-}
-
-.CategoryList .key {
-  background: #fff;
-  border-radius: 7px;
-  box-shadow: 0 2px 5px #ccc;
-  padding: 10px; /* Reduced padding */
-  margin: 10px;
-  /* Removed fixed width */
-  border: 1px solid #ccc; /* Add a border */
-}
-
-/* Adjust text size and reduce margin/padding for elements within each category */
-.CategoryList .key {
-  margin-bottom: 5px; /* Reduced margin */
-}
-
-.CategoryList h3,
-.CategoryList p {
-  font-size: 14px; /* Reduced font size */
-}
-
-.CategoryList .btn {
-  padding: 3px 6px; /* Reduced padding */
-  font-size: 15px; /* Reduced font size */
-}
-
-.CategoryList .custom-btn {
-  padding: 3px 6px; /* Reduced padding */
-  font-size: 10px; /* Reduced font size */
-}
-
-.CategoryList .note div {
-  margin-bottom: 5px; /* Reduced margin */
-}
-
-/* Adjust padding for the buttons in the row */
-.CategoryList .row .btn {
-  padding: 2px 4px; /* Reduced padding */
-  font-size: 9px; /* Reduced font size */
-}
-
-/* Responsive styles if needed */
-@media screen and (max-width: 768px) {
-  .CategoryList .btn {
-    font-size: 9px; /* Reduced font size */
-  }
-
-  .CategoryList .custom-btn {
-    font-size: 9px; /* Reduced font size */
-  }
-}
-
-.CategoryList .key h3 {
-  margin-bottom: 5px; /* Reduced margin */
-}
-
-.CategoryList .key .row {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 5px; /* Reduced margin */
-}
-
-.CategoryList .note {
-  margin-top: 5px; /* Reduced margin */
-}
-
-.CategoryList .no-categories {
-  text-align: center;
-  margin-top: 30px; /* Reduced margin */
-}
-
-.CategoryList .grey-background {
-  background-color: #f0f0f0;
-  padding: 10px; /* Reduced padding */
-  border-radius: 50%;
-  display: inline-block;
-}
-
-.CategoryList .no-categories img {
-  width: 32px; /* Reduced size */
-  height: 32px; /* Reduced size */
-  color: blue;
-}
-
-.CategoryList .no-categories p {
-  margin-top: 5px; /* Reduced margin */
-}
-
-/* Center bookicon and p tag when there are no categories */
-.CategoryList .no-categories {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.CategoryList .no-categories img {
-  margin-bottom: 5px; /* Reduced margin */
-}
-
-.book-list-background {
-  background-color: #f9f9f9;
-  padding: 20px;
-  margin-top: 20px;
-}
-
-.book-list {
-  display: flex;
   flex-wrap: wrap;
+  justify-content: flex-start; /* Align keys to the left */
 }
 
-.book {
+.CategoryList .key {
   background: #fff;
   border-radius: 7px;
   box-shadow: 0 2px 5px #ccc;
   padding: 10px;
   margin: 10px;
-  width: 300px;
   border: 1px solid #ccc;
+  width: 200px; /* Adjust width of keys */
 }
 
-.book h3,
-.book p {
-  font-size: 14px;
+.CategoryList .no-categories {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center; /* Center "no-categories" vertically and horizontally */
+  text-align: center;
+  width: 100%; /* Make "no-categories" take full width */
+  margin: 10px; /* Adjust margin */
+}
+.col {
+  padding-right: 10px; /* Adjust the padding as needed */
 }
 
-.book .btn {
-  padding: 5px 10px;
-  font-size: 12px;
+.col-md-1 {
+  padding-left: 10px; /* Adjust the padding as needed */
 }
 
-@media screen and (max-width: 768px) {
-  .book .btn {
-    font-size: 10px;
-  }
-}
