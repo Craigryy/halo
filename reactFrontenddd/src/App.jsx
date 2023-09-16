@@ -168,10 +168,11 @@ function App() {
         <div className="col">
           <Header title="Halo" />
         </div>
-        <div className="col text-right"> {/* Use Bootstrap's text-right class */}
-          <button onClick={logoutBtn} className='btn btn-primary custom-btn'>
+        <div className="col text-right">
+          <span>Halo</span>
+          <a href="#" onClick={logoutBtn} className='btn btn-link'>
             Logout
-          </button>
+          </a>
         </div>
       </div>
       <br />

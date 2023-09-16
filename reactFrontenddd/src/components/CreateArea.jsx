@@ -110,9 +110,23 @@ function CreateArea(props) {
         setError('Error adding book. Please try again.');
       });
   };
+  
+  const handleCloseForms = () => {
+    setShowBookForm(false);
+    setName('');
+    setCreatedBy('');
+    setBookTitle('');
+    setBookAuthor('');
+    setBookCategory('');
+    setError(null);
+  };
 
   const handleCloseBookForm = () => {
     setShowBookForm(false);
+    setBookTitle('');
+    setBookAuthor('');
+    setBookCategory('');
+    setError(null);
   };
 
   const handleAddBook = () => {
@@ -122,112 +136,116 @@ function CreateArea(props) {
   return (
     <div className="create-area-container">
       {props.category && (
-        <div className="mb-3">
-          <label htmlFor="name" className="form-label">
-            Name of Category
-          </label>
-          <input
-            type="text"
-            className="form-control"
-            name="name"
-            placeholder="Please enter name of the category "
-            value={name}
-            onChange={e => setName(e.target.value)}
-          />
-          <br />
-          <label htmlFor="created_by" className="form-label">
-            Created_by
-          </label>
-          <input
-            type="text"
-            className="form-control"
-            name="created_by"
-            placeholder="Please enter the creator"
-            value={created_by}
-            onChange={e => setCreatedBy(e.target.value)}
-          />
-          <br />
-          {props.category.id ? (
-            <button onClick={updateCategory} className="btn btn-success mt-3">
-              <FontAwesomeIcon icon={faEdit} /> Update category
-            </button>
-          ) : (
-            <button onClick={insertCategory} className="btn btn-success">
-              <FontAwesomeIcon icon={faPlus} /> Insert category
-            </button>
-          )}
-
-          {showBookForm && (
-            <div>
-              <br/>
-              <h3>Add a Book</h3>
-              <label htmlFor="bookTitle" className="form-label">
-                Title
-              </label>
-              <input
-                type="text"
-                className="form-control"
-                name="bookTitle"
-                placeholder="Enter title"
-                value={title}
-                onChange={e => setBookTitle(e.target.value)}
-              />
-              <br />
-              <label htmlFor="bookAuthor" className="form-label">
-                Author
-              </label>
-              <input
-                type="text"
-                className="form-control"
-                name="bookAuthor"
-                placeholder="Enter author"
-                value={author}
-                onChange={e => setBookAuthor(e.target.value)}
-              />
-              <br />
-              <label htmlFor="bookCategory" className="form-label">
-                Category
-              </label>
-              <input
-                type="text"
-                className="form-control"
-                name="bookCategory"
-                placeholder="Enter category ID "
-                value={category_id}
-                onChange={e => setBookCategory(e.target.value)}
-              />
-              <br />
-              {props.book && props.book.id ? (
-                <button onClick={updateBook} className="btn btn-success mt-3">
-                  <FontAwesomeIcon icon={faEdit} /> Update book
-                </button>
-              ) : (
-                <button onClick={handleBookSubmit} className="btn btn-success">
-                  <FontAwesomeIcon icon={faPlus} /> Add book
-                </button>
-              )}
-
-              <br />
-              <button onClick={handleCloseBookForm} className="btn btn-secondary ml-2">
-                Close
+        <div className="form-container">
+          {/* Category Form */}
+          <div className="form-section">
+            <label htmlFor="name" className="form-label">
+              Name of Category
+            </label>
+            <input
+              type="text"
+              className="form-control"
+              name="name"
+              placeholder="Please enter name of the category "
+              value={name}
+              onChange={e => setName(e.target.value)}
+            />
+            <label htmlFor="created_by" className="form-label">
+              Created_by
+            </label>
+            <input
+              type="text"
+              className="form-control"
+              name="created_by"
+              placeholder="Please enter the creator"
+              value={created_by}
+              onChange={e => setCreatedBy(e.target.value)}
+            />
+            {props.category.id ? (
+              <button onClick={updateCategory} className="btn btn-success">
+                <FontAwesomeIcon icon={faEdit} /> Update category
               </button>
-            </div>
-          )}
-
-          {!showBookForm && (
-            <div>
-              <br />
-              <button onClick={handleAddBook} className="btn btn-primary mt-3">
-                <FontAwesomeIcon icon={faPlus} /> Add Book
+            ) : (
+              <button onClick={insertCategory} className="btn btn-success">
+                <FontAwesomeIcon icon={faPlus} /> Insert category
               </button>
-            </div>
-          )}
+            )}
+          </div>
 
-          {error && <p className="text-danger">{error}</p>}
+          {/* Book Form */}
+          <div className="form-section">
+            {showBookForm && (
+              <div>
+                <h3>Add a Book</h3>
+                <label htmlFor="bookTitle" className="form-label">
+                  Title
+                </label>
+                <input
+                  type="text"
+                  className="form-control"
+                  name="bookTitle"
+                  placeholder="Enter title"
+                  value={title}
+                  onChange={e => setBookTitle(e.target.value)}
+                />
+                <label htmlFor="bookAuthor" className="form-label">
+                  Author
+                </label>
+                <input
+                  type="text"
+                  className="form-control"
+                  name="bookAuthor"
+                  placeholder="Enter author"
+                  value={author}
+                  onChange={e => setBookAuthor(e.target.value)}
+                />
+                <label htmlFor="bookCategory" className="form-label">
+                  Category
+                </label>
+                <input
+                  type="text"
+                  className="form-control"
+                  name="bookCategory"
+                  placeholder="Enter category ID "
+                  value={category_id}
+                  onChange={e => setBookCategory(e.target.value)}
+                />
+                {props.book && props.book.id ? (
+                  <button onClick={updateBook} className="btn btn-success">
+                    <FontAwesomeIcon icon={faEdit} /> Update book
+                  </button>
+                ) : (
+                  <button onClick={handleBookSubmit} className="btn btn-success">
+                    <FontAwesomeIcon icon={faPlus} /> Add book
+                  </button>
+                )}
+                <button onClick={handleCloseBookForm} className="btn btn-secondary">
+                  Close Book Form
+                </button>
+              </div>
+            )}
+
+            {!showBookForm && (
+              <div>
+                <button onClick={handleAddBook} className="btn btn-primary">
+                  <FontAwesomeIcon icon={faPlus} /> Add Book
+                </button>
+              </div>
+            )}
+          </div>
         </div>
       )}
+
+      {/* Close All Forms Button */}
+      <button onClick={handleCloseForms} className="btn btn-danger">
+        Close All Forms
+      </button>
+
+      {error && <p className="text-danger">{error}</p>}
     </div>
   );
 }
 
 export default CreateArea;
+
+
