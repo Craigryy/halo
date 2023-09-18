@@ -1,7 +1,8 @@
 .CategoryList {
   display: grid;
-  grid-template-columns: repeat(5, 1fr); /* 4 keys per row */
+  grid-template-columns: repeat(4, 1fr); /* 4 keys per row */
   gap: 20px; /* Adjust the gap between keys */
+  justify-items: flex-start; /* Align keys to the left */
 }
 
 .CategoryList .key {
@@ -12,21 +13,17 @@
   border: 1px solid #ccc;
   border-radius: 6px;
   transition: 0.3s;
-  justify-content: center;
-  align-items: center;
   cursor: pointer;
-  /* Width and margin adjustments are not needed in the grid layout */
 }
-
 
 .CategoryList .no-categories {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center; /* Center "no-categories" vertically and horizontally */
   text-align: center;
-  width: 100%; /* Make "no-categories" take full width */
-  margin: 10px; /* Adjust margin */
+  width: 100%;
+  margin: 10px;
+  grid-column: 1 / -1; /* Span across all columns */
 }
 
 .CategoryList h3 {
