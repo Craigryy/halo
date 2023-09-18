@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import APIService from '../APIService';
 import { useCookies } from 'react-cookie';
-import '../CategoryList.css';
+import '../CSS/CategoryList.css';
 import { Modal, Button } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import bookicon from '../images/bookicon.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPencilAlt, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faPencilAlt, faTrash, faTimes } from '@fortawesome/free-solid-svg-icons';
+
 
 function CategoryList(props) {
   const { categories, books } = props;
@@ -81,19 +82,19 @@ function CategoryList(props) {
             <p>Created by: {category.created_by}</p>
             <div className="row">
               <div className="col-md-1">
-                <button className="btn btn-primary" onClick={() => editCat(category)}>
-                  <FontAwesomeIcon icon={faPencilAlt} /> 
+                <button className="btn btn-primary"   onClick={() => editCat(category)}>
+                  <FontAwesomeIcon icon={faPencilAlt} />
                 </button>
               </div>
               <div className="col">
-                <button className="btn btn-danger" onClick={() => deleteCategory(category)}>
-                  <FontAwesomeIcon icon={faTrash} /> 
+                <button className="btn btn-danger"   onClick={() => deleteCategory(category)}>
+                  <FontAwesomeIcon icon={faTrash} />
                 </button>
               </div>
             </div>
-            <a className="btn btn-primary" onClick={() => handleShowModal(category)}>
-              {props.showBooks[category.id] ? 'Hide Books' : 'Show Books'}
-            </a>
+            <span onClick={() => handleShowModal(category)}>
+              {props.showBooks[category.id] ? 'Hide Books' : 'Show Books'}{' '}
+              </span>
           </div>
         ))
       ) : (
@@ -116,13 +117,14 @@ function CategoryList(props) {
               <div key={book.id} className="book">
                 <h3>{book.title}</h3>
                 <p>Author: {book.author}</p>
-                <p>Category: {book.category_id}</p>
-                <button className="btn btn-primary custom-btn" onClick={() => editCatBook(book)}>
-                  <FontAwesomeIcon icon={faPencilAlt} />
-                </button>
-                <button className="btn btn-danger custom-btn" onClick={() => deleteBook(book)}>
-                  <FontAwesomeIcon icon={faTrash} /> 
-                </button>
+                <div className="book-actions">
+                  <button className="btn btn-primary custom-btn" onClick={() => editCatBook(book)}>
+                    <FontAwesomeIcon icon={faPencilAlt} />
+                  </button>
+                  <button className="btn btn-danger custom-btn" onClick={() => deleteBook(book)}>
+                      <FontAwesomeIcon icon={faTrash} />
+                    </button>
+                </div>
               </div>
             ))}
         </Modal.Body>
@@ -137,3 +139,4 @@ function CategoryList(props) {
 }
 
 export default CategoryList;
+

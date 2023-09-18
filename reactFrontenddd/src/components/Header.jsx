@@ -1,5 +1,5 @@
 import React from 'react';
-import '../header.css';
+import '../CSS/header.css';
 
 function Header(props) {
   const handleLogout = () => {
@@ -13,9 +13,6 @@ function Header(props) {
         <span id="title">Halo</span>
       </a>
       <ul className="header-list">
-        <li className="header-list-item">
-          <a href="/features"><span>Features</span></a>
-        </li>
         <li className="header-list-item">
           <a onClick={handleLogout} style={{ color: '#fff', textDecoration: 'none', cursor: 'pointer' }}>Logout</a>
         </li>

@@ -9,6 +9,8 @@ import { useCookies } from 'react-cookie';
 import './App.css';
 import Login from './components/login';
 import APIService from './APIService'; 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEdit, faPlus, faTrash,faTimes} from '@fortawesome/free-solid-svg-icons';
 
 function App() {
   const [categories, setCategories] = useState([]);
@@ -171,12 +173,18 @@ function App() {
         deleteBtn={deleteBtn}
         deleteBtnBook={deleteBtnBook}
       /> 
-      <button className="btn btn-success custom-btn" onClick={openCreateArea}>
-        INSERT
+      <br/>
+      <button className="btn btn-success" style={{ backgroundColor: '#F6F5F5', border: '2px solid #D92929',color:'#D92929' }} onClick={openCreateArea}>
+        <FontAwesomeIcon icon={faPlus} style={{ backgroundColor: '#FFFAFA' }} />
+          INSERT
       </button>
-      <button className="btn btn-success custom-btn" onClick={closeCreateArea}>
-        CLOSE
+
+      <button className="btn btn-success" style={{ backgroundColor: '#F6F5F5', border: '2px solid #99C8F2', marginLeft: '5px', color: '#99C8F2' }} onClick={closeCreateArea}>
+          <FontAwesomeIcon icon={faTimes} style={{ backgroundColor: '#FFFAFA' }} />
+          CLOSE
       </button>
+
+
         {editedCategory || editedBook ? (
         <CreateArea
           category={editedCategory}

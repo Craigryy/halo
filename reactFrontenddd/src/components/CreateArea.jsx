@@ -3,7 +3,7 @@ import APIService from '../APIService';
 import { useCookies } from 'react-cookie';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
-import '../CreateArea.css';
+import '../CSS/CreateArea.css';
 
 function CreateArea(props) {
   const [name, setName] = useState('');

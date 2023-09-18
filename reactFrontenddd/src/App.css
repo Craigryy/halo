@@ -10,35 +10,21 @@
   width:300px;
  }
   
-  .hrclass {
-    background-color: red;
-  }
   
-  .btn-primary {
-    border-radius: 50px;
-    font-size: 12px;
-    padding: 5px 10px;
-  }
   
-  .btn-danger {
-    border-radius: 50px;
-    font-size: 12px;
-    padding: 5px 10px;
-  }
-  
-  footer {
+footer {
     text-align: center;
     bottom: 0;
     width: 100%;
     height: 2.5rem;
   }
   
-  
-  footer p {
+footer p {
     color: #ccc;
+    line-height: 2.5rem; /* Center the text vertically in the footer */
   }
   
-  .custom-btn {
+.custom-btn {
     background-color: #007bff;
     color: white;
     border: none;
@@ -46,9 +32,10 @@
     padding: 8px 12px;
     margin: 5px;
     cursor: pointer;
+    margin-right: 10px;
   }
   
-  .custom-btn:hover {
+.custom-btn:hover {
     background-color: #0056b3;
   }
   
