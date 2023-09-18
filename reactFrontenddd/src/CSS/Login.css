@@ -107,8 +107,8 @@
     height: auto;
     font-size: medium;
   }
-  
-/* Styles for smaller screen sizes */
+
+  /* Styles for smaller screen sizes up to 576px */
 @media (max-width: 576px) {
   .login-container {
     width: 80%; /* Adjust the width for smaller screens */
@@ -121,7 +121,7 @@
 
   .login-input {
     font-size: 14px; /* Adjust font size for smaller screens */
-    padding: 10px 15px; /* Adjust padding for a more balanced look */
+    padding: 3% 5%; /* Adjust padding proportionally */
   }
 
   .login-button {
@@ -130,5 +130,17 @@
 
   .mb-3 h5 {
     font-size: 12px; /* Adjust font size for smaller screens */
+  }
+}
+
+/* Styles for smaller screen sizes up to 450px */
+@media (max-width: 450px) {
+  .login-container {
+    width: 90%; /* Adjust the width for smaller screens */
+  }
+
+  .login-input {
+    font-size: 12px; /* Adjust font size for smaller screens */
+    padding: 5%; /* Adjust padding proportionally */
   }
 }
