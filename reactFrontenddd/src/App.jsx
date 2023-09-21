@@ -173,17 +173,16 @@ function App() {
         deleteBtn={deleteBtn}
         deleteBtnBook={deleteBtnBook}
       /> 
-      <br/>
-      <button className="btn btn-success" style={{ backgroundColor: '#F6F5F5', border: '2px solid #D92929',color:'#D92929' }} onClick={openCreateArea}>
-        <FontAwesomeIcon icon={faPlus} style={{ backgroundColor: '#FFFAFA' }} />
-          INSERT
-      </button>
+      <br/><button className="btn btn-success" style={{ backgroundColor: '#F6F5F5', border: '2px solid #D92929', color: '#D92929', float: 'left' }} onClick={openCreateArea}>
+  <FontAwesomeIcon icon={faPlus} style={{ backgroundColor: '#FFFAFA' }} />
+  INSERT
+</button>
 
-      <button className="btn btn-success" style={{ backgroundColor: '#F6F5F5', border: '2px solid #99C8F2', marginLeft: '5px', color: '#99C8F2' }} onClick={closeCreateArea}>
-          <FontAwesomeIcon icon={faTimes} style={{ backgroundColor: '#FFFAFA' }} />
-          CLOSE
-      </button>
-
+<button className="btn btn-success" style={{ backgroundColor: '#F6F5F5', border: '2px solid #99C8F2', marginLeft: '5px', color: '#99C8F2', float: 'right' }} onClick={closeCreateArea}>
+  <FontAwesomeIcon icon={faTimes} style={{ backgroundColor: '#FFFAFA' }} />
+  CLOSE
+</button>
+<br/>
 
         {editedCategory || editedBook ? (
         <CreateArea

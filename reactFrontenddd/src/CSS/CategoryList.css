@@ -26,6 +26,11 @@
   grid-column: 1 / -1; /* Span across all columns */
 }
 
+.CategoryList span{
+  color: grey;
+  font-size: small;
+}
+
 .CategoryList h3 {
   font-size: 25px; /* Adjust the font size for category names */
 }
@@ -129,9 +134,25 @@
 
 
 /* Media query for smaller screens */
+
+
+
+
+
+
+/* Media query for smaller screens */
 @media (max-width: 768px) {
   .CategoryList {
     grid-template-columns: repeat(2, 1fr); /* 2 keys per row on smaller screens */
+  }
+
+  .CategoryList .row{
+    display: flex;
+  }
+
+  .CategoryList.key.btn.btn-danger,
+  .CategoryList.key.btn.btn-primary{
+    display: inline-block;
   }
 
   .book {

@@ -29,19 +29,30 @@ function Login() {
       setError('Please enter both username and password');
       return; // Exit early if fields are empty
     }
-
+  
     const userData = { username, password };
-
+  
     try {
       const token = await APIService.login(userData.username, userData.password);
-
+  
       setToken('mytoken', token);
       navigate('/categories');
     } catch (error) {
-      setError('Incorrect username or password');
+      if (error.response) {
+        if (error.response.status === 401) {
+          setError('Password is incorrect'); // Password is incorrect
+        } else if (error.response.status === 404) {
+          setError('Username is incorrect'); // Username is incorrect
+        } else {
+          setError('Login failed'); // Other errors
+        }
+      } else {
+        setError('Login failed');
+      }
       console.error('Login error:', error);
     }
   };
+  
 
   // Register button click handler
   const registerBtn = async () => {
@@ -70,7 +81,6 @@ function Login() {
       setUserName('');
       setPassword('');
       setError('');
-      alert('User successfully created!');
 
       console.log('User successfully created:', username);
 
@@ -117,13 +127,13 @@ function Login() {
           />
         </div>
 
-        <a
+        <button
           href='#'
           onClick={isLogin ? loginBtn : registerBtn}
           className='login-button'
         >
           {isLogin ? 'Login' : 'Register'}
-        </a>
+        </button>
 
         <div className='mb-3'>
           {isLogin ? (

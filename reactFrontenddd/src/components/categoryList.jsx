@@ -93,7 +93,7 @@ function CategoryList(props) {
               </div>
             </div>
             <span onClick={() => handleShowModal(category)}>
-              {props.showBooks[category.id] ? 'Hide Books' : 'Show Books'}{' '}
+              {props.showBooks[category.id] ? 'Hide Books' : 'show books'}{' '}
               </span>
           </div>
         ))
@@ -108,7 +108,7 @@ function CategoryList(props) {
 
       <Modal show={showModal} onHide={handleCloseModal}>
         <Modal.Header closeButton>
-          <Modal.Title>All Books</Modal.Title>
+          <Modal.Title>No available book.</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           {books

@@ -22,17 +22,26 @@
 
 /* Style for buttons */
 .create-area-container .btn {
-  margin-right: 10px;
+  margin-right: 10px; /* Default margin between buttons */
 }
 
 /* Additional styles for responsiveness */
+@media screen and (max-width: 767px) {
+  .create-area-container .btn {
+    margin-right: 5px; /* Adjusted margin for smaller screens */
+    
+  }
+}
+
 @media screen and (min-width: 768px) {
   .create-area-container .form-container {
     display: flex;
     justify-content: space-between;
+    margin-bottom: 5px;
   }
 
   .create-area-container .form-section {
     width: 48%; /* Adjust width as needed */
+    margin-bottom: 5px;
   }
 }
