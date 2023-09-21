@@ -80,18 +80,14 @@ function CategoryList(props) {
           <div className="key" key={category.id}>
             <h3>{category.name}</h3>
             <p>Created by: {category.created_by}</p>
-            <div className="row">
-              <div className="col-md-1">
+              <div className="col">
                 <button className="btn btn-primary"   onClick={() => editCat(category)}>
                   <FontAwesomeIcon icon={faPencilAlt} />
                 </button>
-              </div>
-              <div className="col">
                 <button className="btn btn-danger"   onClick={() => deleteCategory(category)}>
                   <FontAwesomeIcon icon={faTrash} />
                 </button>
               </div>
-            </div>
             <span onClick={() => handleShowModal(category)}>
               {props.showBooks[category.id] ? 'Hide Books' : 'show books'}{' '}
               </span>

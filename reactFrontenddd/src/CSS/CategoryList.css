@@ -1,6 +1,6 @@
 .CategoryList {
   display: grid;
-  grid-template-columns: repeat(4, 1fr); /* 4 keys per row */
+  grid-template-columns: repeat(5, 1fr); /* 4 keys per row */
   gap: 20px; /* Adjust the gap between keys */
   justify-items: flex-start; /* Align keys to the left */
 }
@@ -132,27 +132,28 @@
   margin-left: 5px; /* Adjusted margin */
 }
 
-
-/* Media query for smaller screens */
-
-
-
-
-
-
 /* Media query for smaller screens */
 @media (max-width: 768px) {
   .CategoryList {
     grid-template-columns: repeat(2, 1fr); /* 2 keys per row on smaller screens */
   }
 
-  .CategoryList .row{
-    display: flex;
+  .CategoryList .key {
+    background: #fff;
+    border-radius: 7px;
+    box-shadow: 0 2px 5px #ccc;
+    padding: 2px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    transition: 0.3s;
+    cursor: pointer;
+    box-sizing: border-box;
+    margin: 5px; /* Added margin for spacing */
   }
 
-  .CategoryList.key.btn.btn-danger,
-  .CategoryList.key.btn.btn-primary{
-    display: inline-block;
+  .CategoryList .col {
+    display: flex;
+    align-items: center;
   }
 
   .book {
@@ -166,7 +167,7 @@
 }
 
 /* Media query for iPads */
-@media (min-width: 768px) and (max-width: 1024px) {
+@media (min-width: 769px) and (max-width: 1024px) {
   .CategoryList {
     grid-template-columns: repeat(4, 1fr); /* 4 keys per row on iPads */
   }
