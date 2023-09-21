@@ -131,9 +131,8 @@
   border: 2px solid red; /* Adjusted border */
   margin-left: 5px; /* Adjusted margin */
 }
-
-/* Media query for smaller screens */
-@media (max-width: 768px) {
+/* Media query for smaller screens (e.g., iPhone) */
+@media (max-width: 576px) {
   .CategoryList {
     grid-template-columns: repeat(2, 1fr); /* 2 keys per row on smaller screens */
   }
@@ -166,9 +165,30 @@
   }
 }
 
-/* Media query for iPads */
-@media (min-width: 769px) and (max-width: 1024px) {
+/* Media query for iPad */
+@media (min-width: 577px) and (max-width: 1024px) {
   .CategoryList {
     grid-template-columns: repeat(4, 1fr); /* 4 keys per row on iPads */
   }
 }
+
+/* Media query for iPad Mini */
+@media (min-width: 577px) and (max-width: 767px) {
+  .CategoryList {
+    grid-template-columns: repeat(4, 1fr); /* 4 keys per row on iPad Mini */
+  }
+}
+
+/* Media query for Galaxy Fold */
+@media (max-width: 576px) {
+  .CategoryList {
+    grid-template-columns: repeat(2, 1fr); /* 2 keys per row on Galaxy Fold */
+  }
+}
+
+
+
+
+
+
+
