@@ -14,7 +14,13 @@
   border-radius: 6px;
   transition: 0.3s;
   cursor: pointer;
+  display: flex; /* Use flexbox to center content */
+  flex-direction: column; /* Align items vertically */
+  justify-content: center; /* Center content horizontally */
+  align-items: center; /* Center content vertically */
+  width: 100%; /* Ensure key takes up the full width of the cell */
 }
+
 
 .CategoryList .no-categories {
   display: flex;
@@ -48,27 +54,31 @@
 }
 
 .CategoryList .btn {
-  width: 40px; /* Adjust the width and height to create a square */
-  height: 40px;
   padding: 0; /* Remove default padding */
-  margin-right: 30px; /* Adjust margin to create spacing between buttons */
-  display: inline-flex; /* Display the buttons inline */
-  align-items: center;
   justify-content: center;
   font-size: 16px; /* Adjust the font size of the icon */
   border: 1px solid transparent; /* Hide the border initially */
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  line-height: 1;
 }
 
 .CategoryList .btn.btn-primary {
   background-color: white; /* Background color for the primary button */
   color: green; /* Text color for the primary button */
   border: 1px solid green; /* Border for the primary button */
+  margin-left: 10px;
 }
 
 .CategoryList .btn.btn-danger {
   background-color: white; /* Background color for the danger button */
   color: red; /* Text color for the danger button */
   border: 1px solid red; /* Border for the danger button */
+  margin-left: 10px;
 }
 
 /* Float the buttons to left and right */
@@ -137,18 +147,6 @@
     grid-template-columns: repeat(2, 1fr); /* 2 keys per row on smaller screens */
   }
 
-  .CategoryList .key {
-    background: #fff;
-    border-radius: 7px;
-    box-shadow: 0 2px 5px #ccc;
-    padding: 2px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    transition: 0.3s;
-    cursor: pointer;
-    box-sizing: border-box;
-    margin: 5px; /* Added margin for spacing */
-  }
 
   .CategoryList .col {
     display: flex;

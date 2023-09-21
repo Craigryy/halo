@@ -10,7 +10,8 @@ import './App.css';
 import Login from './components/login';
 import APIService from './APIService'; 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faPlus, faTrash,faTimes} from '@fortawesome/free-solid-svg-icons';
+import {faPlus} from '@fortawesome/free-solid-svg-icons';
+
 
 function App() {
   const [categories, setCategories] = useState([]);
@@ -23,50 +24,44 @@ function App() {
   const [editedCategories, setEditedCategories] = useState(null);
 
   useEffect(() => {
-    // Use APIService to fetch categories
     APIService.makeRequest('/categories/', 'GET', null, token['mytoken'])
       .then(resp => setCategories(resp))
       .catch(error => console.log(error));
   }, [token]);
-  
+
   useEffect(() => {
-    // Use APIService to fetch books
     APIService.makeRequest('/books/', 'GET', null, token['mytoken'])
       .then(resp => setBooks(resp))
       .catch(error => console.log(error));
   }, [token]);
- 
-   
+
   useEffect(() => {
     if (!token['mytoken']) {
-      navigate('/'); // Use navigate() to redirect to the '/' route
+      navigate('/');
     }
   }, [token, navigate]);
 
-  const editCat = (category) => {
+  const editCat = category => {
     setEditedCategories(category);
   };
 
-  const editCatBook = (book) => {
+  const editCatBook = book => {
     setEditedBook(book);
   };
 
   const fetchCategories = () => {
     APIService.makeRequest('/categories/', 'GET', null, token['mytoken'])
-    .then(resp => setCategories(resp))
-    .catch(error => console.log(error));
-    };  
-
+      .then(resp => setCategories(resp))
+      .catch(error => console.log(error));
+  };
 
   const fetchBooks = () => {
     APIService.makeRequest('/books/', 'GET', null, token['mytoken'])
-    .then(resp => setBooks(resp))
-    .catch(error => console.log(error));
-    };  
-   
+      .then(resp => setBooks(resp))
+      .catch(error => console.log(error));
+  };
 
-  
-  const updatedInformation = (category) => {
+  const updatedInformation = category => {
     const new_categories = categories.map(mycategory => {
       if (mycategory.id === category.id) {
         return category;
@@ -74,12 +69,11 @@ function App() {
         return mycategory;
       }
     });
-
     setCategories(new_categories);
     fetchCategories();
   };
 
-  const updatedBookInformation = (book) => {
+  const updatedBookInformation = book => {
     const new_books = books.map(mybook => {
       if (mybook.id === book.id) {
         return book;
@@ -87,13 +81,12 @@ function App() {
         return mybook;
       }
     });
-
     setBooks(new_books);
     fetchCategories();
     fetchBooks();
   };
 
-  const insertedInformation = (category) => {
+  const insertedInformation = category => {
     const new_categories = [...categories, category];
     setCategories(new_categories);
     setEditedCategories(null);
@@ -101,7 +94,7 @@ function App() {
     fetchBooks();
   };
 
-  const deleteBtn = (category) => {
+  const deleteBtn = category => {
     const new_category = categories.filter(mycategory => mycategory.id !== category.id);
     setCategories(new_category);
     fetchCategories();
@@ -113,23 +106,23 @@ function App() {
     navigate('/');
   };
 
-  const deleteBtnBook = (book) => {
+  const deleteBtnBook = book => {
     const new_Books = books.filter(myBooks => myBooks.id !== book.id);
     setBooks(new_Books);
     fetchBooks();
     fetchCategories();
   };
 
-  const handleEditCategory = (category) => {
+  const handleEditCategory = category => {
     setEditedCategory(category);
   };
 
-  const handleEditBook = (book) => {
+  const handleEditBook = book => {
     setEditedBook(book);
   };
 
-  const toggleShowBooks = (categoryId) => {
-    setShowBooks((prevShowBooks) => ({
+  const toggleShowBooks = categoryId => {
+    setShowBooks(prevShowBooks => ({
       ...prevShowBooks,
       [categoryId]: !prevShowBooks[categoryId],
     }));
@@ -143,7 +136,7 @@ function App() {
     setEditedCategory(null);
   };
 
-  const insertedBookInformation = (book) => {
+  const insertedBookInformation = book => {
     const new_books = [...books, book];
     setBooks(new_books);
     setEditedBook(null);
@@ -151,14 +144,11 @@ function App() {
     fetchBooks();
   };
 
-
-
-  
   return (
     <div className="App">
       <div className="row">
         <div className="col">
-        <Header logoutBtn={logoutBtn} />
+          <Header logoutBtn={logoutBtn} />
         </div>
       </div>
       <br />
@@ -172,19 +162,19 @@ function App() {
         editCatBook={handleEditBook}
         deleteBtn={deleteBtn}
         deleteBtnBook={deleteBtnBook}
-      /> 
-      <br/><button className="btn btn-success" style={{ backgroundColor: '#F6F5F5', border: '2px solid #D92929', color: '#D92929', float: 'left' }} onClick={openCreateArea}>
-  <FontAwesomeIcon icon={faPlus} style={{ backgroundColor: '#FFFAFA' }} />
-  INSERT
-</button>
+      />
+      <br />
+      <button
+        className="btn btn-success"
+        style={{ backgroundColor: '#F6F5F5', border: '2px solid #D92929', color: '#D92929', float: 'left' }}
+        onClick={openCreateArea}
+      >
+        <FontAwesomeIcon icon={faPlus} style={{ backgroundColor: '#FFFAFA' }} />
+        INSERT
+      </button>
+      <br />
 
-<button className="btn btn-success" style={{ backgroundColor: '#F6F5F5', border: '2px solid #99C8F2', marginLeft: '5px', color: '#99C8F2', float: 'right' }} onClick={closeCreateArea}>
-  <FontAwesomeIcon icon={faTimes} style={{ backgroundColor: '#FFFAFA' }} />
-  CLOSE
-</button>
-<br/>
-
-        {editedCategory || editedBook ? (
+      {editedCategory || editedBook ? (
         <CreateArea
           category={editedCategory}
           book={editedBook}
@@ -192,10 +182,11 @@ function App() {
           insertedInformation={insertedInformation}
           insertedBookInformation={insertedBookInformation}
           updatedBookInformation={updatedBookInformation}
+          closeCreateArea={closeCreateArea}
         />
-      ) : null }
-      <br/>
-      <br/>
+      ) : null}
+      <br />
+      <br />
       <Footer />
     </div>
   );

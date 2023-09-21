@@ -25,6 +25,21 @@
   margin-right: 10px; /* Default margin between buttons */
 }
 
+.button1 {
+  background-color: white; /* Background color for the primary button */
+  color: #0F71F2; /* Text color for the primary button */
+  border: 1px solid #0F71F2; /* Border for the primary button */
+  margin-left: 5px; /* Adjusted margin */
+}
+
+.button2 {
+  background-color: white; /* Background color for the danger button */
+  color: green; /* Text color for the danger button */
+  border: 1px solid green; /* Border for the danger button */
+  margin-left: 5px; /* Adjusted margin */
+}
+
+
 /* Additional styles for responsiveness */
 @media screen and (max-width: 767px) {
   .create-area-container .btn {

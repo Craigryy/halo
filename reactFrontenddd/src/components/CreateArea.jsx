@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import APIService from '../APIService';
 import { useCookies } from 'react-cookie';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faPlus, faTimes } from '@fortawesome/free-solid-svg-icons';
 import '../CSS/CreateArea.css';
 
 function CreateArea(props) {
@@ -31,12 +31,10 @@ function CreateArea(props) {
     }
   }, [props.book]);
 
-
   useEffect(() => {
     const fetchCategories = async () => {
       try {
         const response = await APIService.makeRequest('/categories', 'GET', null, token['mytoken']);
-  
         if (Array.isArray(response)) {
           setCategories(response);
         } else {
@@ -46,10 +44,8 @@ function CreateArea(props) {
         console.error('Error fetching categories:', error);
       }
     };
-  
     fetchCategories();
   }, [token]);
-  
 
   const updateCategory = () => {
     APIService.UpdateCategory(props.category.id, { name, created_by }, token['mytoken'])
@@ -77,7 +73,7 @@ function CreateArea(props) {
       category_id: category_id,
     };
 
-    APIService.updateBook(props.book.category_id, props.book.id, updatedBookData, token['mytoken'])
+    APIService.updateBook(category_id, props.book.id, updatedBookData, token['mytoken'])
       .then(updatedBook => {
         props.updatedBookInformation(updatedBook);
         setBookAuthor('');
@@ -141,23 +137,22 @@ function CreateArea(props) {
     setError(null);
   };
 
-  const handleCloseBookForm = () => {
-    setShowBookForm(false);
-    setBookTitle('');
-    setBookAuthor('');
-    setBookCategory('');
-    setError(null);
-  };
-
   const handleAddBook = () => {
     setShowBookForm(true);
   };
 
   return (
     <div className="create-area-container">
+      <button
+          className="btn btn-success"
+          style={{ backgroundColor: '#F6F5F5', border: '2px solid #99C8F2', marginLeft: '5px', color: '#99C8F2', float: 'right', transition: 'opacity 0.5s' }}
+          onClick={props.closeCreateArea}
+        >
+          <FontAwesomeIcon icon={faTimes} style={{ backgroundColor: '#FFFAFA' }} />
+          CLOSE
+        </button>
       {props.category && (
         <div className="form-container">
-          {/* Category Form */}
           <div className="form-section">
             <h3>Category Form</h3>
             <label htmlFor="name" className="form-label">
@@ -167,7 +162,7 @@ function CreateArea(props) {
               type="text"
               className="form-control"
               name="name"
-              placeholder="Please enter name of the category "
+              placeholder="Please enter name of the category"
               value={name}
               onChange={e => setName(e.target.value)}
             />
@@ -183,21 +178,20 @@ function CreateArea(props) {
               onChange={e => setCreatedBy(e.target.value)}
             />
             {props.category.id ? (
-              <button onClick={updateCategory} className="btn btn-success">
+              <button onClick={updateCategory} className="btn button1">
                 <FontAwesomeIcon icon={faEdit} /> Update category
               </button>
             ) : (
-              <button onClick={insertCategory} className="btn btn-success">
+              <button onClick={insertCategory} className="btn button2">
                 <FontAwesomeIcon icon={faPlus} /> Insert category
               </button>
             )}
           </div>
 
-          {/* Book Form */}
           <div className="form-section">
             {showBookForm && (
               <div>
-                <br/>
+                <br />
                 <h3>Book Form</h3>
                 <label htmlFor="bookTitle" className="form-label">
                   Title
@@ -238,21 +232,21 @@ function CreateArea(props) {
                   ))}
                 </select>
                 {props.book && props.book.id ? (
-                  <button onClick={updateBook} className="btn btn-success">
+                  <button onClick={updateBook} className="btn button2">
                     <FontAwesomeIcon icon={faEdit} /> Update book
                   </button>
                 ) : (
-                  <button onClick={handleBookSubmit} className="btn btn-success">
+                  <button onClick={handleBookSubmit} className="btn button2">
                     <FontAwesomeIcon icon={faPlus} /> Add book
                   </button>
                 )}
               </div>
             )}
-            <br/>
+            <br />
 
             {!showBookForm && (
               <div>
-                <button onClick={handleAddBook} className="btn btn-primary">
+                <button onClick={handleAddBook} className="btn button1">
                   <FontAwesomeIcon icon={faPlus} /> Add Book
                 </button>
               </div>
