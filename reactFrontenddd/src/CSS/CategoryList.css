@@ -21,7 +21,6 @@
   width: 100%; /* Ensure key takes up the full width of the cell */
 }
 
-
 .CategoryList .no-categories {
   display: flex;
   flex-direction: column;
@@ -32,7 +31,7 @@
   grid-column: 1 / -1; /* Span across all columns */
 }
 
-.CategoryList span{
+.CategoryList span {
   color: grey;
   font-size: small;
 }
@@ -89,8 +88,9 @@
 .CategoryList .btn.btn-danger {
   float: right;
 }
+
 .book {
-  box-shadow: 0 2px 6px 0 rgba(0,0,0,0.1);
+  box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.1);
   transition: 0.3s;
   border-radius: 6px;
   color: var(--text);
@@ -129,24 +129,24 @@
 }
 
 .book .btn-primary.custom-btn {
-  background-color: #F6F5F5;
-  color: #99c8F2;
-  border: 2px solid #99C8F2; /* Adjusted border */
+  background-color: #f6f5f5;
+  color: #99c8f2;
+  border: 2px solid #99c8f2; /* Adjusted border */
   margin-left: 5px; /* Adjusted margin */
 }
 
 .book .btn-danger.custom-btn {
-  background-color: #F6F5F5;
+  background-color: #f6f5f5;
   color: red;
   border: 2px solid red; /* Adjusted border */
   margin-left: 5px; /* Adjusted margin */
 }
+
 /* Media query for smaller screens (e.g., iPhone) */
 @media (max-width: 576px) {
   .CategoryList {
     grid-template-columns: repeat(2, 1fr); /* 2 keys per row on smaller screens */
   }
-
 
   .CategoryList .col {
     display: flex;
@@ -183,10 +183,3 @@
     grid-template-columns: repeat(2, 1fr); /* 2 keys per row on Galaxy Fold */
   }
 }
-
-
-
-
-
-
-

@@ -16,80 +16,123 @@ function Login() {
 
   const navigate = useNavigate();
 
-  // Effect to check for token and redirect if present
   useEffect(() => {
-    if (token['mytoken']) {
-      navigate('/categories');
-    }
-  }, [token, navigate]);
-
-  // Login button click handler
-  const loginBtn = async () => {
-    if (!username || !password) {
-      setError('Please enter both username and password');
-      return; // Exit early if fields are empty
-    }
-  
-    const userData = { username, password };
-  
-    try {
-      const token = await APIService.login(userData.username, userData.password);
-  
-      setToken('mytoken', token);
-      navigate('/categories');
-    } catch (error) {
-      if (error.response) {
-        if (error.response.status === 401) {
-          setError('Password is incorrect'); // Password is incorrect
-        } else if (error.response.status === 404) {
-          setError('Username is incorrect'); // Username is incorrect
-        } else {
-          setError('Login failed'); // Other errors
-        }
-      } else {
-        setError('Login failed');
+    /**
+     * Checks if a valid token is present and navigates to the '/categories' page if available.
+     *
+     * @function
+     * @returns {void}
+     */
+    const checkTokenAndNavigate = () => {
+      if (token['mytoken']) {
+        navigate('/categories');
       }
-      console.error('Login error:', error);
-    }
-  };
+    };
+  
+    // Call the checkTokenAndNavigate function when the token or navigation function changes
+    checkTokenAndNavigate();
+  }, [token, navigate]);
   
 
-  // Register button click handler
-  const registerBtn = async () => {
-    let missingFields = [];
+/**
+ * Handles login button click, validates input, sends login request, and sets token if successful.
+ *
+ * @async
+ * @function
+ * @returns {Promise<void>}
+ */
+const loginBtn = async () => {
+  if (!username || !password) {
+    setError('Please enter both username and password');
+    return; // Exit early if fields are empty
+  }
 
-    if (!username) {
-      missingFields.push('Username');
+  const userData = { username, password };
+
+  try {
+    const token = await APIService.login(userData.username, userData.password);
+
+    /**
+     * Sets the authentication token in cookies and navigates to the '/categories' page on successful login.
+     *
+     * @function
+     * @param {string} key - The key for the cookie.
+     * @param {string} value - The value to set in the cookie.
+     * @returns {void}
+     */
+    const setTokenAndNavigate = (key, value) => {
+      setToken(key, value);
+      navigate('/categories');
+    };
+
+    setTokenAndNavigate('mytoken', token);
+  } catch (error) {
+    if (error.response) {
+      if (error.response.status === 401) {
+        setError('Password is incorrect'); // Password is incorrect
+      } else if (error.response.status === 404) {
+        setError('Username is incorrect'); // Username is incorrect
+      } else {
+        setError('Either Username or Password is incorrect'); // Other errors
+      }
+    } else {
+      setError('Login failed');
     }
+    console.error('Login error:', error);
+  }
+};
 
-    if (!password) {
-      missingFields.push('Password');
-    }
+/**
+ * Handles register button click, validates input, sends user creation request, and navigates on success.
+ *
+ * @async
+ * @function
+ * @returns {Promise<void>}
+ */
+const registerBtn = async () => {
+  let missingFields = [];
 
-    if (missingFields.length > 0) {
-      const errorMessage = `Please enter the following field(s): ${missingFields.join(', ')}`;
-      setError(errorMessage);
-      return; // Exit early if fields are missing
-    }
+  if (!username) {
+    missingFields.push('Username');
+  }
 
-    const userData = { username, password };
+  if (!password) {
+    missingFields.push('Password');
+  }
 
-    try {
-      await APIService.createUser(userData.username, userData.password);
+  if (missingFields.length > 0) {
+    const errorMessage = `Please enter the following field(s): ${missingFields.join(', ')}`;
+    setError(errorMessage);
+    return; // Exit early if fields are missing
+  }
 
-      // Clear input fields and navigate
+  const userData = { username, password };
+
+  try {
+    await APIService.createUser(userData.username, userData.password);
+
+    /**
+     * Clears input fields and navigates to the '/categories' page on successful user creation.
+     *
+     * @function
+     * @returns {void}
+     */
+    const clearFieldsAndNavigate = () => {
       setUserName('');
       setPassword('');
       setError('');
-
-      console.log('User successfully created:', username);
-
       navigate('/categories');
-    } catch (error) {
-      setError('Error creating user');
-      console.error('Error creating user:', error);
-    }
-  };
+    };
+
+    clearFieldsAndNavigate();
+
+    console.log('User successfully created:', username);
+  } catch (error) {
+    setError('Error creating user');
+    console.error('Error creating user:', error);
+  }
+};
+
 
   // JSX rendering
   return (

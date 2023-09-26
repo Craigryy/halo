@@ -1,18 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
+import { useNavigate } from 'react-router-dom';
+import { useCookies } from 'react-cookie';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
+
+import './App.css';
+
+import APIService from './APIService';
 import CategoryList from './components/categoryList';
 import CreateArea from './components/CreateArea';
 import Header from './components/Header';
 import Footer from './components/Footer';
-import { useNavigate } from 'react-router-dom';
-import { useCookies } from 'react-cookie';
-import './App.css';
 import Login from './components/login';
-import APIService from './APIService'; 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {faPlus} from '@fortawesome/free-solid-svg-icons';
 
-
+/**
+ * Main application component.
+ *
+ * @function
+ * @returns {JSX.Element} The rendered JSX element.
+ */
 function App() {
   const [categories, setCategories] = useState([]);
   const [token, setToken, removeCookie] = useCookies(['mytoken']);
@@ -24,43 +31,114 @@ function App() {
   const [editedCategories, setEditedCategories] = useState(null);
 
   useEffect(() => {
-    APIService.makeRequest('/categories/', 'GET', null, token['mytoken'])
-      .then(resp => setCategories(resp))
-      .catch(error => console.log(error));
+    /**
+     * Fetches categories from the API.
+     *
+     * @function
+     * @async
+     */
+    const fetchCategories = async () => {
+      try {
+        const resp = await APIService.makeRequest('/categories/', 'GET', null, token['mytoken']);
+        setCategories(resp);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchCategories();
   }, [token]);
 
   useEffect(() => {
-    APIService.makeRequest('/books/', 'GET', null, token['mytoken'])
-      .then(resp => setBooks(resp))
-      .catch(error => console.log(error));
+    /**
+     * Fetches books from the API.
+     *
+     * @function
+     * @async
+     */
+    const fetchBooks = async () => {
+      try {
+        const resp = await APIService.makeRequest('/books/', 'GET', null, token['mytoken']);
+        setBooks(resp);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchBooks();
   }, [token]);
 
   useEffect(() => {
-    if (!token['mytoken']) {
-      navigate('/');
-    }
+    /**
+     * Checks if a valid token is present and navigates to the login page if not.
+     *
+     * @function
+     */
+    const checkToken = () => {
+      if (!token['mytoken']) {
+        navigate('/');
+      }
+    };
+
+    checkToken();
   }, [token, navigate]);
 
+  /**
+   * Edits a category.
+   *
+   * @function
+   * @param {Object} category - The category to edit.
+   */
   const editCat = category => {
     setEditedCategories(category);
   };
 
+  /**
+   * Edits a category book.
+   *
+   * @function
+   * @param {Object} book - The book to edit.
+   */
   const editCatBook = book => {
     setEditedBook(book);
   };
 
-  const fetchCategories = () => {
-    APIService.makeRequest('/categories/', 'GET', null, token['mytoken'])
-      .then(resp => setCategories(resp))
-      .catch(error => console.log(error));
+  /**
+   * Fetches categories from the API.
+   *
+   * @function
+   * @async
+   */
+  const fetchCategories = async () => {
+    try {
+      const resp = await APIService.makeRequest('/categories/', 'GET', null, token['mytoken']);
+      setCategories(resp);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  const fetchBooks = () => {
-    APIService.makeRequest('/books/', 'GET', null, token['mytoken'])
-      .then(resp => setBooks(resp))
-      .catch(error => console.log(error));
+  /**
+   * Fetches books from the API.
+   *
+   * @function
+   * @async
+   */
+  const fetchBooks = async () => {
+    try {
+      const resp = await APIService.makeRequest('/books/', 'GET', null, token['mytoken']);
+      setBooks(resp);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
+  /**
+   * Updates category information.
+   *
+   * @function
+   * @param {Object} category - The updated category.
+   */
   const updatedInformation = category => {
     const new_categories = categories.map(mycategory => {
       if (mycategory.id === category.id) {
@@ -73,6 +151,12 @@ function App() {
     fetchCategories();
   };
 
+  /**
+   * Updates book information.
+   *
+   * @function
+   * @param {Object} book - The updated book.
+   */
   const updatedBookInformation = book => {
     const new_books = books.map(mybook => {
       if (mybook.id === book.id) {
@@ -86,6 +170,12 @@ function App() {
     fetchBooks();
   };
 
+  /**
+   * Inserts category information.
+   *
+   * @function
+   * @param {Object} category - The inserted category.
+   */
   const insertedInformation = category => {
     const new_categories = [...categories, category];
     setCategories(new_categories);
@@ -94,6 +184,12 @@ function App() {
     fetchBooks();
   };
 
+  /**
+   * Deletes a category.
+   *
+   * @function
+   * @param {Object} category - The category to delete.
+   */
   const deleteBtn = category => {
     const new_category = categories.filter(mycategory => mycategory.id !== category.id);
     setCategories(new_category);
@@ -101,11 +197,22 @@ function App() {
     fetchBooks();
   };
 
+  /**
+   * Logs out the user.
+   *
+   * @function
+   */
   const logoutBtn = () => {
     removeCookie('mytoken');
     navigate('/');
   };
 
+  /**
+   * Deletes a book.
+   *
+   * @function
+   * @param {Object} book - The book to delete.
+   */
   const deleteBtnBook = book => {
     const new_Books = books.filter(myBooks => myBooks.id !== book.id);
     setBooks(new_Books);
@@ -113,14 +220,32 @@ function App() {
     fetchCategories();
   };
 
+  /**
+   * Handles editing of a category.
+   *
+   * @function
+   * @param {Object} category - The category to edit.
+   */
   const handleEditCategory = category => {
     setEditedCategory(category);
   };
 
+  /**
+   * Handles editing of a book.
+   *
+   * @function
+   * @param {Object} book - The book to edit.
+   */
   const handleEditBook = book => {
     setEditedBook(book);
   };
 
+  /**
+   * Toggles the display of books in a category.
+   *
+   * @function
+   * @param {string} categoryId - The ID of the category to toggle.
+   */
   const toggleShowBooks = categoryId => {
     setShowBooks(prevShowBooks => ({
       ...prevShowBooks,
@@ -128,14 +253,30 @@ function App() {
     }));
   };
 
+  /**
+   * Opens the create area for a category.
+   *
+   * @function
+   */
   const openCreateArea = () => {
     setEditedCategory({ name: '', created_by: '' });
   };
 
+  /**
+   * Closes the create area for a category.
+   *
+   * @function
+   */
   const closeCreateArea = () => {
     setEditedCategory(null);
   };
 
+  /**
+   * Inserts book information.
+   *
+   * @function
+   * @param {Object} book - The inserted book.
+   */
   const insertedBookInformation = book => {
     const new_books = [...books, book];
     setBooks(new_books);

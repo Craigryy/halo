@@ -8,6 +8,21 @@ import bookicon from '../images/bookicon.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPencilAlt, faTrash } from '@fortawesome/free-solid-svg-icons';
 
+/**
+ * Component to display a list of categories and their respective books.
+ *
+ * @component
+ * @param {Object} props - The properties passed to the component.
+ * @param {Array} props.categories - An array of category objects.
+ * @param {Array} props.books - An array of book objects.
+ * @param {Object} props.showBooks - Object to manage book visibility for each category.
+ * @param {Function} props.toggleShowBooks - Function to toggle book visibility.
+ * @param {Function} props.editCat - Function to edit a category.
+ * @param {Function} props.editCatBook - Function to edit a book.
+ * @param {Function} props.deleteBtn - Function to delete a category.
+ * @param {Function} props.deleteBtnBook - Function to delete a book.
+ * @returns {JSX.Element} The rendered JSX element.
+ */
 function CategoryList(props) {
   const { categories, books } = props;
   const [allBooks, setAllBooks] = useState([]);
@@ -16,31 +31,63 @@ function CategoryList(props) {
   const [showModal, setShowModal] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(null);
 
-  const fetchAllBooks = () => {
-    APIService.getAllBooks(token['mytoken'])
-      .then(response => {
-        setAllBooks(response);
-      })
-      .catch(error => {
-        console.error('Error fetching all books:', error);
-      });
-  };
+/**
+ * Fetches all books and updates the component state with the fetched books.
+ *
+ * @function
+ * @returns {void}
+ */
+const fetchAllBooks = () => {
+  APIService.getAllBooks(token['mytoken'])
+    .then(response => {
+      setAllBooks(response);
+    })
+    .catch(error => {
+      console.error('Error fetching all books:', error);
+    });
+};
 
-  const toggleShowAllBooks = () => {
-    setShowAllBooks(prevShowAllBooks => !prevShowAllBooks);
-    if (!showAllBooks) {
-      fetchAllBooks();
-    }
-  };
 
+  /**
+ * Toggles the display of all books.
+ *
+ * @function
+ * @returns {void}
+ */
+const toggleShowAllBooks = () => {
+  setShowAllBooks(prevShowAllBooks => !prevShowAllBooks);
+  if (!showAllBooks) {
+    fetchAllBooks();
+  }
+};
+
+
+  /**
+   * Edits a category.
+   *
+   * @function
+   * @param {Object} category - The category to edit.
+   */
   const editCat = category => {
     props.editCat(category);
   };
 
+  /**
+   * Edits a book within a category.
+   *
+   * @function
+   * @param {Object} book - The book to edit.
+   */
   const editCatBook = book => {
     props.editCatBook(book);
   };
 
+  /**
+   * Deletes a category.
+   *
+   * @function
+   * @param {Object} category - The category to delete.
+   */
   const deleteCategory = category => {
     const isConfirmed = window.confirm('Are you sure you want to delete this category?');
     if (isConfirmed) {
@@ -52,6 +99,12 @@ function CategoryList(props) {
     }
   };
 
+  /**
+   * Deletes a book.
+   *
+   * @function
+   * @param {Object} book - The book to delete.
+   */
   const deleteBook = book => {
     const isConfirmed = window.confirm('Are you sure you want to delete this book?');
     if (isConfirmed) {
@@ -63,11 +116,22 @@ function CategoryList(props) {
     }
   };
 
+  /**
+   * Handles showing the modal with books for a category.
+   *
+   * @function
+   * @param {Object} category - The selected category.
+   */
   const handleShowModal = category => {
     setSelectedCategory(category);
     setShowModal(true);
   };
 
+  /**
+   * Handles closing the modal.
+   *
+   * @function
+   */
   const handleCloseModal = () => {
     setShowModal(false);
   };

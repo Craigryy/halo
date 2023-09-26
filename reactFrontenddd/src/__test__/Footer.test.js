@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import Footer from '../components/Footer'; // Adjust the path according to your project structure
+import Footer from '../components/Footer'; 
 
 test('renders footer with current year', () => {
   render(<Footer />);

@@ -8,8 +8,7 @@ import APIService from '../APIService';
 jest.mock('../APIService');
 
 describe('Login component', () => {
-  // ... other tests ...
-
+  
   test('calls the registration function and displays a success message on successful registration', async () => {
     APIService.createUser.mockResolvedValue({ success: true });
 

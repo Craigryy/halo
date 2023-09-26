@@ -137,9 +137,16 @@ function CreateArea(props) {
     setError(null);
   };
 
-  const handleAddBook = () => {
-    setShowBookForm(true);
-  };
+ /**
+ * Sets the book form visibility to true, enabling the addition of a new book.
+ *
+ * @function
+ * @returns {void}
+ */
+const handleAddBook = () => {
+  setShowBookForm(true);
+};
+
 
   return (
     <div className="create-area-container">

@@ -28,8 +28,8 @@ def create_app():
     app = Flask(__name__, static_folder='../reactFrontenddd/build', static_url_path='')
     jwt = JWTManager(app)
 
-    # # CORS setup
-    cors = CORS(app, resources={r"*": {"origins": "http://localhost:3000"}})
+    if 'REACT_API_URL' is os.environ:
+        cors = CORS(app, resources={r"*": {"origins": 'REACT_API_URL' }})
    
    
     if 'DATABASE_URL' in os.environ:
@@ -92,7 +92,7 @@ def create_app():
     
     @app.errorhandler(404)
     def not_found(err):
-        return send_from_directory('../reactFrontend/build','index.html')
+        return send_from_directory('../reactFrontenddd/build','index.html')
     
     
     CORS(app)

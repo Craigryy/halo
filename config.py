@@ -25,7 +25,10 @@ from flask.helpers import send_from_directory
 
 # Create the Flask application
 app = Flask(__name__, static_folder='reactFrontenddd/build', static_url_path='')
-cors = CORS(app,resources={r'*':{'origins':'http://localhost:3000'}})
+
+if 'REACT_API_URL' is os.environ:
+    cors = CORS(app, resources={r"*": {"origins": 'REACT_API_URL' }})
+   
 
     # Configure the database URI conditionally based on Heroku or local
 if 'DATABASE_URL' in os.environ:
