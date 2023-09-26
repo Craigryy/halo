@@ -28,7 +28,7 @@ def create_app():
     app = Flask(__name__, static_folder='../reactFrontenddd/build', static_url_path='')
     jwt = JWTManager(app)
 
-    
+
     # Load REACT_API_URL from environment variables
     react_api_url = os.environ.get('REACT_API_URL')
 
@@ -102,7 +102,5 @@ def create_app():
         return send_from_directory('../reactFrontenddd/build','index.html')
     
     
-    CORS(app)
-
 
     return app
