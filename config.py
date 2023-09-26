@@ -19,6 +19,7 @@ POSTGRES_PASSWORD = os.environ.get('POSTGRES_PASSWORD', 'Favour98')
 POSTGRES_SECRET_KEY = os.environ.get('POSTGRES_SECRET_KEY', 'jesusislord')
 FLASK_PORT = int(os.environ.get('FLASK_PORT', 5000))
 
+
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS, cross_origin
 from flask.helpers import send_from_directory
@@ -26,9 +27,14 @@ from flask.helpers import send_from_directory
 # Create the Flask application
 app = Flask(__name__, static_folder='reactFrontenddd/build', static_url_path='')
 
-if 'REACT_API_URL' is os.environ:
-    cors = CORS(app, resources={r"*": {"origins": 'REACT_API_URL' }})
-   
+# Load REACT_API_URL from environment variables
+react_api_url = os.environ.get('REACT_API_URL')
+
+if react_api_url:
+    cors = CORS(app, resources={r"*": {"origins": react_api_url}})
+else:
+    # If REACT_API_URL is not set, allow all origins
+    cors = CORS(app)
 
     # Configure the database URI conditionally based on Heroku or local
 if 'DATABASE_URL' in os.environ:

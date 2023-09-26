@@ -28,8 +28,15 @@ def create_app():
     app = Flask(__name__, static_folder='../reactFrontenddd/build', static_url_path='')
     jwt = JWTManager(app)
 
-    if 'REACT_API_URL' is os.environ:
-        cors = CORS(app, resources={r"*": {"origins": 'REACT_API_URL' }})
+    
+    # Load REACT_API_URL from environment variables
+    react_api_url = os.environ.get('REACT_API_URL')
+
+    if react_api_url:
+        cors = CORS(app, resources={r"*": {"origins": react_api_url}})
+    else:
+        # If REACT_API_URL is not set, allow all origins
+        cors = CORS(app)
    
    
     if 'DATABASE_URL' in os.environ:
