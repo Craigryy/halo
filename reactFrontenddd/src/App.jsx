@@ -36,6 +36,13 @@ function App() {
      *
      * @function
      * @async
+     * @returns {void}
+     * @param {string} url - The API endpoint URL.
+     * @param {string} method - The HTTP request method (e.g., 'GET').
+     * @param {object|null} data - Optional data to send with the request.
+     * @param {string} authToken - The authentication token.
+     * @returns {Promise<any>} A Promise that resolves with the response data.
+     * @throws {Error} If the API request fails.
      */
     const fetchCategories = async () => {
       try {
@@ -49,12 +56,20 @@ function App() {
     fetchCategories();
   }, [token]);
 
+
   useEffect(() => {
     /**
      * Fetches books from the API.
      *
      * @function
      * @async
+     * @returns {void}
+     * @param {string} url - The API endpoint URL.
+     * @param {string} method - The HTTP request method (e.g., 'GET').
+     * @param {object|null} data - Optional data to send with the request.
+     * @param {string} authToken - The authentication token.
+     * @returns {Promise<any>} A Promise that resolves with the response data.
+     * @throws {Error} If the API request fails.
      */
     const fetchBooks = async () => {
       try {
@@ -68,61 +83,79 @@ function App() {
     fetchBooks();
   }, [token]);
 
+
   useEffect(() => {
     /**
      * Checks if a valid token is present and navigates to the login page if not.
      *
      * @function
+     * @param {string} authToken - The authentication token.
+     * @returns {Promise<void>} A Promise that resolves after fetching .
      */
     const checkToken = () => {
       if (!token['mytoken']) {
+        // Navigates to the login page if the authentication token is not present.
         navigate('/');
       }
     };
-
+  
+    // Invokes the checkToken function.
     checkToken();
   }, [token, navigate]);
+  
 
   /**
-   * Edits a category.
-   *
-   * @function
-   * @param {Object} category - The category to edit.
-   */
+ * Edits a category by setting it as the edited category for further actions.
+ *
+ * @function
+ * @param {Object} category - The category to edit.
+ * @returns {void}
+ */
   const editCat = category => {
     setEditedCategories(category);
   };
+
 
   /**
    * Edits a category book.
    *
    * @function
    * @param {Object} book - The book to edit.
+   *  @returns {void}
    */
   const editCatBook = book => {
     setEditedBook(book);
   };
 
-  /**
-   * Fetches categories from the API.
-   *
-   * @function
-   * @async
-   */
-  const fetchCategories = async () => {
-    try {
-      const resp = await APIService.makeRequest('/categories/', 'GET', null, token['mytoken']);
-      setCategories(resp);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+
+ /**
+ * Fetches categories from the API and sets them in the component state.
+ *
+ * @function
+ * @async
+ * @param {string} url - The API endpoint URL (e.g,'/categories/).
+ * @param {string} method - The HTTP request method (e.g., 'GET').
+  * @param {object|null} data - Optional data to send with the request.
+  * @param {string} authToken - The authentication token.
+  * @returns {Promise<any>} A Promise that resolves with the response data.
+ */
+const fetchCategories = async () => {
+  try {
+    const resp = await APIService.makeRequest('/categories/', 'GET', null, token['mytoken']);
+    setCategories(resp);
+  } catch (error) {
+    console.error('Error fetching categories:', error);
+  }
+};
+
 
   /**
    * Fetches books from the API.
    *
    * @function
    * @async
+    * @param {string} url - The API endpoint URL (e.g,'/books/).
+    * @param {string} method - The HTTP request method (e.g., 'GET').
    */
   const fetchBooks = async () => {
     try {
@@ -201,6 +234,7 @@ function App() {
    * Logs out the user.
    *
    * @function
+   * @param {string} authToken - The authentication token.
    */
   const logoutBtn = () => {
     removeCookie('mytoken');
@@ -266,24 +300,28 @@ function App() {
    * Closes the create area for a category.
    *
    * @function
+   * @returns {void}
    */
   const closeCreateArea = () => {
     setEditedCategory(null);
   };
 
-  /**
-   * Inserts book information.
-   *
-   * @function
-   * @param {Object} book - The inserted book.
-   */
-  const insertedBookInformation = book => {
-    const new_books = [...books, book];
-    setBooks(new_books);
-    setEditedBook(null);
-    fetchCategories();
-    fetchBooks();
-  };
+
+/**
+ * Inserts book information and updates the component state accordingly.
+ *
+ * @function
+ * @param {Object} book - The inserted book.
+ * @returns {void}
+ */
+const insertedBookInformation = book => {
+  const new_books = [...books, book];
+  setBooks(new_books);
+  setEditedBook(null); // Reset the edited book
+  fetchCategories();
+  fetchBooks();
+};
+
 
   return (
     <div className="App">
