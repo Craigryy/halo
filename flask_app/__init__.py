@@ -39,8 +39,8 @@ def create_app():
         cors = CORS(app)
    
    
-    if 'DATABASE_URL' in os.environ:
-        app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
+    if 'HEROKU_POSTGRESQL_CHARCOAL_URL' in os.environ:
+        app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['HEROKU_POSTGRESQL_CHARCOAL_URL']
     else:
         app.config['SQLALCHEMY_DATABASE_URI'] = f'postgresql://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_HOST}/{POSTGRES_DB}'
 
