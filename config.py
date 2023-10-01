@@ -37,8 +37,8 @@ else:
     cors = CORS(app)
 
     # Configure the database URI conditionally based on Heroku or local
-if 'HEROKU_POSTGRESQL_CHARCOAL_URL' in os.environ:
-    app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['HEROKU_POSTGRESQL_CHARCOAL_URL']
+if 'DATABASE_URL' in os.environ:
+    app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
 else:
     app.config['SQLALCHEMY_DATABASE_URI'] = f'postgresql://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_HOST}/{POSTGRES_DB}'
 
