@@ -13,6 +13,7 @@ RUN pip install --upgrade setuptools
 # Install yaml
 RUN pip install PyYAML
 
+
 # Install the Python dependencies
 COPY requirements.txt requirements.txt
 RUN pip install -r requirements.txt
