@@ -1,9 +1,15 @@
 from flask import Blueprint, jsonify, make_response, request
+<<<<<<< HEAD
 from flask_jwt_extended import jwt_required
+=======
+
+from .authenticate import token_required
+>>>>>>> origin/master
 from .model import BookCategory, BookModel
 
 book_app = Blueprint('book_app', __name__)
 
+<<<<<<< HEAD
 @book_app.route('/categories/<int:id>/books/', methods=['GET', 'POST'])
 @jwt_required()
 def create_book(id):
@@ -11,6 +17,16 @@ def create_book(id):
     Create a book in the specified category.
     """
     category = BookCategory.query.filter_by(id=id).first()
+=======
+@book_app.route('/categories/<int:id>/books/', methods=['POST'])
+@token_required
+def create_book(current_user, id):
+    """Create a book in the specified category."""
+    if not current_user:
+        return jsonify({'message': 'Cannot perform that function!'})
+
+    category = BookCategory.query.filter_by(id=id, user_id=current_user.id).first()
+>>>>>>> origin/master
     if not category:
         return make_response(jsonify({'message': 'Category with id:{} was not found'.format(id)}))
 
@@ -22,6 +38,7 @@ def create_book(id):
 
     return jsonify({'book': book.to_json()})
 
+<<<<<<< HEAD
 @book_app.route('/categories/<int:id>/books/', methods=['GET'])
 @jwt_required()
 def get_books_by_category(id):
@@ -112,6 +129,16 @@ def update_book(id, book_id):
     """
     Update a book in the specified category.
     """
+=======
+
+@book_app.route('/categories/<int:id>/books/<int:book_id>', methods=['PUT'])
+@token_required
+def update_book(current_user, id, book_id):
+    """Update a book in the specified category."""
+    if not current_user:
+        return jsonify({'message': 'Cannot perform that function!'})
+
+>>>>>>> origin/master
     category = BookCategory.query.filter_by(id=id).first()
     if not category:
         return make_response(jsonify({'message': 'Category with id:{} was not found'.format(id)}))
@@ -128,6 +155,7 @@ def update_book(id, book_id):
 
     return make_response(jsonify({"message": "Book updated successfully", "book": book.to_json()}), 200)
 
+<<<<<<< HEAD
 @book_app.route('/categories/<int:id>/books/<int:book_id>', methods=['DELETE'])
 @jwt_required()
 def delete_book(id, book_id):
@@ -135,6 +163,17 @@ def delete_book(id, book_id):
     Delete a book from the specified category.
     """
     book_category = BookCategory.query.filter_by(id=id).first()
+=======
+
+@book_app.route('/categories/<int:id>/books/<int:book_id>', methods=['DELETE'])
+@token_required
+def delete_book(current_user, id, book_id):
+    """Delete a book from the specified category."""
+    if not current_user:
+        return jsonify({'message': 'Cannot perform that function!'})
+
+    book_category = BookCategory.query.filter_by(id=id, user_id=current_user.id).first()
+>>>>>>> origin/master
     if not book_category:
         return make_response(jsonify({'message': 'Book category with id:{} was not found'.format(book_id)}))
 
@@ -143,4 +182,8 @@ def delete_book(id, book_id):
         return make_response(jsonify({'message': 'Book with id:{} was not found'.format(book_id)}))
 
     book.delete()
+<<<<<<< HEAD
     return make_response(jsonify({"message": "Book deleted successfully"}), 200)
+=======
+    return make_response(jsonify({"message": "Book deleted successfully"}), 200)
+>>>>>>> origin/master
