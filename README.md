@@ -10,8 +10,12 @@ The API allows user to interact only when authenticated,to ensured security .
 
 
 
+<<<<<<< HEAD
 
 ##RESOURCES
+=======
+## RESOURCES
+>>>>>>> origin/master
 
 AUTH url_data:username = "username"
 
@@ -328,6 +332,11 @@ Open a web browser: Launch a web browser of your choice.
 
 Access the Swagger UI: In the address bar of your web browser, enter the following URL:
 
+<<<<<<< HEAD
+=======
+bash
+Copy code
+>>>>>>> origin/master
 http://localhost:5000/api/docs
 This URL assumes that the Flask application is running on the default development server, listening on port 5000. If you're using a different port or domain, modify the URL accordingly.
 
@@ -336,6 +345,7 @@ Explore the Swagger UI: The Swagger UI interface should now be displayed in your
 ### USAGE :
 
 Install dependencies using pip install -r requirements.txt
+<<<<<<< HEAD
 Run `python manager.py` to start the server
 Test API using POSTMAN or cURL
 
@@ -395,3 +405,24 @@ Test API using POSTMAN or cURL
 For example, to install dependencies, run:
 `
 ```make install-dependencies``
+=======
+Run  python manager.py to start server
+Test Api using POSTMAN or cURL
+
+###USEAGE ON DOCKER :
+
+
+Clone this repo into your local machine then run "docker-compose up --build" command on terminal inside cloned directory.
+docker-compose up 
+Open postman application and Test
+
+
+#### Database Used: 
+Postgress
+
+Set User: postgres
+
+Password: Favour98
+
+Database name: halo
+>>>>>>> origin/master
