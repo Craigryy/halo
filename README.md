@@ -1,14 +1,14 @@
 ### halo
 
 
-halo is a book inventory api that uses flask python micro framework.
-This API allows a user to create a book-category and add books to their categories
-The API allows user to interact only when authenticated,to ensured security .
+halo is a book inventory app that uses flask python micro framework as a backend and react.js as frontend  .
+This APP allows a user to create a book-category and add books to their categories
+
 
 .![Screenshot (116)](https://github.com/Craigryy/halo/assets/116971272/5c8f1946-01e4-4c99-b1e8-9cc91bdd6de8)
 
 
-##RESOURCES 
+##RESOURCES TO USE IN POSTMAN/Curl
 
 AUTH url_data:username = "username"
 
