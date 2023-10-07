@@ -34,13 +34,13 @@ The API requires authentication using an API key token . Include the API key in 
 
 
 Upon auth/login a token is given .
-Token should be used as header value with key 'x-access-token'
+Token should be used as header value with key 'Authentication'
 Example :
 
-Key: "x-access-token"
+Key: "Aythentication"
 
 
-Value: {int:TOKEN}
+Value:|" Bearer {int:TOKEN}"
 
 
 ## Endpoints
