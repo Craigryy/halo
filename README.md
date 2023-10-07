@@ -10,12 +10,8 @@ The API allows user to interact only when authenticated,to ensured security .
 
 
 
-<<<<<<< HEAD
 
 ##RESOURCES
-=======
-## RESOURCES
->>>>>>> origin/master
 
 AUTH url_data:username = "username"
 
@@ -59,6 +55,7 @@ GET /categories
 
 
 Retrieves a list of all book categories in the inventory.
+
 
 #### Response
 
