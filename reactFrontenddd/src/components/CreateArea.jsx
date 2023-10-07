@@ -5,6 +5,14 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faPlus, faTimes } from '@fortawesome/free-solid-svg-icons';
 import '../CSS/CreateArea.css';
 
+
+/**
+ *  CreateArea component.
+ *
+ * @function
+ * @returns {JSX.Element} The rendered JSX element.
+ */
+
 function CreateArea(props) {
   const [name, setName] = useState('');
   const [created_by, setCreatedBy] = useState('');
@@ -17,21 +25,54 @@ function CreateArea(props) {
   const [categories, setCategories] = useState([]);
 
   useEffect(() => {
-    if (props.category) {
-      setName(props.category.name || '');
-      setCreatedBy(props.category.created_by || '');
-    }
+    /**
+     * Sets the component state based on the category prop.
+     * If a category prop is provided, updates the name and created_by state.
+     *
+     * @function
+     * @returns {void}
+     */
+    const setCategoryStateFromProps = () => {
+      if (props.category) {
+        setName(props.category.name || '');
+        setCreatedBy(props.category.created_by || '');
+      }
+    };
+  
+    // Call the setCategoryStateFromProps function when the category prop changes
+    setCategoryStateFromProps();
   }, [props.category]);
+  
 
   useEffect(() => {
-    if (props.book) {
-      setBookTitle(props.book.title || '');
-      setBookAuthor(props.book.author || '');
-      setBookCategory(props.book.category_id || '');
-    }
+    /**
+     * Sets the component state based on the book prop.
+     * If a book prop is provided, updates the title, author, and category state.
+     *
+     * @function
+     * @returns {void}
+     */
+    const setBookStateFromProps = () => {
+      if (props.book) {
+        setBookTitle(props.book.title || '');
+        setBookAuthor(props.book.author || '');
+        setBookCategory(props.book.category_id || '');
+      }
+    };
+  
+    // Call the setBookStateFromProps function when the book prop changes
+    setBookStateFromProps();
   }, [props.book]);
+  
 
   useEffect(() => {
+    /**
+     * Fetches categories from the API and updates the component state.
+     *
+     * @function
+     * @async
+     * @returns {void}
+     */
     const fetchCategories = async () => {
       try {
         const response = await APIService.makeRequest('/categories', 'GET', null, token['mytoken']);
@@ -44,63 +85,100 @@ function CreateArea(props) {
         console.error('Error fetching categories:', error);
       }
     };
+  
+    // Call the fetchCategories function when the component mounts or when the token changes
     fetchCategories();
   }, [token]);
+  
 
-  const updateCategory = () => {
-    APIService.UpdateCategory(props.category.id, { name, created_by }, token['mytoken'])
-      .then(updatedCategory => {
-        props.updatedInformation(updatedCategory);
-        setName('');
-        setCreatedBy('');
-        setError(null);
-      })
-      .catch(error => {
-        console.error('Error updating category:', error);
-        setError('Error updating category. Please try again.');
-      });
+/**
+ * Updates an existing category with new information.
+ *
+ * @function
+ * @returns {void}
+ */
+const updateCategory = () => {
+  APIService.UpdateCategory(props.category.id, { name, created_by }, token['mytoken'])
+    .then(updatedCategory => {
+      // Updates the state with the updated category information
+      props.updatedInformation(updatedCategory);
+      setName('');
+      setCreatedBy('');
+      setError(null);
+    })
+    .catch(error => {
+      console.error('Error updating category:', error);
+      setError('Error updating category. Please try again.');
+    });
+};
+
+
+/**
+ * Updates an existing book with new information or adds a new book if no book ID is provided.
+ * Validates the book details and calls the API to update/add the book.
+ *
+ * @function
+ * @returns {void}
+ */
+const updateBook = () => {
+  if (!title || !author || !category_id) {
+    setError('Please fill in all book details.');
+    return;
+  }
+
+  const updatedBookData = {
+    title: title,
+    author: author,
+    category_id: category_id,
   };
 
-  const updateBook = () => {
-    if (!title || !author || !category_id) {
-      setError('Please fill in all book details.');
-      return;
-    }
+  // Calls the API to update/add the book
+  APIService.updateBook(category_id, props.book?.id, updatedBookData, token['mytoken'])
+    .then(updatedBook => {
+      // Updates the state with the updated book information
+      props.updatedBookInformation(updatedBook);
+      setBookAuthor('');
+      setBookTitle('');
+      setBookCategory('');
+      setError(null);
+    })
+    .catch(error => {
+      console.error('Error updating book:', error);
+      setError('Error updating book. Please try again.');
+    });
+};
 
-    const updatedBookData = {
-      title: title,
-      author: author,
-      category_id: category_id,
-    };
 
-    APIService.updateBook(category_id, props.book.id, updatedBookData, token['mytoken'])
-      .then(updatedBook => {
-        props.updatedBookInformation(updatedBook);
-        setBookAuthor('');
-        setBookTitle('');
-        setBookCategory('');
-        setError(null);
-      })
-      .catch(error => {
-        console.error('Error updating book:', error);
-        setError('Error updating book. Please try again.');
-      });
-  };
+/**
+ * Inserts a new category using the provided name and creator, calling the API for insertion.
+ * After successful insertion, updates the component state and resets form-related state values.
+ *
+ * @function
+ * @returns {void}
+ */
+const insertCategory = () => {
+  APIService.insertCategory({ name, created_by }, token['mytoken'])
+    .then(resp => {
+      // Updates the state with the inserted category information
+      props.insertedInformation(resp);
+      setName('');
+      setCreatedBy('');
+      setError(null);
+    })
+    .catch(error => {
+      console.error('Error inserting category:', error);
+      setError('Error inserting category. Please try again.');
+    });
+};
 
-  const insertCategory = () => {
-    APIService.insertCategory({ name, created_by }, token['mytoken'])
-      .then(resp => {
-        props.insertedInformation(resp);
-        setName('');
-        setCreatedBy('');
-        setError(null);
-      })
-      .catch(error => {
-        console.error('Error inserting category:', error);
-        setError('Error inserting category. Please try again.');
-      });
-  };
 
+  /**
+  * Handles the submission of book information to be added to the system.
+  * Validates the book details and calls the API to add the book.
+
+  * @function
+  * @returns {void}
+  */
   const handleBookSubmit = () => {
     if (!title || !author || !category_id) {
       setError('Please fill in all book details.');
@@ -127,15 +205,22 @@ function CreateArea(props) {
       });
   };
 
-  const handleCloseForms = () => {
-    setShowBookForm(false);
-    setName('');
-    setCreatedBy('');
-    setBookTitle('');
-    setBookAuthor('');
-    setBookCategory('');
-    setError(null);
-  };
+/**
+ * Resets form-related state values and hides the book form.
+ *
+ * @function
+ * @returns {void}
+ */
+const handleCloseForms = () => {
+  setShowBookForm(false);
+  setName('');
+  setCreatedBy('');
+  setBookTitle('');
+  setBookAuthor('');
+  setBookCategory('');
+  setError(null);
+};
+
 
  /**
  * Sets the book form visibility to true, enabling the addition of a new book.

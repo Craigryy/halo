@@ -1,7 +1,21 @@
 import React from 'react';
 import '../CSS/header.css';
 
+/**
+ * Header component displaying the application logo and logout button.
+ *
+ * @component
+ * @param {object} props - The properties passed down to the component.
+ * @param {Function} props.logoutBtn - Function to handle the logout action.
+ * @returns {JSX.Element} Header component JSX
+ */
 function Header(props) {
+  /**
+   * Handles the logout action by calling the provided logoutBtn function.
+   *
+   * @function
+   * @returns {void}
+   */
   const handleLogout = () => {
     props.logoutBtn();
   };
