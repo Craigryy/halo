@@ -51,6 +51,7 @@ bcrypt = Bcrypt(app)
 
 port = FLASK_PORT
 
+
 # Initialize the database
 db = SQLAlchemy()
 db.init_app(app)
