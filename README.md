@@ -37,7 +37,7 @@ Upon auth/login a token is given .
 Token should be used as header value with key 'Authentication'
 Example :
 
-Key: "Aythentication"
+Key: "Authentication"
 
 
 Value:|" Bearer {int:TOKEN}"
