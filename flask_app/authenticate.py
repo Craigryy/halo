@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import jwt
 import time
 import uuid
