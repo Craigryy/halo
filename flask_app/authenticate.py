@@ -99,6 +99,15 @@ def delete_user(id):
     """
     Delete a single user from the database.
     """
+    return make_response(jsonify({"message": error_message}), 500)
+
+
+@auth_app.route("/users/<int:id>", methods=["DELETE"])
+@token_required
+def delete_user(current_user, id):
+    """Delete a single user from the database."""
+    if not current_user:
+        return jsonify({"message": "Cannot perform that function!"})
     try:
         user = User.query.filter_by(id=id).first()
         if user:
@@ -151,4 +160,42 @@ def logout():
     """
     response = jsonify({"msg": "logout successful"})
     unset_jwt_cookies(response)
-    return response 
+    return reponse
+    return make_response(jsonify({"message": error_message}), 500)
+
+
+@auth_app.route("/login", methods=["POST"])
+def login():
+    """Authenticate a user and return a token."""
+    secret_key = current_app.config["SECRET_KEY"]
+    auth = request.authorization
+
+    if not auth or not auth.username or not auth.password:
+        return make_response(
+            "Could not verify",
+            401,
+            {"WWW-Authenticate": 'Basic realm="Login required!"'},
+        )
+
+    user = User.query.filter_by(name=auth.username).first()
+
+    if not user:
+        return make_response(
+            "Could not verify",
+            401,
+            {"WWW-Authenticate": 'Basic realm="Login required!"'},
+        )
+
+    if check_password_hash(user.password, auth.password):
+        token = jwt.encode(
+            {"public_id": user.public_id, "exp": datetime.datetime.utcnow() + datetime.timedelta(minutes=30)},
+            secret_key,
+        )
+
+        return jsonify({"token": token})
+
+    return make_response(
+        "Could not verify",
+        401,
+        {"WWW-Authenticate": 'Basic realm="Login required!"'},
+    )

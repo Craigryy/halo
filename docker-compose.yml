@@ -55,4 +55,3 @@ services:
     command: ["python", "manager.py"]  # Start Flask using python manager.py
     ports:
       - "8000:8000"
-
