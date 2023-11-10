@@ -31,7 +31,6 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=Favour98
     ports:
-<<<<<<< HEAD
       - "5000:5000"
 
   frontend:
@@ -57,6 +56,3 @@ services:
     ports:
       - "8000:8000"
 
-=======
-      - "5000:5000"
->>>>>>> origin/master

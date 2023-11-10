@@ -7,7 +7,6 @@ WORKDIR /app
 # Copy the necessary files
 COPY . .
 
-<<<<<<< HEAD
 # Upgrade setuptools
 RUN pip install --upgrade setuptools
 
@@ -23,22 +22,6 @@ RUN pip install -r requirements.txt
 RUN adduser --disabled-password --gecos '' myuser
 USER myuser
 
-=======
-# Copy requirements.txt
-COPY requirements.txt .
-
-
-# # # Create a non-root user
-RUN adduser --disabled-password --gecos '' myuser
-USER myuser
-
-# # Add command for setup
-RUN python - c "from flask_app.model import db,User,BookModel,BookCategory ; config import app ; app.app_context().push() ; db.Create_all()"
-
-# Install the Python dependencies
-RUN pip install -r requirements.txt
-
->>>>>>> origin/master
 # Set environment variables
 ENV POSTGRES_HOST=database
 ENV POSTGRES_PORT=5432
@@ -53,8 +36,4 @@ EXPOSE 5000
 EXPOSE 5432
 
 # Set the command to run the Flask app
-<<<<<<< HEAD
 CMD ["python", "manager.py"]
-=======
-CMD ["python", "manager.py"]
->>>>>>> origin/master
