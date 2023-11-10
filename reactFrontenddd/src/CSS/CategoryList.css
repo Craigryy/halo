@@ -1,0 +1,185 @@
+.CategoryList {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr); /* 4 keys per row */
+  gap: 20px; /* Adjust the gap between keys */
+  justify-items: flex-start; /* Align keys to the left */
+}
+
+.CategoryList .key {
+  background: #fff;
+  border-radius: 7px;
+  box-shadow: 0 2px 5px #ccc;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  transition: 0.3s;
+  cursor: pointer;
+  display: flex; /* Use flexbox to center content */
+  flex-direction: column; /* Align items vertically */
+  justify-content: center; /* Center content horizontally */
+  align-items: center; /* Center content vertically */
+  width: 100%; /* Ensure key takes up the full width of the cell */
+}
+
+.CategoryList .no-categories {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  width: 100%;
+  margin: 10px;
+  grid-column: 1 / -1; /* Span across all columns */
+}
+
+.CategoryList span {
+  color: grey;
+  font-size: small;
+}
+
+.CategoryList h3 {
+  font-size: 25px; /* Adjust the font size for category names */
+}
+
+.CategoryList p {
+  font-size: 12px; /* Adjust the font size for created by information */
+}
+
+.CategoryList .key {
+  margin-bottom: 5px; /* Adjust the margin between categories */
+}
+
+.CategoryList .row {
+  margin-top: 8px; /* Adjust the top margin to add spacing between buttons and category information */
+}
+
+.CategoryList .btn {
+  padding: 0; /* Remove default padding */
+  justify-content: center;
+  font-size: 16px; /* Adjust the font size of the icon */
+  border: 1px solid transparent; /* Hide the border initially */
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  line-height: 1;
+}
+
+.CategoryList .btn.btn-primary {
+  background-color: white; /* Background color for the primary button */
+  color: green; /* Text color for the primary button */
+  border: 1px solid green; /* Border for the primary button */
+  margin-left: 10px;
+}
+
+.CategoryList .btn.btn-danger {
+  background-color: white; /* Background color for the danger button */
+  color: red; /* Text color for the danger button */
+  border: 1px solid red; /* Border for the danger button */
+  margin-left: 10px;
+}
+
+/* Float the buttons to left and right */
+.CategoryList .btn.btn-primary {
+  float: left;
+}
+
+.CategoryList .btn.btn-danger {
+  float: right;
+}
+
+.book {
+  box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.1);
+  transition: 0.3s;
+  border-radius: 6px;
+  color: var(--text);
+  margin: 10px 0; /* Adjusted margin */
+  padding: 10px; /* Adjusted padding */
+  display: flex; /* Display as flex container */
+  justify-content: space-between; /* Align items to left and right */
+  align-items: center;
+  width: 100%;
+}
+
+.book h3 {
+  margin-bottom: 5px;
+  text-align: left; /* Align text to left */
+}
+
+.book p {
+  margin: 0;
+  text-align: left; /* Align text to left */
+}
+
+.book .book-actions {
+  display: flex;
+  align-items: center;
+}
+
+.book .custom-btn {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  line-height: 1;
+  font-size: 18px;
+}
+
+.book .btn-primary.custom-btn {
+  background-color: #f6f5f5;
+  color: #99c8f2;
+  border: 2px solid #99c8f2; /* Adjusted border */
+  margin-left: 5px; /* Adjusted margin */
+}
+
+.book .btn-danger.custom-btn {
+  background-color: #f6f5f5;
+  color: red;
+  border: 2px solid red; /* Adjusted border */
+  margin-left: 5px; /* Adjusted margin */
+}
+
+/* Media query for smaller screens (e.g., iPhone) */
+@media (max-width: 576px) {
+  .CategoryList {
+    grid-template-columns: repeat(2, 1fr); /* 2 keys per row on smaller screens */
+  }
+
+  .CategoryList .col {
+    display: flex;
+    align-items: center;
+  }
+
+  .book {
+    flex-direction: column; /* Stack elements in a column on smaller screens */
+  }
+
+  .book .custom-btn {
+    margin-left: 0; /* Remove left margin for custom buttons on smaller screens */
+    margin-top: 10px; /* Adjust top margin for custom buttons on smaller screens */
+  }
+}
+
+/* Media query for iPad */
+@media (min-width: 577px) and (max-width: 1024px) {
+  .CategoryList {
+    grid-template-columns: repeat(4, 1fr); /* 4 keys per row on iPads */
+  }
+}
+
+/* Media query for iPad Mini */
+@media (min-width: 577px) and (max-width: 767px) {
+  .CategoryList {
+    grid-template-columns: repeat(4, 1fr); /* 4 keys per row on iPad Mini */
+  }
+}
+
+/* Media query for Galaxy Fold */
+@media (max-width: 576px) {
+  .CategoryList {
+    grid-template-columns: repeat(2, 1fr); /* 2 keys per row on Galaxy Fold */
+  }
+}

@@ -1,0 +1,167 @@
+.login-label {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.login-label .fas {
+  position: absolute;
+  left: 10px;
+  top: 70%;
+  transform: translateY(-50%);
+  font-size: 18px;
+}
+
+.login-label::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 10px; /* Adjusted from 10 (missing unit) */
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  pointer-events: none;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: white;
+  font-family: Arial, sans-serif;
+}
+
+.login-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.login-container {
+  background-color: #fffafa;
+  padding: 20px;
+  border-radius: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  width: 350px;
+  height: 350px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+}
+
+.login-container img.login-image {
+  max-width: 100px;
+  border-radius: 50%;
+  background-color: transparent;
+  padding: 10px;
+  position: absolute;
+  top: -60px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1;
+}
+
+.login-input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+}
+
+.login-button {
+  background-color: #91C8E4;
+  color: white;
+  width: 50%;
+  border-radius: 20px;
+}
+
+.login-alt-text {
+  cursor: pointer;
+  color: #007bff;
+  text-decoration: underline;
+}
+
+.login-alt-button {
+  font-size: 14px;
+}
+
+.mb-3 {
+  text-align: center;
+}
+
+.mb-3 h5 {
+  font-size: 14px;
+}
+
+.login-button {
+  width: 100%;
+  height: auto;
+  font-size: medium;
+}
+
+/* Styles for smaller screen sizes up to 576px */
+@media (max-width: 576px) {
+  .login-container {
+    width: 80%; /* Adjust the width for smaller screens */
+    height: auto; /* Adjust height to fit content */
+  }
+
+  .login-container img.login-image {
+    top: -70px; /* Adjust top position for the image */
+  }
+
+  .login-input {
+    font-size: 14px; /* Adjust font size for smaller screens */
+    padding: 3% 5%; /* Adjust padding proportionally */
+  }
+
+  .login-button {
+    width: 100%; /* Adjust button width for smaller screens */
+  }
+
+  .mb-3 h5 {
+    font-size: 12px; /* Adjust font size for smaller screens */
+  }
+}
+
+/* Styles for smaller screen sizes up to 450px */
+@media (max-width: 450px) {
+  .login-container {
+    width: 90%; /* Adjust the width for smaller screens */
+  }
+
+  .login-input {
+    font-size: 12px; /* Adjust font size for smaller screens */
+    padding: 5%; /* Adjust padding proportionally */
+  }
+}
+
+/* Styles for smaller screen sizes up to 280px (Samsung Fold) */
+@media (max-width: 280px) {
+  .login-container {
+    width: 90%; /* Adjust the width for smaller screens */
+  }
+
+  .login-container img.login-image {
+    top: -80px; /* Adjust top position for the image */
+  }
+
+  .login-input {
+    font-size: 10px; /* Adjust font size for smaller screens */
+    padding: 5%; /* Adjust padding proportionally */
+  }
+
+  .login-button {
+    width: 100%; /* Adjust button width for smaller screens */
+    font-size: small; /* Adjust button font size */
+  }
+
+  .mb-3 h5 {
+    font-size: 10px; /* Adjust font size for smaller screens */
+  }
+}

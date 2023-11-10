@@ -1,0 +1,62 @@
+.create-area-container {
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin-top: 20px;
+}
+
+/* Style for form labels */
+.create-area-container .form-label {
+  font-weight: bold;
+  display: block;
+  width: 100%;
+  margin-bottom: 5px;
+}
+
+/* Style for form inputs */
+.create-area-container .form-control {
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+/* Style for buttons */
+.create-area-container .btn {
+  margin-right: 10px; /* Default margin between buttons */
+}
+
+.button1 {
+  background-color: white; /* Background color for the primary button */
+  color: #0F71F2; /* Text color for the primary button */
+  border: 1px solid #0F71F2; /* Border for the primary button */
+  margin-left: 5px; /* Adjusted margin */
+}
+
+.button2 {
+  background-color: white; /* Background color for the danger button */
+  color: green; /* Text color for the danger button */
+  border: 1px solid green; /* Border for the danger button */
+  margin-left: 5px; /* Adjusted margin */
+}
+
+
+/* Additional styles for responsiveness */
+@media screen and (max-width: 767px) {
+  .create-area-container .btn {
+    margin-right: 5px; /* Adjusted margin for smaller screens */
+    
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .create-area-container .form-container {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px;
+  }
+
+  .create-area-container .form-section {
+    width: 48%; /* Adjust width as needed */
+    margin-bottom: 5px;
+  }
+}
