@@ -18,7 +18,7 @@ jobs:
       with:
         node-version: '14'
 
-    - name: Install dependencies 
+    - name: Install Node.js dependencies 
       run: |
         cd reactFrontend
         npm install
@@ -28,7 +28,7 @@ jobs:
         cd reactFrontenddd
         npm run build 
 
-    - name: Set up python
+    - name: Set up Python
       uses: actions/setup-python@v2
       with:
         python-version: '3.x'
@@ -41,3 +41,8 @@ jobs:
       run: |
         cd Test
         python -m unittest discover 
+    
+    - name: Run JavaScript tests
+      run: |
+        cd reactFrontenddd/src/__test__
+        npm test
