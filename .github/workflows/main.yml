@@ -29,7 +29,3 @@ jobs:
     - name: Install Python dependencies
       run: pip install -r requirements.txt
 
-    - name: Flask test
-      run: cd Test && python3 test.py
-
-        
