@@ -48,7 +48,6 @@ def create_app():
         app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL_HEROKU']
     else:
         app.config['SQLALCHEMY_DATABASE_URI'] = f'postgresql://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_HOST}/{POSTGRES_DB}'
-
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     app.config["SECRET_KEY"] = POSTGRES_SECRET_KEY    
     app.static_folder ='../reactFrontenddd/build'
