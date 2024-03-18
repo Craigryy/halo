@@ -36,11 +36,11 @@ services:
   frontend:
     restart: always
     container_name: halo_frontend
-    build: ./reactFrontend
+    build: ./reactFrontenddd
     ports:
       - "3000:3000"
     volumes:
-      - ./reactFrontend/:/app
+      - ./reactFrontenddd/:/app
       - /app/client/node_modules/
     command: ["npm", "start", "--prefix", "/app"]  # Start React using npm start
 

@@ -1,4 +1,4 @@
-name: CI 
+name: CI
 
 on:
   push:
@@ -19,14 +19,7 @@ jobs:
         node-version: '14'
 
     - name: Install Node.js dependencies 
-      run: |
-        cd reactFrontend
-        npm install
-
-    - name: Build React app
-      run: |
-        cd reactFrontenddd
-        npm run build 
+      run: npm install
 
     - name: Set up Python
       uses: actions/setup-python@v2
@@ -34,15 +27,10 @@ jobs:
         python-version: '3.x'
 
     - name: Install Python dependencies
-      run: |
-        pip install -r requirements.txt
+      run: pip install -r requirements.txt
 
     - name: Run Flask tests  
-      run: |
-        cd Test
-        python -m unittest discover 
-    
+      run: python -m unittest discover 
+
     - name: Run JavaScript tests
-      run: |
-        cd reactFrontenddd/src/__test__
-        npm test
+      run: npm test

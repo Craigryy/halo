@@ -10,8 +10,8 @@ COPY . .
 # Upgrade setuptools
 RUN pip install --upgrade setuptools
 
-# Install yaml
-RUN pip install PyYAML
+# # Install yaml
+# RUN pip install PyYAML
 
 
 # Install the Python dependencies
