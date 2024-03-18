@@ -93,17 +93,18 @@ def update_user(id):
         error_message = f"Error updating user: {str(e)}"
         return make_response(jsonify({"message": error_message}), 500)
 
-@auth_app.route('/user/<int:id>/', methods=['DELETE'])
-@jwt_required()
-def delete_user(id):
-    """
-    Delete a single user from the database.
-    """
-    return make_response(jsonify({"message": error_message}), 500)
+# @auth_app.route('/user/<int:id>/', methods=['DELETE'])
+# @jwt_required()
+# def delete_user(id):
+#     """
+#     Delete a single user from the database.
+#     """
+#     error_message = f"Error updating user: {str(e)}"
+#     return make_response(jsonify({"message": error_message}), 500)
 
 
 @auth_app.route("/users/<int:id>", methods=["DELETE"])
-@token_required
+@jwt_required()
 def delete_user(current_user, id):
     """Delete a single user from the database."""
     if not current_user:
@@ -160,8 +161,7 @@ def logout():
     """
     response = jsonify({"msg": "logout successful"})
     unset_jwt_cookies(response)
-    return reponse
-    return make_response(jsonify({"message": error_message}), 500)
+    return response
 
 
 @auth_app.route("/login", methods=["POST"])
