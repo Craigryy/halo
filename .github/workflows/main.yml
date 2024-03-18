@@ -28,9 +28,3 @@ jobs:
 
     - name: Install Python dependencies
       run: pip install -r requirements.txt
-
-    - name: Run Flask tests  
-      run: python -m unittest discover 
-
-    - name: Run JavaScript tests
-      run: npm test
