@@ -16,7 +16,7 @@ Flask-JWT-Extended==4.5.2
 flask-rest-api==0.17.1
 Flask-SQLAlchemy==3.0.5
 flask-swagger-ui==4.11.1
-greenlet==2.0.2
+greenlet==3.0.3
 gunicorn==21.2.0
 isort==5.12.0
 itsdangerous==2.1.2
