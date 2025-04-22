@@ -26,30 +26,36 @@ def create_app():
     """
     Create the Flask application, configure the database, and register blueprints.
 
-    Returns:git 
+    Returns:git
         Flask: The Flask application instance.
     """
     # Create the Flask application
     app = Flask(__name__, static_folder='../reactFrontenddd/build', static_url_path='')
     jwt = JWTManager(app)
 
-
-    # Load REACT_API_URL from environment variables
-    react_api_url = os.environ.get('REACT_API_URL')
-
-    if react_api_url:
-        cors = CORS(app, resources={r"*": {"origins": react_api_url}})
+    # Configure CORS for all origins in production, or specific origins in development
+    if os.environ.get('FLASK_ENV') == 'production':
+        # In production, allow requests from the frontend URL
+        frontend_url = os.environ.get('FRONTEND_URL', '*')
+        cors = CORS(app, resources={r"/*": {"origins": frontend_url}})
     else:
-        # If REACT_API_URL is not set, allow all origins
+        # In development, allow all origins
         cors = CORS(app)
-   
-   
-    if 'DATABASE_URL_HEROKU' in os.environ:
+
+    # Configure database
+    if 'DATABASE_URL' in os.environ:
+        # For Render PostgreSQL - convert from postgres:// to postgresql://
+        database_url = os.environ['DATABASE_URL']
+        if database_url.startswith('postgres://'):
+            database_url = database_url.replace('postgres://', 'postgresql://', 1)
+        app.config['SQLALCHEMY_DATABASE_URI'] = database_url
+    elif 'DATABASE_URL_HEROKU' in os.environ:
         app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL_HEROKU']
     else:
         app.config['SQLALCHEMY_DATABASE_URI'] = f'postgresql://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_HOST}/{POSTGRES_DB}'
+
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-    app.config["SECRET_KEY"] = POSTGRES_SECRET_KEY    
+    app.config["SECRET_KEY"] = POSTGRES_SECRET_KEY
     app.static_folder ='../reactFrontenddd/build'
 
 
@@ -96,15 +102,15 @@ def create_app():
                 response.headers[key] = value
             return response
 
-    
+
     @app.route("/")
     def serve():
         return app.send_static_file('index.html')
-    
+
     @app.errorhandler(404)
     def not_found(err):
         return send_from_directory('../reactFrontenddd/build','index.html')
-    
-    
+
+
 
     return app

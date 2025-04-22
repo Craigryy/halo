@@ -39,6 +39,7 @@ class User(Base):
     name = db.Column(db.String(100))
     password = db.Column(db.String(100))
     admin = db.Column(db.Boolean)
+    # Establishing the relationship
     category = db.relationship("BookCategory", backref="owner", lazy="dynamic")
 
     def to_json(self):
@@ -65,6 +66,7 @@ class BookCategory(Base):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), unique=True, nullable=False)
     created_by = db.Column(db.String(100))
+    # Linking back to User
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
     books = db.relationship(
         "BookModel", backref="category", cascade="all, delete-orphan", lazy="dynamic"

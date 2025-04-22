@@ -1,0 +1,46 @@
+services:
+  - type: web
+    name: halo-api
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: python manager.py
+    envVars:
+      - key: POSTGRES_HOST
+        fromDatabase:
+          name: halo-db
+          property: host
+      - key: POSTGRES_PORT
+        fromDatabase:
+          name: halo-db
+          property: port
+      - key: POSTGRES_DB
+        fromDatabase:
+          name: halo-db
+          property: database
+      - key: POSTGRES_USER
+        fromDatabase:
+          name: halo-db
+          property: user
+      - key: POSTGRES_PASSWORD
+        fromDatabase:
+          name: halo-db
+          property: password
+      - key: FLASK_ENV
+        value: production
+
+  - type: web
+    name: halo-frontend
+    env: static
+    buildCommand: cd reactFrontenddd && npm install && npm run build
+    staticPublishPath: ./reactFrontenddd/build
+    envVars:
+      - key: REACT_APP_API_URL
+        fromService:
+          name: halo-api
+          type: web
+          property: url
+
+databases:
+  - name: halo-db
+    databaseName: halo
+    user: postgres

@@ -1,4 +1,6 @@
 export default class APIService {
+  static API_URL = process.env.REACT_APP_API_URL || '';
+
   static async makeRequest(url, method, body = null, token = null) {
     const headers = {
       "Content-Type": "application/json",
@@ -16,7 +18,8 @@ export default class APIService {
       requestOptions.body = JSON.stringify(body);
     }
 
-    const response = await fetch(url, requestOptions);
+    const fullUrl = `${this.API_URL}${url}`;
+    const response = await fetch(fullUrl, requestOptions);
     const data = await response.json();
     return data;
   }
@@ -34,7 +37,7 @@ export default class APIService {
   static async DeleteCategory(categoryId, token) {
     return this.makeRequest(`/categories/${categoryId}/`, 'DELETE', null, token);
   }
-  
+
   //  BOOKS ROUTES
 
   static async addBook(categoryId, body, token) {
@@ -60,7 +63,7 @@ static async login(username, password) {
   const url = '/login';
   const body = { name: username, password };
 
-  return fetch(url, {
+  return fetch(`${this.API_URL}${url}`, {
     method: 'POST',
     headers: {
       "Content-Type": "application/json",
