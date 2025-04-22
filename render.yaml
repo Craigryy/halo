@@ -38,9 +38,8 @@ services:
         fromService:
           name: halo-api
           type: web
-          property: url
+          property: hostport
 
 databases:
   - name: halo-db
     databaseName: halo
-    user: postgres
